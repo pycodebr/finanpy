@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LogoutView as DjangoLogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
 
@@ -98,3 +99,28 @@ class SignupView(CreateView):
         )
 
         return response
+
+
+class CustomLogoutView(DjangoLogoutView):
+    """
+    Custom logout view that adds a success message.
+
+    Inherits from Django's LogoutView and overrides dispatch()
+    to display a friendly success message before logging out.
+    Redirects to LOGOUT_REDIRECT_URL configured in settings.
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Override dispatch to add success message before logout.
+
+        Args:
+            request: The HTTP request object
+            *args: Variable length argument list
+            **kwargs: Arbitrary keyword arguments
+
+        Returns:
+            HttpResponseRedirect: Redirect to LOGOUT_REDIRECT_URL
+        """
+        messages.success(request, 'Você saiu da sua conta com sucesso. Até logo!')
+        return super().dispatch(request, *args, **kwargs)

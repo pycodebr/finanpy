@@ -275,27 +275,29 @@
 **Descrição**: Criar template HTML para página de login
 
 **Subtarefas**:
-- [ ] 1.11.1: Criar arquivo `templates/auth/login.html`
-- [ ] 1.11.2: Extender base.html
-- [ ] 1.11.3: Adicionar título da página
-- [ ] 1.11.4: Criar container centralizado
-- [ ] 1.11.5: Adicionar logo/nome Finanpy com gradiente
-- [ ] 1.11.6: Criar card de login estilizado
-- [ ] 1.11.7: Adicionar título "Entrar"
-- [ ] 1.11.8: Criar formulário de login
-- [ ] 1.11.9: Renderizar campos com estilização
-- [ ] 1.11.10: Adicionar botão de submit
-- [ ] 1.11.11: Adicionar link para página de cadastro
-- [ ] 1.11.12: Adicionar exibição de mensagens de erro
+- [X] 1.11.1: Criar arquivo `templates/auth/login.html`
+- [X] 1.11.2: Extender base.html
+- [X] 1.11.3: Adicionar título da página
+- [X] 1.11.4: Criar container centralizado
+- [X] 1.11.5: Adicionar logo/nome Finanpy com gradiente
+- [X] 1.11.6: Criar card de login estilizado
+- [X] 1.11.7: Adicionar título "Entrar"
+- [X] 1.11.8: Criar formulário de login
+- [X] 1.11.9: Renderizar campos com estilização
+- [X] 1.11.10: Adicionar botão de submit
+- [X] 1.11.11: Adicionar link para página de cadastro
+- [X] 1.11.12: Adicionar exibição de mensagens de erro
+- [X] Tarefa 1.11 concluída
 
 #### Tarefa 1.12: View de Logout
 **Descrição**: Criar view para logout de usuários
 
 **Subtarefas**:
-- [ ] 1.12.1: No arquivo `users/views.py`, importar LogoutView do Django
-- [ ] 1.12.2: Criar LogoutView personalizada se necessário
-- [ ] 1.12.3: Configurar LOGOUT_REDIRECT_URL = '/' no settings.py
-- [ ] 1.12.4: Adicionar mensagem de sucesso ao fazer logout
+- [X] 1.12.1: No arquivo `users/views.py`, importar LogoutView do Django
+- [X] 1.12.2: Criar LogoutView personalizada se necessário
+- [X] 1.12.3: Configurar LOGOUT_REDIRECT_URL = '/' no settings.py
+- [X] 1.12.4: Adicionar mensagem de sucesso ao fazer logout
+- [X] Tarefa 1.12 concluída
 
 #### Tarefa 1.13: URLs de Autenticação
 **Descrição**: Configurar URLs para views de autenticação
