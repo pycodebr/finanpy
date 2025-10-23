@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar Conta - Finanpy{% endblock %}
+
+{% block content %}
+<!-- Full-height container centered vertically and horizontally -->
+<div class="min-h-screen flex items-center justify-center px-4 py-12 bg-slate-900">
+    <div class="max-w-md w-full space-y-8">
+
+        <!-- Logo/Brand Section -->
+        <div class="text-center">
+            <h1 class="text-5xl font-bold mb-2">
+                <span class="bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
+                    Finanpy
+                </span>
+            </h1>
+            <p class="text-slate-400 text-lg">
+                Gerencie suas finanças com inteligência
+            </p>
+        </div>
+
+        <!-- Signup Card -->
+        <div class="bg-slate-800 rounded-lg shadow-lg border border-slate-700 p-8">
+
+            <!-- Card Header -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-100 text-center mb-2">
+                    Criar Conta
+                </h2>
+                <p class="text-slate-400 text-center">
+                    Comece a controlar suas finanças hoje
+                </p>
+            </div>
+
+            <!-- Non-field errors (global form errors) -->
+            {% if form.non_field_errors %}
+            <div class="mb-6 bg-red-500/10 border border-red-500 rounded-lg p-4">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-red-400 text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Signup Form -->
+            <form method="POST" class="space-y-6" novalidate>
+                {% csrf_token %}
+
+                <!-- Email Field -->
+                <div>
+                    <label for="id_email" class="block text-slate-300 font-medium mb-2">
+                        Email
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="mt-2">
+                        {% for error in form.email.errors %}
+                        <p class="text-red-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Password1 Field -->
+                <div>
+                    <label for="id_password1" class="block text-slate-300 font-medium mb-2">
+                        Senha
+                    </label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                    <div class="mt-2 space-y-1">
+                        {% for error in form.password1.errors %}
+                        <p class="text-red-400 text-sm flex items-start">
+                            <svg class="w-4 h-4 mr-1.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>{{ error }}</span>
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-slate-500 text-xs mt-2">
+                        Mínimo de 8 caracteres. Não pode ser totalmente numérica.
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Password2 Field (Confirmation) -->
+                <div>
+                    <label for="id_password2" class="block text-slate-300 font-medium mb-2">
+                        Confirme a Senha
+                    </label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                    <div class="mt-2">
+                        {% for error in form.password2.errors %}
+                        <p class="text-red-400 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button
+                        type="submit"
+                        class="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-200 shadow-lg hover:shadow-purple-500/50"
+                    >
+                        Criar Conta
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="mt-8 relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-700"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-slate-800 text-slate-400">Já tem uma conta?</span>
+                </div>
+            </div>
+
+            <!-- Login Link -->
+            <div class="mt-6 text-center">
+                <a
+                    href="{% url 'users:login' %}"
+                    class="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200"
+                >
+                    Faça login aqui
+                </a>
+            </div>
+        </div>
+
+        <!-- Additional Info/Features (Optional) -->
+        <div class="mt-8 text-center">
+            <div class="flex items-center justify-center space-x-6 text-slate-400 text-sm">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span>100% Seguro</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <span>Dados Privados</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span>Grátis</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<!-- Remove footer on auth pages for cleaner look -->
+{% endblock %}
