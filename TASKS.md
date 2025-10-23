@@ -181,12 +181,13 @@
 **Descrição**: Configurar Django Admin para gerenciar perfis
 
 **Subtarefas**:
-- [ ] 1.5.1: Abrir arquivo `profiles/admin.py`
-- [ ] 1.5.2: Importar admin e Profile model
-- [ ] 1.5.3: Criar classe ProfileAdmin
-- [ ] 1.5.4: Configurar list_display com user email, full_name, phone
-- [ ] 1.5.5: Configurar search_fields com user email e full_name
-- [ ] 1.5.6: Registrar Profile com ProfileAdmin
+- [X] 1.5.1: Abrir arquivo `profiles/admin.py`
+- [X] 1.5.2: Importar admin e Profile model
+- [X] 1.5.3: Criar classe ProfileAdmin
+- [X] 1.5.4: Configurar list_display com user email, full_name, phone
+- [X] 1.5.5: Configurar search_fields com user email e full_name
+- [X] 1.5.6: Registrar Profile com ProfileAdmin
+- [X] Tarefa 1.5 concluída
 
 #### Tarefa 1.6: Migrations Iniciais
 **Descrição**: Criar e aplicar migrations para users e profiles
