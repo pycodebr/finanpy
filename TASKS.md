@@ -240,18 +240,19 @@
 **Descrição**: Criar template HTML para página de cadastro
 
 **Subtarefas**:
-- [ ] 1.9.1: Criar arquivo `templates/auth/signup.html`
-- [ ] 1.9.2: Extender base.html
-- [ ] 1.9.3: Adicionar título da página no block title
-- [ ] 1.9.4: Criar container centralizado com max-width
-- [ ] 1.9.5: Adicionar logo/nome Finanpy com gradiente
-- [ ] 1.9.6: Criar card com bg-bg-secondary e border
-- [ ] 1.9.7: Adicionar título "Criar Conta"
-- [ ] 1.9.8: Criar formulário com method POST e csrf_token
-- [ ] 1.9.9: Renderizar campos do form com classes TailwindCSS
-- [ ] 1.9.10: Adicionar botão de submit estilizado
-- [ ] 1.9.11: Adicionar link para página de login
-- [ ] 1.9.12: Adicionar tratamento de erros do formulário
+- [X] 1.9.1: Criar arquivo `templates/auth/signup.html`
+- [X] 1.9.2: Extender base.html
+- [X] 1.9.3: Adicionar título da página no block title
+- [X] 1.9.4: Criar container centralizado com max-width
+- [X] 1.9.5: Adicionar logo/nome Finanpy com gradiente
+- [X] 1.9.6: Criar card com bg-bg-secondary e border
+- [X] 1.9.7: Adicionar título "Criar Conta"
+- [X] 1.9.8: Criar formulário com method POST e csrf_token
+- [X] 1.9.9: Renderizar campos do form com classes TailwindCSS
+- [X] 1.9.10: Adicionar botão de submit estilizado
+- [X] 1.9.11: Adicionar link para página de login
+- [X] 1.9.12: Adicionar tratamento de erros do formulário
+- [X] Tarefa 1.9 concluída
 
 #### Tarefa 1.10: View de Login
 **Descrição**: Criar view para autenticação de usuários
