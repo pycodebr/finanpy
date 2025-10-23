@@ -221,19 +221,20 @@
 **Descrição**: Criar view para cadastro de novos usuários
 
 **Subtarefas**:
-- [ ] 1.8.1: Criar arquivo `users/forms.py`
-- [ ] 1.8.2: Importar UserCreationForm e forms do Django
-- [ ] 1.8.3: Importar get_user_model
-- [ ] 1.8.4: Criar classe SignupForm herdando de UserCreationForm
-- [ ] 1.8.5: Adicionar campo email ao Meta.fields
-- [ ] 1.8.6: Configurar widgets com classes TailwindCSS
-- [ ] 1.8.7: Adicionar validação customizada para email único
-- [ ] 1.8.8: Abrir arquivo `users/views.py`
-- [ ] 1.8.9: Criar SignupView como CreateView
-- [ ] 1.8.10: Configurar form_class = SignupForm
-- [ ] 1.8.11: Configurar template_name = 'auth/signup.html'
-- [ ] 1.8.12: Configurar success_url para dashboard
-- [ ] 1.8.13: Override form_valid para fazer login automático após cadastro
+- [X] 1.8.1: Criar arquivo `users/forms.py`
+- [X] 1.8.2: Importar UserCreationForm e forms do Django
+- [X] 1.8.3: Importar get_user_model
+- [X] 1.8.4: Criar classe SignupForm herdando de UserCreationForm
+- [X] 1.8.5: Adicionar campo email ao Meta.fields
+- [X] 1.8.6: Configurar widgets com classes TailwindCSS
+- [X] 1.8.7: Adicionar validação customizada para email único
+- [X] 1.8.8: Abrir arquivo `users/views.py`
+- [X] 1.8.9: Criar SignupView como CreateView
+- [X] 1.8.10: Configurar form_class = SignupForm
+- [X] 1.8.11: Configurar template_name = 'auth/signup.html'
+- [X] 1.8.12: Configurar success_url para dashboard
+- [X] 1.8.13: Override form_valid para fazer login automático após cadastro
+- [X] Tarefa 1.8 concluída
 
 #### Tarefa 1.9: Template de Registro
 **Descrição**: Criar template HTML para página de cadastro
