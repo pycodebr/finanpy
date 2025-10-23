@@ -193,27 +193,29 @@
 **Descrição**: Criar e aplicar migrations para users e profiles
 
 **Subtarefas**:
-- [ ] 1.6.1: Executar: `python manage.py makemigrations users`
-- [ ] 1.6.2: Verificar arquivo de migration gerado
-- [ ] 1.6.3: Executar: `python manage.py makemigrations profiles`
-- [ ] 1.6.4: Verificar arquivo de migration gerado
-- [ ] 1.6.5: Executar: `python manage.py migrate`
-- [ ] 1.6.6: Verificar que tabelas foram criadas no db.sqlite3
+- [X] 1.6.1: Executar: `python manage.py makemigrations users`
+- [X] 1.6.2: Verificar arquivo de migration gerado
+- [X] 1.6.3: Executar: `python manage.py makemigrations profiles`
+- [X] 1.6.4: Verificar arquivo de migration gerado
+- [X] 1.6.5: Executar: `python manage.py migrate`
+- [X] 1.6.6: Verificar que tabelas foram criadas no db.sqlite3
+- [X] Tarefa 1.6 concluída
 
 #### Tarefa 1.7: Template Base
 **Descrição**: Criar template base com estrutura HTML e TailwindCSS
 
 **Subtarefas**:
-- [ ] 1.7.1: Criar arquivo `templates/base.html`
-- [ ] 1.7.2: Adicionar DOCTYPE e estrutura HTML5 básica
-- [ ] 1.7.3: Adicionar tag {% load static %} e {% load tailwind_tags %}
-- [ ] 1.7.4: Adicionar {% tailwind_css %} no head
-- [ ] 1.7.5: Configurar meta tags (charset, viewport)
-- [ ] 1.7.6: Adicionar link para Google Fonts (Inter)
-- [ ] 1.7.7: Adicionar classe bg-bg-primary ao body
-- [ ] 1.7.8: Criar bloco {% block title %}
-- [ ] 1.7.9: Criar bloco {% block content %}
-- [ ] 1.7.10: Adicionar estrutura de mensagens do Django com estilização
+- [X] 1.7.1: Criar arquivo `templates/base.html`
+- [X] 1.7.2: Adicionar DOCTYPE e estrutura HTML5 básica
+- [X] 1.7.3: Adicionar tag {% load static %} e {% load tailwind_tags %}
+- [X] 1.7.4: Adicionar {% tailwind_css %} no head
+- [X] 1.7.5: Configurar meta tags (charset, viewport)
+- [X] 1.7.6: Adicionar link para Google Fonts (Inter)
+- [X] 1.7.7: Adicionar classe bg-bg-primary ao body
+- [X] 1.7.8: Criar bloco {% block title %}
+- [X] 1.7.9: Criar bloco {% block content %}
+- [X] 1.7.10: Adicionar estrutura de mensagens do Django com estilização
+- [X] Tarefa 1.7 concluída
 
 #### Tarefa 1.8: View de Registro (Signup)
 **Descrição**: Criar view para cadastro de novos usuários
