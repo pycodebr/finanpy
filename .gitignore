@@ -264,4 +264,8 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django
-.gitignore
+
+# Tailwind CSS
+theme/static_src/node_modules/
+theme/static_src/package-lock.json
+theme/static/css/dist/
