@@ -303,15 +303,16 @@
 **Descrição**: Configurar URLs para views de autenticação
 
 **Subtarefas**:
-- [ ] 1.13.1: Criar arquivo `users/urls.py`
-- [ ] 1.13.2: Importar path do Django
-- [ ] 1.13.3: Importar views de users
-- [ ] 1.13.4: Criar urlpatterns list
-- [ ] 1.13.5: Adicionar path para signup: path('signup/', SignupView.as_view(), name='signup')
-- [ ] 1.13.6: Adicionar path para login: path('login/', LoginView.as_view(), name='login')
-- [ ] 1.13.7: Adicionar path para logout: path('logout/', LogoutView.as_view(), name='logout')
-- [ ] 1.13.8: Abrir arquivo `core/urls.py`
-- [ ] 1.13.9: Adicionar include de users.urls: path('auth/', include('users.urls'))
+- [X] 1.13.1: Criar arquivo `users/urls.py`
+- [X] 1.13.2: Importar path do Django
+- [X] 1.13.3: Importar views de users
+- [X] 1.13.4: Criar urlpatterns list
+- [X] 1.13.5: Adicionar path para signup: path('signup/', SignupView.as_view(), name='signup')
+- [X] 1.13.6: Adicionar path para login: path('login/', LoginView.as_view(), name='login')
+- [X] 1.13.7: Adicionar path para logout: path('logout/', LogoutView.as_view(), name='logout')
+- [X] 1.13.8: Abrir arquivo `core/urls.py`
+- [X] 1.13.9: Adicionar include de users.urls: path('auth/', include('users.urls'))
+- [X] Tarefa 1.13 concluída
 
 #### Tarefa 1.14: Página Inicial Pública
 **Descrição**: Criar página inicial para usuários não autenticados
