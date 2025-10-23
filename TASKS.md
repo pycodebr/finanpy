@@ -258,17 +258,18 @@
 **Descrição**: Criar view para autenticação de usuários
 
 **Subtarefas**:
-- [ ] 1.10.1: No arquivo `users/forms.py`, criar LoginForm
-- [ ] 1.10.2: Adicionar campo email (EmailField)
-- [ ] 1.10.3: Adicionar campo password (CharField com widget PasswordInput)
-- [ ] 1.10.4: Aplicar classes TailwindCSS aos widgets
-- [ ] 1.10.5: No arquivo `users/views.py`, criar LoginView como FormView
-- [ ] 1.10.6: Configurar form_class = LoginForm
-- [ ] 1.10.7: Configurar template_name = 'auth/login.html'
-- [ ] 1.10.8: Configurar success_url para dashboard
-- [ ] 1.10.9: Implementar método form_valid com authenticate e login
-- [ ] 1.10.10: Adicionar tratamento de credenciais inválidas
-- [ ] 1.10.11: Adicionar mensagem de erro para login inválido
+- [X] 1.10.1: No arquivo `users/forms.py`, criar LoginForm
+- [X] 1.10.2: Adicionar campo email (EmailField)
+- [X] 1.10.3: Adicionar campo password (CharField com widget PasswordInput)
+- [X] 1.10.4: Aplicar classes TailwindCSS aos widgets
+- [X] 1.10.5: No arquivo `users/views.py`, criar LoginView como FormView
+- [X] 1.10.6: Configurar form_class = LoginForm
+- [X] 1.10.7: Configurar template_name = 'auth/login.html'
+- [X] 1.10.8: Configurar success_url para dashboard
+- [X] 1.10.9: Implementar método form_valid com authenticate e login
+- [X] 1.10.10: Adicionar tratamento de credenciais inválidas
+- [X] 1.10.11: Adicionar mensagem de erro para login inválido
+- [X] Tarefa 1.10 concluída
 
 #### Tarefa 1.11: Template de Login
 **Descrição**: Criar template HTML para página de login
