@@ -318,19 +318,20 @@
 **Descrição**: Criar página inicial para usuários não autenticados
 
 **Subtarefas**:
-- [ ] 1.14.1: Criar arquivo `users/views.py` adicionar HomeView
-- [ ] 1.14.2: Criar TemplateView para home
-- [ ] 1.14.3: Configurar template_name = 'home.html'
-- [ ] 1.14.4: Override método get para redirecionar usuários autenticados
-- [ ] 1.14.5: Criar arquivo `templates/home.html`
-- [ ] 1.14.6: Extender base.html
-- [ ] 1.14.7: Criar seção hero com gradiente
-- [ ] 1.14.8: Adicionar logo e nome Finanpy
-- [ ] 1.14.9: Adicionar tagline/descrição do produto
-- [ ] 1.14.10: Adicionar botões de Cadastrar e Entrar estilizados
-- [ ] 1.14.11: Criar seção de features/funcionalidades
-- [ ] 1.14.12: Listar principais funcionalidades com ícones
-- [ ] 1.14.13: Adicionar URL no urls.py: path('', HomeView.as_view(), name='home')
+- [X] 1.14.1: Criar arquivo `users/views.py` adicionar HomeView
+- [X] 1.14.2: Criar TemplateView para home
+- [X] 1.14.3: Configurar template_name = 'home.html'
+- [X] 1.14.4: Override método get para redirecionar usuários autenticados
+- [X] 1.14.5: Criar arquivo `templates/home.html`
+- [X] 1.14.6: Extender base.html
+- [X] 1.14.7: Criar seção hero com gradiente
+- [X] 1.14.8: Adicionar logo e nome Finanpy
+- [X] 1.14.9: Adicionar tagline/descrição do produto
+- [X] 1.14.10: Adicionar botões de Cadastrar e Entrar estilizados
+- [X] 1.14.11: Criar seção de features/funcionalidades
+- [X] 1.14.12: Listar principais funcionalidades com ícones
+- [X] 1.14.13: Adicionar URL no urls.py: path('', HomeView.as_view(), name='home')
+- [X] Tarefa 1.14 concluída
 
 #### Tarefa 1.15: Testes Manuais de Autenticação
 **Descrição**: Testar fluxo completo de autenticação

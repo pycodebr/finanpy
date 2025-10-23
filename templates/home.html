@@ -16,11 +16,11 @@
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#" class="px-8 py-4 gradient-primary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                <a href="{% url 'users:signup' %}" class="px-8 py-4 gradient-primary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
                     Começar Agora
                 </a>
-                <a href="#" class="px-8 py-4 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all">
-                    Saber Mais
+                <a href="{% url 'users:login' %}" class="px-8 py-4 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all">
+                    Entrar
                 </a>
             </div>
         </div>
