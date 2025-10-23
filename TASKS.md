@@ -166,15 +166,16 @@
 **Descrição**: Implementar signal para criar perfil automaticamente ao criar usuário
 
 **Subtarefas**:
-- [ ] 1.4.1: Criar arquivo `profiles/signals.py`
-- [ ] 1.4.2: Importar post_save signal e receiver decorator
-- [ ] 1.4.3: Importar User model (get_user_model)
-- [ ] 1.4.4: Importar Profile model
-- [ ] 1.4.5: Criar função create_profile com decorator @receiver(post_save, sender=User)
-- [ ] 1.4.6: Verificar if created e criar Profile.objects.create(user=instance)
-- [ ] 1.4.7: Abrir arquivo `profiles/apps.py`
-- [ ] 1.4.8: Override método ready() para importar signals
-- [ ] 1.4.9: Adicionar import de signals no método ready
+- [X] 1.4.1: Criar arquivo `profiles/signals.py`
+- [X] 1.4.2: Importar post_save signal e receiver decorator
+- [X] 1.4.3: Importar User model (get_user_model)
+- [X] 1.4.4: Importar Profile model
+- [X] 1.4.5: Criar função create_profile com decorator @receiver(post_save, sender=User)
+- [X] 1.4.6: Verificar if created e criar Profile.objects.create(user=instance)
+- [X] 1.4.7: Abrir arquivo `profiles/apps.py`
+- [X] 1.4.8: Override método ready() para importar signals
+- [X] 1.4.9: Adicionar import de signals no método ready
+- [X] Tarefa 1.4 concluída
 
 #### Tarefa 1.5: Configuração do Admin para Profile
 **Descrição**: Configurar Django Admin para gerenciar perfis
