@@ -337,18 +337,19 @@
 **Descrição**: Testar fluxo completo de autenticação
 
 **Subtarefas**:
-- [ ] 1.15.1: Iniciar servidor de desenvolvimento
-- [ ] 1.15.2: Acessar página inicial e verificar layout
-- [ ] 1.15.3: Clicar em "Cadastrar" e verificar redirecionamento
-- [ ] 1.15.4: Testar cadastro com email inválido
-- [ ] 1.15.5: Testar cadastro com senha fraca
-- [ ] 1.15.6: Cadastrar usuário válido
-- [ ] 1.15.7: Verificar redirecionamento após cadastro
-- [ ] 1.15.8: Fazer logout
-- [ ] 1.15.9: Tentar login com credenciais inválidas
-- [ ] 1.15.10: Fazer login com credenciais válidas
-- [ ] 1.15.11: Verificar que usuário autenticado é redirecionado da home
-- [ ] 1.15.12: Verificar criação automática do perfil no admin
+- [X] 1.15.1: Iniciar servidor de desenvolvimento
+- [X] 1.15.2: Acessar página inicial e verificar layout
+- [X] 1.15.3: Clicar em "Cadastrar" e verificar redirecionamento
+- [X] 1.15.4: Testar cadastro com email inválido
+- [X] 1.15.5: Testar cadastro com senha fraca
+- [X] 1.15.6: Cadastrar usuário válido
+- [X] 1.15.7: Verificar redirecionamento após cadastro
+- [X] 1.15.8: Fazer logout
+- [X] 1.15.9: Tentar login com credenciais inválidas
+- [X] 1.15.10: Fazer login com credenciais válidas
+- [X] 1.15.11: Verificar que usuário autenticado é redirecionado da home
+- [X] 1.15.12: Verificar criação automática do perfil no admin
+- [X] Tarefa 1.15 concluída
 
 ---
 
