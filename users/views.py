@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjangoLogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 
 from .forms import LoginForm, SignupForm
 
@@ -124,3 +125,31 @@ class CustomLogoutView(DjangoLogoutView):
         """
         messages.success(request, 'Você saiu da sua conta com sucesso. Até logo!')
         return super().dispatch(request, *args, **kwargs)
+
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """
+    Dashboard view for authenticated users.
+
+    Displays a welcome message and placeholder sections for upcoming features
+    (Accounts, Categories, Transactions - to be implemented in Sprints 2-4).
+
+    This is a minimal implementation to fix the authentication redirect issue.
+    The dashboard will be enhanced with real data and widgets in Sprint 5.
+    """
+
+    template_name = 'dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Add user information to the template context.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments
+
+        Returns:
+            dict: Context dictionary with user information
+        """
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context

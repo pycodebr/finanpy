@@ -20,7 +20,7 @@ class HomeView(TemplateView):
         """
         Override get method to redirect authenticated users.
 
-        If user is logged in, redirects to admin (temporary until dashboard is available).
+        If user is logged in, redirects to dashboard.
         Non-authenticated users see the public home page.
 
         Args:
@@ -29,18 +29,12 @@ class HomeView(TemplateView):
             **kwargs: Arbitrary keyword arguments
 
         Returns:
-            HttpResponseRedirect: Redirect to admin if authenticated
+            HttpResponseRedirect: Redirect to dashboard if authenticated
             HttpResponse: Rendered home template if not authenticated
         """
-        # Redirect authenticated users to admin page
-        # TODO: Change to redirect('dashboard') when Task 5.1 is implemented
+        # Redirect authenticated users to dashboard
         if request.user.is_authenticated:
-            messages.info(
-                request,
-                'Bem-vindo! O dashboard está em desenvolvimento. '
-                'Por enquanto, você pode acessar o painel administrativo.'
-            )
-            return redirect('admin:index')
+            return redirect('dashboard')
 
         # Add test messages to verify the message system works
         if request.GET.get('test_messages'):

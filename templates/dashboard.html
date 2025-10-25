@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Finanpy{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-bg-primary py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-text-primary">
+                Bem-vindo, {{ user.email }}!
+            </h1>
+            <p class="text-text-secondary mt-2">
+                Este é o seu dashboard. Em breve você poderá visualizar suas finanças aqui.
+            </p>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="bg-bg-secondary border border-slate-700 rounded-lg p-6 shadow-lg">
+            <h2 class="text-xl font-semibold text-text-primary mb-4">
+                Ações Rápidas
+            </h2>
+            <div class="space-y-3">
+                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                    <span class="text-2xl">🏦</span>
+                    <div>
+                        <p class="text-text-primary font-medium">Gerenciar Contas</p>
+                        <p class="text-text-secondary text-sm">Em breve - Sprint 2</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                    <span class="text-2xl">🏷️</span>
+                    <div>
+                        <p class="text-text-primary font-medium">Gerenciar Categorias</p>
+                        <p class="text-text-secondary text-sm">Em breve - Sprint 3</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                    <span class="text-2xl">💰</span>
+                    <div>
+                        <p class="text-text-primary font-medium">Gerenciar Transações</p>
+                        <p class="text-text-secondary text-sm">Em breve - Sprint 4</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Link -->
+        <div class="mt-6">
+            <a href="{% url 'users:logout' %}"
+               class="text-red-400 hover:text-red-300 transition-colors duration-200 inline-flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                <span>Sair</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
