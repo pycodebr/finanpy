@@ -1,75 +1,552 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - Finanpy{% endblock %}
+{% block title %}Finanpy - Controle Financeiro Pessoal Simples e Eficiente{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-16">
-    <div class="max-w-4xl mx-auto text-center">
-        <!-- Hero Section -->
-        <div class="mb-12">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                Bem-vindo ao Finanpy
+
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-purple-950">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-20 relative z-10">
+        <div class="flex flex-col items-center text-center max-w-5xl mx-auto">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm font-medium mb-8 backdrop-blur-sm">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Gestão Financeira Inteligente</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+                <span class="text-slate-100">Seu dinheiro,</span>
+                <br>
+                <span class="bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 bg-clip-text text-transparent">
+                    sob controle total
+                </span>
             </h1>
-            <p class="text-xl text-slate-300 mb-8">
-                Sistema de Gestão Financeira Pessoal - Controle suas finanças com simplicidade e eficiência
+
+            <!-- Subtitle -->
+            <p class="text-xl md:text-2xl text-slate-300 mb-4 max-w-3xl leading-relaxed">
+                Gerencie suas finanças com simplicidade e inteligência. Contas, transações e relatórios em um único lugar.
+            </p>
+
+            <p class="text-base md:text-lg text-slate-400 mb-10 max-w-2xl">
+                Sem complicações, sem custos. Apenas o essencial para você dominar suas finanças pessoais.
             </p>
 
             <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'users:signup' %}" class="px-8 py-4 gradient-primary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
-                    Começar Agora
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-12">
+                <a href="{% url 'users:signup' %}" class="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold text-lg rounded-xl shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        Começar Agora - Grátis
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-800 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </a>
-                <a href="{% url 'users:login' %}" class="px-8 py-4 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all">
-                    Entrar
+                <a href="{% url 'users:login' %}" class="px-8 py-4 bg-slate-800/50 backdrop-blur text-slate-100 font-bold text-lg rounded-xl border-2 border-slate-700 hover:border-purple-500 hover:bg-slate-800 transition-all duration-300">
+                    Fazer Login
                 </a>
             </div>
-        </div>
 
-        <!-- Features Grid -->
-        <div class="grid md:grid-cols-3 gap-8 mt-16">
-            <!-- Feature 1 -->
-            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700 hover:border-purple-500 transition-all">
-                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
+            <!-- Trust Badges -->
+            <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">100% Gratuito</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-100 mb-2">Contas Bancárias</h3>
-                <p class="text-slate-400">Gerencie múltiplas contas e acompanhe seus saldos em tempo real</p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700 hover:border-purple-500 transition-all">
-                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">Dados Seguros</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-100 mb-2">Transações</h3>
-                <p class="text-slate-400">Categorize receitas e despesas para melhor controle financeiro</p>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700 hover:border-purple-500 transition-all">
-                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
-                    </svg>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">Uso Imediato</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-100 mb-2">Dashboard</h3>
-                <p class="text-slate-400">Visualize suas finanças consolidadas em um painel intuitivo</p>
             </div>
-        </div>
-
-        <!-- Test Messages Link -->
-        <div class="mt-16 p-6 bg-slate-800 rounded-lg border border-slate-700">
-            <h3 class="text-lg font-semibold text-slate-100 mb-2">Teste o Sistema de Mensagens</h3>
-            <p class="text-slate-400 mb-4">Clique no botão abaixo para ver exemplos de mensagens do sistema</p>
-            <a href="?test_messages=1" class="inline-block px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all">
-                Testar Mensagens
-            </a>
         </div>
     </div>
-</div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 bg-gradient-to-b from-purple-950 to-slate-900">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+            <!-- Stat 1 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-2">
+                    100%
+                </div>
+                <div class="text-slate-400 font-medium">Gratuito</div>
+            </div>
+            <!-- Stat 2 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-2">
+                    Seguro
+                </div>
+                <div class="text-slate-400 font-medium">Seus Dados</div>
+            </div>
+            <!-- Stat 3 -->
+            <div class="flex flex-col items-center text-center">
+                <div class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent mb-2">
+                    Simples
+                </div>
+                <div class="text-slate-400 font-medium">Interface</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 lg:py-32 bg-slate-900">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section Header -->
+            <div class="flex flex-col items-center text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm font-semibold mb-4">
+                    FUNCIONALIDADES
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4">
+                    Tudo que você precisa para
+                    <br>
+                    <span class="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                        gerenciar suas finanças
+                    </span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl">
+                    Ferramentas poderosas e intuitivas em uma plataforma completa
+                </p>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="flex flex-col gap-8">
+                <!-- Feature 1 - Left aligned -->
+                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                    <div class="flex-1 flex flex-col">
+                        <div class="inline-flex items-center gap-3 mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Múltiplas Contas Bancárias</h3>
+                        </div>
+                        <p class="text-lg text-slate-400 leading-relaxed mb-6">
+                            Centralize todas as suas contas bancárias em um único painel. Visualize saldos, movimentações e o patrimônio total de forma consolidada e em tempo real.
+                        </p>
+                        <ul class="flex flex-col gap-3">
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Organização por banco e tipo de conta</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Cálculo automático de saldo consolidado</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Gestão completa de conta corrente, poupança e investimentos</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 border border-slate-700 shadow-2xl">
+                                <div class="space-y-4">
+                                    <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl p-5 text-white">
+                                        <div class="text-sm opacity-80 mb-1">Banco Inter</div>
+                                        <div class="text-3xl font-bold">R$ 8.450,00</div>
+                                    </div>
+                                    <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700">
+                                        <div class="text-sm text-slate-400 mb-1">Nubank</div>
+                                        <div class="text-2xl font-bold text-slate-200">R$ 4.000,00</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2 - Right aligned -->
+                <div class="flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-12">
+                    <div class="flex-1 flex flex-col">
+                        <div class="inline-flex items-center gap-3 mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Categorização Inteligente</h3>
+                        </div>
+                        <p class="text-lg text-slate-400 leading-relaxed mb-6">
+                            Organize todas as suas transações em categorias personalizadas. Entenda exatamente para onde seu dinheiro está indo e tome decisões financeiras mais conscientes.
+                        </p>
+                        <ul class="flex flex-col gap-3">
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Crie categorias ilimitadas personalizadas</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Separação clara entre receitas e despesas</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Análise detalhada de gastos por categoria</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 border border-slate-700 shadow-2xl">
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                                <span class="text-green-400 text-lg">💼</span>
+                                            </div>
+                                            <span class="text-slate-200 font-medium">Salário</span>
+                                        </div>
+                                        <span class="text-green-400 font-bold">+R$ 5.000</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                                <span class="text-red-400 text-lg">🏠</span>
+                                            </div>
+                                            <span class="text-slate-200 font-medium">Moradia</span>
+                                        </div>
+                                        <span class="text-red-400 font-bold">-R$ 1.500</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl border border-slate-700">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                                <span class="text-red-400 text-lg">🍕</span>
+                                            </div>
+                                            <span class="text-slate-200 font-medium">Alimentação</span>
+                                        </div>
+                                        <span class="text-red-400 font-bold">-R$ 890</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute -top-4 -left-4 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 - Left aligned -->
+                <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+                    <div class="flex-1 flex flex-col">
+                        <div class="inline-flex items-center gap-3 mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl md:text-3xl font-bold text-slate-100">Dashboard Completo</h3>
+                        </div>
+                        <p class="text-lg text-slate-400 leading-relaxed mb-6">
+                            Tenha uma visão completa da sua situação financeira. Dashboard intuitivo com gráficos, resumos e todas as informações importantes em um só lugar.
+                        </p>
+                        <ul class="flex flex-col gap-3">
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Visão consolidada de todas as contas</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Resumo de receitas e despesas do período</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-300">Interface limpa e moderna</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-6 border border-slate-700 shadow-2xl">
+                                <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl p-6 text-white mb-4">
+                                    <div class="text-sm opacity-90 mb-2">Patrimônio Total</div>
+                                    <div class="text-4xl font-bold mb-4">R$ 12.450,00</div>
+                                    <div class="flex justify-between text-sm pt-4 border-t border-white/20">
+                                        <div>
+                                            <div class="opacity-75 mb-1">Receitas</div>
+                                            <div class="font-bold text-green-200">+R$ 5.200</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="opacity-75 mb-1">Despesas</div>
+                                            <div class="font-bold text-red-200">-R$ 2.890</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-slate-400 text-sm">
+                                    Última atualização: Hoje
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 lg:py-32 bg-gradient-to-b from-slate-900 to-slate-950">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section Header -->
+            <div class="flex flex-col items-center text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm font-semibold mb-4">
+                    COMO FUNCIONA
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4">
+                    Comece em
+                    <span class="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                        3 passos simples
+                    </span>
+                </h2>
+                <p class="text-xl text-slate-400 max-w-2xl">
+                    Configure sua conta e assuma o controle das suas finanças em minutos
+                </p>
+            </div>
+
+            <!-- Steps -->
+            <div class="flex flex-col gap-8">
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-purple-500/30">
+                            1
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-slate-100 mb-2">Crie sua conta gratuita</h3>
+                        <p class="text-lg text-slate-400">
+                            Cadastro rápido e sem burocracia. Não pedimos cartão de crédito nem informações bancárias sensíveis.
+                        </p>
+                    </div>
+                    <div class="hidden md:block">
+                        <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-purple-500/30">
+                            2
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-slate-100 mb-2">Adicione suas contas e categorias</h3>
+                        <p class="text-lg text-slate-400">
+                            Cadastre suas contas bancárias e crie categorias personalizadas para organizar suas transações.
+                        </p>
+                    </div>
+                    <div class="hidden md:block">
+                        <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-3xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-purple-500/30">
+                            3
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-slate-100 mb-2">Controle suas finanças</h3>
+                        <p class="text-lg text-slate-400">
+                            Registre transações, visualize relatórios e tome decisões financeiras mais inteligentes.
+                        </p>
+                    </div>
+                    <div class="hidden md:block">
+                        <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-20 lg:py-32 bg-slate-950">
+    <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section Header -->
+            <div class="flex flex-col items-center text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-300 text-sm font-semibold mb-4">
+                    BENEFÍCIOS
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4">
+                    Por que escolher o
+                    <span class="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                        Finanpy?
+                    </span>
+                </h2>
+            </div>
+
+            <!-- Benefits Grid -->
+            <div class="flex flex-wrap gap-6">
+                <!-- Benefit 1 -->
+                <div class="flex-1 min-w-[280px] flex flex-col items-center text-center p-8 bg-gradient-to-br from-slate-800/30 to-slate-900/30 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-500/20">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-3">100% Gratuito</h3>
+                    <p class="text-slate-400">
+                        Sem taxas ocultas, sem assinaturas. Todas as funcionalidades disponíveis para sempre.
+                    </p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="flex-1 min-w-[280px] flex flex-col items-center text-center p-8 bg-gradient-to-br from-slate-800/30 to-slate-900/30 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-3">Segurança Total</h3>
+                    <p class="text-slate-400">
+                        Seus dados são privados e protegidos. Isolamento completo entre usuários.
+                    </p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="flex-1 min-w-[280px] flex flex-col items-center text-center p-8 bg-gradient-to-br from-slate-800/30 to-slate-900/30 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-3">Simples e Rápido</h3>
+                    <p class="text-slate-400">
+                        Interface intuitiva e moderna. Comece a usar em menos de 1 minuto.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final Section -->
+<section class="py-20 lg:py-32 bg-gradient-to-br from-purple-950 via-slate-900 to-slate-950 relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col items-center text-center">
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-100 mb-6">
+                    Pronto para transformar suas
+                    <span class="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+                        finanças pessoais?
+                    </span>
+                </h2>
+                <p class="text-xl md:text-2xl text-slate-300 mb-10 max-w-2xl">
+                    Junte-se ao Finanpy gratuitamente e assuma o controle total do seu dinheiro hoje mesmo.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                    <a href="{% url 'users:signup' %}" class="group relative px-12 py-6 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold text-xl rounded-xl shadow-2xl shadow-purple-500/40 hover:shadow-purple-500/60 transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                        <span class="relative z-10 flex items-center justify-center gap-2">
+                            Criar Conta Gratuita
+                            <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-800 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </a>
+                    <a href="{% url 'users:login' %}" class="px-12 py-6 bg-slate-800/50 backdrop-blur text-slate-100 font-bold text-xl rounded-xl border-2 border-slate-700 hover:border-purple-500 hover:bg-slate-800 transition-all duration-300">
+                        Já tenho conta
+                    </a>
+                </div>
+
+                <p class="text-slate-500 text-sm">
+                    ✓ Sem cartão de crédito • ✓ Sem compromisso • ✓ Comece em 60 segundos
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
