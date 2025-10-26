@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }} - Finanpy{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">{{ page_title }}</h1>
+        <p class="text-slate-400">Preencha os dados da conta bancária</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg p-6 md:p-8">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Non-field Errors -->
+            {% if form.non_field_errors %}
+            <div class="bg-red-500 bg-opacity-20 border border-red-500 rounded-lg p-4">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-red-400 text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Name Field -->
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.name.label }}
+                    <span class="text-red-400">*</span>
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <div class="mt-2">
+                    {% for error in form.name.errors %}
+                    <p class="text-red-400 text-sm flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Digite um nome descritivo para identificar sua conta</p>
+            </div>
+
+            <!-- Bank Name Field -->
+            <div>
+                <label for="{{ form.bank_name.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.bank_name.label }}
+                    <span class="text-red-400">*</span>
+                </label>
+                {{ form.bank_name }}
+                {% if form.bank_name.errors %}
+                <div class="mt-2">
+                    {% for error in form.bank_name.errors %}
+                    <p class="text-red-400 text-sm flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Nome da instituição financeira</p>
+            </div>
+
+            <!-- Account Type Field -->
+            <div>
+                <label for="{{ form.account_type.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.account_type.label }}
+                    <span class="text-red-400">*</span>
+                </label>
+                {{ form.account_type }}
+                {% if form.account_type.errors %}
+                <div class="mt-2">
+                    {% for error in form.account_type.errors %}
+                    <p class="text-red-400 text-sm flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Selecione o tipo de conta bancária</p>
+            </div>
+
+            <!-- Balance Field -->
+            <div>
+                <label for="{{ form.balance.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.balance.label }}
+                    <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-slate-400 font-medium">R$</span>
+                    </div>
+                    <input
+                        type="number"
+                        name="{{ form.balance.name }}"
+                        id="{{ form.balance.id_for_label }}"
+                        value="{% if form.balance.value %}{{ form.balance.value }}{% endif %}"
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                        class="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                    >
+                </div>
+                {% if form.balance.errors %}
+                <div class="mt-2">
+                    {% for error in form.balance.errors %}
+                    <p class="text-red-400 text-sm flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Saldo inicial da conta (pode ser atualizado posteriormente)</p>
+            </div>
+
+            <!-- Required Fields Notice -->
+            <div class="bg-slate-700 bg-opacity-50 border border-slate-600 rounded-lg p-4">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-slate-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-slate-400 text-sm">
+                        <span class="text-red-400">*</span> Campos obrigatórios
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                <button
+                    type="submit"
+                    class="flex-1 px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+                >
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Salvar Conta
+                </button>
+                <a
+                    href="{% url 'accounts:account_list' %}"
+                    class="flex-1 px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 flex items-center justify-center text-center"
+                >
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Help Text -->
+    <div class="mt-6 bg-slate-800 border border-slate-700 rounded-lg p-4">
+        <div class="flex items-start">
+            <svg class="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            <div class="flex-1">
+                <p class="text-slate-300 font-semibold mb-1">Dica</p>
+                <p class="text-slate-400 text-sm">
+                    Você pode criar diferentes contas para organizar melhor suas finanças, como conta corrente, poupança, investimentos, carteiras digitais, etc.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

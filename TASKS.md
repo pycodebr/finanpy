@@ -353,196 +353,198 @@
 
 ---
 
-### Sprint 2: Gestão de Contas Bancárias
+### Sprint 2: Gestão de Contas Bancárias ✅ CONCLUÍDA
 
-#### Tarefa 2.1: Model de Account
+#### Tarefa 2.1: Model de Account ✅
 **Descrição**: Criar model para representar contas bancárias do usuário
 
 **Subtarefas**:
-- [ ] 2.1.1: Abrir arquivo `accounts/models.py`
-- [ ] 2.1.2: Importar models e get_user_model
-- [ ] 2.1.3: Criar classe Account com ForeignKey para User
-- [ ] 2.1.4: Adicionar campo name (CharField, max_length=100)
-- [ ] 2.1.5: Adicionar campo bank_name (CharField, max_length=100)
-- [ ] 2.1.6: Criar choices para account_type (CHECKING, SAVINGS, WALLET)
-- [ ] 2.1.7: Adicionar campo account_type com choices
-- [ ] 2.1.8: Adicionar campo balance (DecimalField, max_digits=12, decimal_places=2, default=0)
-- [ ] 2.1.9: Adicionar campo is_active (BooleanField, default=True)
-- [ ] 2.1.10: Adicionar campos created_at e updated_at
-- [ ] 2.1.11: Adicionar método __str__ retornando name
-- [ ] 2.1.12: Adicionar Meta com ordering, verbose_name e indexes
+- [X] 2.1.1: Abrir arquivo `accounts/models.py`
+- [X] 2.1.2: Importar models e get_user_model
+- [X] 2.1.3: Criar classe Account com ForeignKey para User
+- [X] 2.1.4: Adicionar campo name (CharField, max_length=100)
+- [X] 2.1.5: Adicionar campo bank_name (CharField, max_length=100)
+- [X] 2.1.6: Criar choices para account_type (CHECKING, SAVINGS, WALLET)
+- [X] 2.1.7: Adicionar campo account_type com choices
+- [X] 2.1.8: Adicionar campo balance (DecimalField, max_digits=12, decimal_places=2, default=0)
+- [X] 2.1.9: Adicionar campo is_active (BooleanField, default=True)
+- [X] 2.1.10: Adicionar campos created_at e updated_at
+- [X] 2.1.11: Adicionar método __str__ retornando name
+- [X] 2.1.12: Adicionar Meta com ordering, verbose_name e indexes
 
-#### Tarefa 2.2: Admin de Account
+#### Tarefa 2.2: Admin de Account ✅
 **Descrição**: Configurar Django Admin para gerenciar contas
 
 **Subtarefas**:
-- [ ] 2.2.1: Abrir arquivo `accounts/admin.py`
-- [ ] 2.2.2: Importar admin e Account model
-- [ ] 2.2.3: Criar classe AccountAdmin
-- [ ] 2.2.4: Configurar list_display: user email, name, bank_name, account_type, balance, is_active
-- [ ] 2.2.5: Configurar list_filter: account_type, is_active
-- [ ] 2.2.6: Configurar search_fields: name, bank_name, user__email
-- [ ] 2.2.7: Configurar readonly_fields: created_at, updated_at
-- [ ] 2.2.8: Registrar Account com AccountAdmin
+- [X] 2.2.1: Abrir arquivo `accounts/admin.py`
+- [X] 2.2.2: Importar admin e Account model
+- [X] 2.2.3: Criar classe AccountAdmin
+- [X] 2.2.4: Configurar list_display: user email, name, bank_name, account_type, balance, is_active
+- [X] 2.2.5: Configurar list_filter: account_type, is_active
+- [X] 2.2.6: Configurar search_fields: name, bank_name, user__email
+- [X] 2.2.7: Configurar readonly_fields: created_at, updated_at
+- [X] 2.2.8: Registrar Account com AccountAdmin
 
-#### Tarefa 2.3: Form de Account
+#### Tarefa 2.3: Form de Account ✅
 **Descrição**: Criar formulário para cadastro e edição de contas
 
 **Subtarefas**:
-- [ ] 2.3.1: Criar arquivo `accounts/forms.py`
-- [ ] 2.3.2: Importar forms e Account model
-- [ ] 2.3.3: Criar classe AccountForm herdando de forms.ModelForm
-- [ ] 2.3.4: Configurar Meta com model = Account
-- [ ] 2.3.5: Definir fields: name, bank_name, account_type, balance
-- [ ] 2.3.6: Configurar widgets com classes TailwindCSS para cada campo
-- [ ] 2.3.7: Adicionar labels em português para cada campo
-- [ ] 2.3.8: Adicionar placeholders nos widgets
-- [ ] 2.3.9: Configurar choices de account_type em português
+- [X] 2.3.1: Criar arquivo `accounts/forms.py`
+- [X] 2.3.2: Importar forms e Account model
+- [X] 2.3.3: Criar classe AccountForm herdando de forms.ModelForm
+- [X] 2.3.4: Configurar Meta com model = Account
+- [X] 2.3.5: Definir fields: name, bank_name, account_type, balance
+- [X] 2.3.6: Configurar widgets com classes TailwindCSS para cada campo
+- [X] 2.3.7: Adicionar labels em português para cada campo
+- [X] 2.3.8: Adicionar placeholders nos widgets
+- [X] 2.3.9: Configurar choices de account_type em português
 
-#### Tarefa 2.4: View de Listagem de Contas
+#### Tarefa 2.4: View de Listagem de Contas ✅
 **Descrição**: Criar view para listar contas do usuário
 
 **Subtarefas**:
-- [ ] 2.4.1: Abrir arquivo `accounts/views.py`
-- [ ] 2.4.2: Importar LoginRequiredMixin e ListView
-- [ ] 2.4.3: Importar Account model
-- [ ] 2.4.4: Criar AccountListView herdando de LoginRequiredMixin e ListView
-- [ ] 2.4.5: Configurar model = Account
-- [ ] 2.4.6: Configurar template_name = 'accounts/account_list.html'
-- [ ] 2.4.7: Configurar context_object_name = 'accounts'
-- [ ] 2.4.8: Override get_queryset para filtrar por usuário: self.request.user
-- [ ] 2.4.9: Adicionar ordenação por nome
-- [ ] 2.4.10: Adicionar cálculo de saldo total no get_context_data
+- [X] 2.4.1: Abrir arquivo `accounts/views.py`
+- [X] 2.4.2: Importar LoginRequiredMixin e ListView
+- [X] 2.4.3: Importar Account model
+- [X] 2.4.4: Criar AccountListView herdando de LoginRequiredMixin e ListView
+- [X] 2.4.5: Configurar model = Account
+- [X] 2.4.6: Configurar template_name = 'accounts/account_list.html'
+- [X] 2.4.7: Configurar context_object_name = 'accounts'
+- [X] 2.4.8: Override get_queryset para filtrar por usuário: self.request.user
+- [X] 2.4.9: Adicionar ordenação por nome
+- [X] 2.4.10: Adicionar cálculo de saldo total no get_context_data
 
-#### Tarefa 2.5: Template de Listagem de Contas
+#### Tarefa 2.5: Template de Listagem de Contas ✅
 **Descrição**: Criar template HTML para listar contas
 
 **Subtarefas**:
-- [ ] 2.5.1: Criar arquivo `templates/accounts/account_list.html`
-- [ ] 2.5.2: Extender base.html
-- [ ] 2.5.3: Adicionar título "Minhas Contas"
-- [ ] 2.5.4: Criar header com título e botão "Nova Conta"
-- [ ] 2.5.5: Criar container com grid responsivo
-- [ ] 2.5.6: Iterar sobre accounts com for loop
-- [ ] 2.5.7: Para cada conta, criar card estilizado
-- [ ] 2.5.8: Exibir nome da conta em destaque
-- [ ] 2.5.9: Exibir nome do banco e tipo de conta
-- [ ] 2.5.10: Exibir saldo formatado com R$
-- [ ] 2.5.11: Adicionar botões de Editar e Excluir
-- [ ] 2.5.12: Adicionar mensagem quando não houver contas
-- [ ] 2.5.13: Adicionar card com saldo total consolidado
+- [X] 2.5.1: Criar arquivo `templates/accounts/account_list.html`
+- [X] 2.5.2: Extender base.html
+- [X] 2.5.3: Adicionar título "Minhas Contas"
+- [X] 2.5.4: Criar header com título e botão "Nova Conta"
+- [X] 2.5.5: Criar container com grid responsivo
+- [X] 2.5.6: Iterar sobre accounts com for loop
+- [X] 2.5.7: Para cada conta, criar card estilizado
+- [X] 2.5.8: Exibir nome da conta em destaque
+- [X] 2.5.9: Exibir nome do banco e tipo de conta
+- [X] 2.5.10: Exibir saldo formatado com R$
+- [X] 2.5.11: Adicionar botões de Editar e Excluir
+- [X] 2.5.12: Adicionar mensagem quando não houver contas
+- [X] 2.5.13: Adicionar card com saldo total consolidado
 
-#### Tarefa 2.6: View de Criação de Conta
+#### Tarefa 2.6: View de Criação de Conta ✅
 **Descrição**: Criar view para cadastrar nova conta
 
 **Subtarefas**:
-- [ ] 2.6.1: No arquivo `accounts/views.py`, importar CreateView
-- [ ] 2.6.2: Importar AccountForm
-- [ ] 2.6.3: Criar AccountCreateView herdando de LoginRequiredMixin e CreateView
-- [ ] 2.6.4: Configurar model = Account
-- [ ] 2.6.5: Configurar form_class = AccountForm
-- [ ] 2.6.6: Configurar template_name = 'accounts/account_form.html'
-- [ ] 2.6.7: Configurar success_url para lista de contas
-- [ ] 2.6.8: Override form_valid para associar user: form.instance.user = self.request.user
-- [ ] 2.6.9: Adicionar mensagem de sucesso
-- [ ] 2.6.10: Adicionar context extra com título da página
+- [X] 2.6.1: No arquivo `accounts/views.py`, importar CreateView
+- [X] 2.6.2: Importar AccountForm
+- [X] 2.6.3: Criar AccountCreateView herdando de LoginRequiredMixin e CreateView
+- [X] 2.6.4: Configurar model = Account
+- [X] 2.6.5: Configurar form_class = AccountForm
+- [X] 2.6.6: Configurar template_name = 'accounts/account_form.html'
+- [X] 2.6.7: Configurar success_url para lista de contas
+- [X] 2.6.8: Override form_valid para associar user: form.instance.user = self.request.user
+- [X] 2.6.9: Adicionar mensagem de sucesso
+- [X] 2.6.10: Adicionar context extra com título da página
 
-#### Tarefa 2.7: View de Edição de Conta
+#### Tarefa 2.7: View de Edição de Conta ✅
 **Descrição**: Criar view para editar conta existente
 
 **Subtarefas**:
-- [ ] 2.7.1: No arquivo `accounts/views.py`, importar UpdateView
-- [ ] 2.7.2: Criar AccountUpdateView herdando de LoginRequiredMixin e UpdateView
-- [ ] 2.7.3: Configurar model, form_class e template_name
-- [ ] 2.7.4: Configurar success_url
-- [ ] 2.7.5: Override get_queryset para filtrar por usuário
-- [ ] 2.7.6: Adicionar mensagem de sucesso
-- [ ] 2.7.7: Adicionar context extra com título
+- [X] 2.7.1: No arquivo `accounts/views.py`, importar UpdateView
+- [X] 2.7.2: Criar AccountUpdateView herdando de LoginRequiredMixin e UpdateView
+- [X] 2.7.3: Configurar model, form_class e template_name
+- [X] 2.7.4: Configurar success_url
+- [X] 2.7.5: Override get_queryset para filtrar por usuário
+- [X] 2.7.6: Adicionar mensagem de sucesso
+- [X] 2.7.7: Adicionar context extra com título
 
-#### Tarefa 2.8: View de Exclusão de Conta
+#### Tarefa 2.8: View de Exclusão de Conta ✅
 **Descrição**: Criar view para excluir conta
 
 **Subtarefas**:
-- [ ] 2.8.1: No arquivo `accounts/views.py`, importar DeleteView
-- [ ] 2.8.2: Criar AccountDeleteView herdando de LoginRequiredMixin e DeleteView
-- [ ] 2.8.3: Configurar model = Account
-- [ ] 2.8.4: Configurar template_name = 'accounts/account_confirm_delete.html'
-- [ ] 2.8.5: Configurar success_url para lista de contas
-- [ ] 2.8.6: Override get_queryset para filtrar por usuário
-- [ ] 2.8.7: Adicionar mensagem de sucesso
-- [ ] 2.8.8: Adicionar validação para não excluir conta com transações (implementar depois)
+- [X] 2.8.1: No arquivo `accounts/views.py`, importar DeleteView
+- [X] 2.8.2: Criar AccountDeleteView herdando de LoginRequiredMixin e DeleteView
+- [X] 2.8.3: Configurar model = Account
+- [X] 2.8.4: Configurar template_name = 'accounts/account_confirm_delete.html'
+- [X] 2.8.5: Configurar success_url para lista de contas
+- [X] 2.8.6: Override get_queryset para filtrar por usuário
+- [X] 2.8.7: Adicionar mensagem de sucesso
+- [X] 2.8.8: Adicionar validação para não excluir conta com transações (implementar depois)
 
-#### Tarefa 2.9: Template de Form de Conta
+#### Tarefa 2.9: Template de Form de Conta ✅
 **Descrição**: Criar template HTML para criar/editar conta
 
 **Subtarefas**:
-- [ ] 2.9.1: Criar arquivo `templates/accounts/account_form.html`
-- [ ] 2.9.2: Extender base.html
-- [ ] 2.9.3: Adicionar título dinâmico (Nova Conta ou Editar Conta)
-- [ ] 2.9.4: Criar container centralizado
-- [ ] 2.9.5: Criar card com formulário
-- [ ] 2.9.6: Adicionar form com method POST e csrf_token
-- [ ] 2.9.7: Renderizar campos do form com {{ form.as_p }} ou manualmente
-- [ ] 2.9.8: Estilizar cada campo individualmente com TailwindCSS
-- [ ] 2.9.9: Adicionar botão de Salvar
-- [ ] 2.9.10: Adicionar botão de Cancelar
-- [ ] 2.9.11: Adicionar exibição de erros do formulário
+- [X] 2.9.1: Criar arquivo `templates/accounts/account_form.html`
+- [X] 2.9.2: Extender base.html
+- [X] 2.9.3: Adicionar título dinâmico (Nova Conta ou Editar Conta)
+- [X] 2.9.4: Criar container centralizado
+- [X] 2.9.5: Criar card com formulário
+- [X] 2.9.6: Adicionar form com method POST e csrf_token
+- [X] 2.9.7: Renderizar campos do form com {{ form.as_p }} ou manualmente
+- [X] 2.9.8: Estilizar cada campo individualmente com TailwindCSS
+- [X] 2.9.9: Adicionar botão de Salvar
+- [X] 2.9.10: Adicionar botão de Cancelar
+- [X] 2.9.11: Adicionar exibição de erros do formulário
 
-#### Tarefa 2.10: Template de Confirmação de Exclusão
+#### Tarefa 2.10: Template de Confirmação de Exclusão ✅
 **Descrição**: Criar template para confirmar exclusão de conta
 
 **Subtarefas**:
-- [ ] 2.10.1: Criar arquivo `templates/accounts/account_confirm_delete.html`
-- [ ] 2.10.2: Extender base.html
-- [ ] 2.10.3: Adicionar título "Confirmar Exclusão"
-- [ ] 2.10.4: Criar card com mensagem de confirmação
-- [ ] 2.10.5: Exibir nome da conta a ser excluída
-- [ ] 2.10.6: Adicionar aviso sobre exclusão permanente
-- [ ] 2.10.7: Criar form com method POST e csrf_token
-- [ ] 2.10.8: Adicionar botão de Confirmar Exclusão (vermelho)
-- [ ] 2.10.9: Adicionar botão de Cancelar
-- [ ] 2.10.10: Estilizar com cores de alerta
+- [X] 2.10.1: Criar arquivo `templates/accounts/account_confirm_delete.html`
+- [X] 2.10.2: Extender base.html
+- [X] 2.10.3: Adicionar título "Confirmar Exclusão"
+- [X] 2.10.4: Criar card com mensagem de confirmação
+- [X] 2.10.5: Exibir nome da conta a ser excluída
+- [X] 2.10.6: Adicionar aviso sobre exclusão permanente
+- [X] 2.10.7: Criar form com method POST e csrf_token
+- [X] 2.10.8: Adicionar botão de Confirmar Exclusão (vermelho)
+- [X] 2.10.9: Adicionar botão de Cancelar
+- [X] 2.10.10: Estilizar com cores de alerta
 
-#### Tarefa 2.11: URLs de Accounts
+#### Tarefa 2.11: URLs de Accounts ✅
 **Descrição**: Configurar URLs para views de contas
 
 **Subtarefas**:
-- [ ] 2.11.1: Criar arquivo `accounts/urls.py`
-- [ ] 2.11.2: Importar path e views
-- [ ] 2.11.3: Criar urlpatterns list
-- [ ] 2.11.4: Adicionar path para list: path('', AccountListView.as_view(), name='account_list')
-- [ ] 2.11.5: Adicionar path para create: path('new/', AccountCreateView.as_view(), name='account_create')
-- [ ] 2.11.6: Adicionar path para update: path('<int:pk>/edit/', AccountUpdateView.as_view(), name='account_update')
-- [ ] 2.11.7: Adicionar path para delete: path('<int:pk>/delete/', AccountDeleteView.as_view(), name='account_delete')
-- [ ] 2.11.8: No arquivo `core/urls.py`, incluir accounts.urls: path('accounts/', include('accounts.urls'))
+- [X] 2.11.1: Criar arquivo `accounts/urls.py`
+- [X] 2.11.2: Importar path e views
+- [X] 2.11.3: Criar urlpatterns list
+- [X] 2.11.4: Adicionar path para list: path('', AccountListView.as_view(), name='account_list')
+- [X] 2.11.5: Adicionar path para create: path('new/', AccountCreateView.as_view(), name='account_create')
+- [X] 2.11.6: Adicionar path para update: path('<int:pk>/edit/', AccountUpdateView.as_view(), name='account_update')
+- [X] 2.11.7: Adicionar path para delete: path('<int:pk>/delete/', AccountDeleteView.as_view(), name='account_delete')
+- [X] 2.11.8: No arquivo `core/urls.py`, incluir accounts.urls: path('accounts/', include('accounts.urls'))
 
-#### Tarefa 2.12: Migration de Account
+#### Tarefa 2.12: Migration de Account ✅
 **Descrição**: Criar e aplicar migration para model Account
 
 **Subtarefas**:
-- [ ] 2.12.1: Executar: `python manage.py makemigrations accounts`
-- [ ] 2.12.2: Verificar arquivo de migration gerado
-- [ ] 2.12.3: Executar: `python manage.py migrate`
-- [ ] 2.12.4: Verificar tabela no banco de dados
+- [X] 2.12.1: Executar: `python manage.py makemigrations accounts`
+- [X] 2.12.2: Verificar arquivo de migration gerado
+- [X] 2.12.3: Executar: `python manage.py migrate`
+- [X] 2.12.4: Verificar tabela no banco de dados
 
-#### Tarefa 2.13: Testes Manuais de Accounts
+#### Tarefa 2.13: Testes Manuais de Accounts ✅
 **Descrição**: Testar CRUD completo de contas
 
 **Subtarefas**:
-- [ ] 2.13.1: Fazer login no sistema
-- [ ] 2.13.2: Acessar página de contas
-- [ ] 2.13.3: Verificar mensagem de lista vazia
-- [ ] 2.13.4: Criar nova conta corrente
-- [ ] 2.13.5: Verificar redirecionamento e mensagem de sucesso
-- [ ] 2.13.6: Criar conta poupança
-- [ ] 2.13.7: Criar conta tipo carteira
-- [ ] 2.13.8: Verificar que todas as contas aparecem na listagem
-- [ ] 2.13.9: Editar nome de uma conta
-- [ ] 2.13.10: Editar saldo de uma conta
-- [ ] 2.13.11: Tentar excluir uma conta
-- [ ] 2.13.12: Verificar que conta foi excluída
-- [ ] 2.13.13: Verificar que outro usuário não vê as contas
-- [ ] 2.13.14: Verificar cálculo de saldo total
+- [X] 2.13.1: Fazer login no sistema
+- [X] 2.13.2: Acessar página de contas
+- [X] 2.13.3: Verificar mensagem de lista vazia
+- [X] 2.13.4: Criar nova conta corrente
+- [X] 2.13.5: Verificar redirecionamento e mensagem de sucesso
+- [X] 2.13.6: Criar conta poupança
+- [X] 2.13.7: Criar conta tipo carteira
+- [X] 2.13.8: Verificar que todas as contas aparecem na listagem
+- [X] 2.13.9: Editar nome de uma conta
+- [X] 2.13.10: Editar saldo de uma conta
+- [X] 2.13.11: Tentar excluir uma conta
+- [X] 2.13.12: Verificar que conta foi excluída
+- [X] 2.13.13: Verificar que outro usuário não vê as contas
+- [X] 2.13.14: Verificar cálculo de saldo total
+
+- [X] Tarefa 2.13 concluída
 
 ---
 
