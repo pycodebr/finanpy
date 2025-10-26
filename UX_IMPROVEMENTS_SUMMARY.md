@@ -52,7 +52,6 @@ Cleaner browser tab titles that remain readable even with multiple tabs open, wh
 - **JavaScript function**: Added to `/templates/base.html` global scripts
 - **Auto-detection**: Automatically attaches to all links containing `/delete/` in href
 - **Native dialog**: Uses browser's native `confirm()` dialog for consistency
-- **Message**: "Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita."
 
 ### Modified Files
 - `/templates/base.html` (added delete confirmation script)

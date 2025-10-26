@@ -193,17 +193,6 @@
                     }, 2000);
                 });
             });
-
-            // Delete confirmation functionality
-            const deleteLinks = document.querySelectorAll('a[href*="/delete/"]');
-            deleteLinks.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    const confirmed = confirm('Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.');
-                    if (!confirmed) {
-                        e.preventDefault();
-                    }
-                });
-            });
         });
     </script>
 
