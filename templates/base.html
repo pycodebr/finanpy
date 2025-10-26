@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Finanpy - Sistema de Gestão Financeira Pessoal">
 
-    <title>{% block title %}Finanpy - Gestão Financeira Pessoal{% endblock %}</title>
+    <title>{% block title %}Finanpy{% endblock %} | Finanpy</title>
 
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,21 +32,65 @@
         .gradient-primary:hover {
             background: linear-gradient(135deg, #5568d3 0%, #65408a 100%);
         }
+
+        /* Message Toast Animations */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .message-toast {
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .message-toast.fade-out {
+            animation: slideOutRight 0.3s ease-in-out forwards;
+        }
     </style>
 
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen antialiased">
+    <!-- Navigation Bar -->
+    {% if user.is_authenticated %}
+        {% include 'includes/navbar.html' %}
+    {% endif %}
+
+    <!-- Breadcrumbs -->
+    {% if user.is_authenticated and breadcrumbs %}
+        {% include 'includes/breadcrumbs.html' %}
+    {% endif %}
+
     <!-- Messages Container -->
     {% if messages %}
-    <div class="fixed top-4 right-4 z-50 space-y-3 max-w-md">
+    <div class="fixed top-20 right-4 z-50 space-y-3 max-w-md w-full sm:w-96">
         {% for message in messages %}
-        <div class="animate-slide-in-right rounded-lg shadow-lg p-4 flex items-start space-x-3
-                    {% if message.tags == 'success' %}bg-emerald-500 text-white
-                    {% elif message.tags == 'error' %}bg-red-500 text-white
-                    {% elif message.tags == 'warning' %}bg-amber-500 text-slate-900
-                    {% elif message.tags == 'info' %}bg-blue-500 text-white
-                    {% else %}bg-slate-700 text-slate-100{% endif %}">
+        <div class="message-toast rounded-lg shadow-xl p-4 flex items-start space-x-3 border-l-4
+                    {% if message.tags == 'success' %}bg-emerald-500/10 border-emerald-500 text-emerald-400
+                    {% elif message.tags == 'error' %}bg-red-500/10 border-red-500 text-red-400
+                    {% elif message.tags == 'warning' %}bg-yellow-500/10 border-yellow-500 text-yellow-400
+                    {% elif message.tags == 'info' %}bg-blue-500/10 border-blue-500 text-blue-400
+                    {% else %}bg-slate-700/50 border-slate-500 text-slate-300{% endif %}"
+             style="animation: slideInRight 0.3s ease-out;">
+            <!-- Icon -->
             <div class="flex-shrink-0">
                 {% if message.tags == 'success' %}
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,10 +114,17 @@
                 </svg>
                 {% endif %}
             </div>
-            <div class="flex-1">
-                <p class="font-medium">{{ message }}</p>
+
+            <!-- Message Text -->
+            <div class="flex-1 pt-0.5">
+                <p class="font-medium text-sm leading-relaxed">{{ message }}</p>
             </div>
-            <button type="button" class="flex-shrink-0 ml-2 hover:opacity-75 transition-opacity" onclick="this.parentElement.remove()">
+
+            <!-- Close Button -->
+            <button type="button"
+                    class="flex-shrink-0 ml-2 hover:opacity-75 transition-opacity focus:outline-none"
+                    onclick="this.parentElement.remove()"
+                    aria-label="Fechar mensagem">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -101,18 +152,57 @@
 
     <!-- Custom Scripts -->
     <script>
-        // Auto-dismiss messages after 5 seconds
+        // Message toast functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const messages = document.querySelectorAll('.animate-slide-in-right');
-            messages.forEach(function(message) {
+            const messageToasts = document.querySelectorAll('.message-toast');
+
+            // Function to dismiss a message with animation
+            function dismissMessage(messageElement) {
+                messageElement.classList.add('fade-out');
                 setTimeout(function() {
-                    message.style.opacity = '0';
-                    message.style.transform = 'translateX(100%)';
-                    message.style.transition = 'all 0.3s ease-in-out';
-                    setTimeout(function() {
-                        message.remove();
-                    }, 300);
+                    messageElement.remove();
+                }, 300);
+            }
+
+            // Auto-dismiss messages after 5 seconds
+            messageToasts.forEach(function(message) {
+                // Set up auto-dismiss timer
+                const autoDismissTimer = setTimeout(function() {
+                    dismissMessage(message);
                 }, 5000);
+
+                // Find the close button and add click handler
+                const closeButton = message.querySelector('button[aria-label="Fechar mensagem"]');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        clearTimeout(autoDismissTimer);
+                        dismissMessage(message);
+                    });
+                }
+
+                // Pause auto-dismiss on hover
+                message.addEventListener('mouseenter', function() {
+                    clearTimeout(autoDismissTimer);
+                });
+
+                // Resume auto-dismiss on mouse leave
+                message.addEventListener('mouseleave', function() {
+                    setTimeout(function() {
+                        dismissMessage(message);
+                    }, 2000);
+                });
+            });
+
+            // Delete confirmation functionality
+            const deleteLinks = document.querySelectorAll('a[href*="/delete/"]');
+            deleteLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    const confirmed = confirm('Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.');
+                    if (!confirmed) {
+                        e.preventDefault();
+                    }
+                });
             });
         });
     </script>

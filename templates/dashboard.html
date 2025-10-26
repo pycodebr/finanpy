@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Dashboard - Finanpy{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-bg-primary py-8">
@@ -22,27 +22,30 @@
                 Ações Rápidas
             </h2>
             <div class="space-y-3">
-                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                <a href="{% url 'accounts:account_list' %}"
+                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
                     <span class="text-2xl">🏦</span>
                     <div>
                         <p class="text-text-primary font-medium">Gerenciar Contas</p>
-                        <p class="text-text-secondary text-sm">Em breve - Sprint 2</p>
+                        <p class="text-text-secondary text-sm">Visualize e gerencie suas contas</p>
                     </div>
-                </div>
-                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                </a>
+                <a href="{% url 'categories:category_list' %}"
+                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
                     <span class="text-2xl">🏷️</span>
                     <div>
                         <p class="text-text-primary font-medium">Gerenciar Categorias</p>
-                        <p class="text-text-secondary text-sm">Em breve - Sprint 3</p>
+                        <p class="text-text-secondary text-sm">Organize suas categorias</p>
                     </div>
-                </div>
-                <div class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                </a>
+                <a href="{% url 'transactions:transaction_list' %}"
+                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
                     <span class="text-2xl">💰</span>
                     <div>
                         <p class="text-text-primary font-medium">Gerenciar Transações</p>
-                        <p class="text-text-secondary text-sm">Em breve - Sprint 4</p>
+                        <p class="text-text-secondary text-sm">Acompanhe suas movimentações</p>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
 

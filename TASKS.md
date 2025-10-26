@@ -906,167 +906,167 @@
 
 ---
 
-### Sprint 5: Dashboard e Visualizações
+### Sprint 5: Dashboard e Visualizações ✅ CONCLUÍDA
 
 #### Tarefa 5.1: View do Dashboard
 **Descrição**: Criar view principal do dashboard com estatísticas
 
 **Subtarefas**:
-- [ ] 5.1.1: Criar arquivo `users/views.py` (ou usar existente)
-- [ ] 5.1.2: Importar TemplateView e modelos necessários
-- [ ] 5.1.3: Criar DashboardView herdando de LoginRequiredMixin e TemplateView
-- [ ] 5.1.4: Configurar template_name = 'dashboard.html'
-- [ ] 5.1.5: Override get_context_data
-- [ ] 5.1.6: Calcular saldo total de todas as contas do usuário
-- [ ] 5.1.7: Calcular total de entradas do mês atual
-- [ ] 5.1.8: Calcular total de saídas do mês atual
-- [ ] 5.1.9: Calcular balanço do mês (entradas - saídas)
-- [ ] 5.1.10: Buscar últimas 10 transações do usuário
-- [ ] 5.1.11: Calcular totais por categoria do mês
-- [ ] 5.1.12: Contar número de contas ativas
-- [ ] 5.1.13: Adicionar todos os dados ao context
+- [X] 5.1.1: Criar arquivo `users/views.py` (ou usar existente)
+- [X] 5.1.2: Importar TemplateView e modelos necessários
+- [X] 5.1.3: Criar DashboardView herdando de LoginRequiredMixin e TemplateView
+- [X] 5.1.4: Configurar template_name = 'dashboard.html'
+- [X] 5.1.5: Override get_context_data
+- [X] 5.1.6: Calcular saldo total de todas as contas do usuário
+- [X] 5.1.7: Calcular total de entradas do mês atual
+- [X] 5.1.8: Calcular total de saídas do mês atual
+- [X] 5.1.9: Calcular balanço do mês (entradas - saídas)
+- [X] 5.1.10: Buscar últimas 10 transações do usuário
+- [X] 5.1.11: Calcular totais por categoria do mês
+- [X] 5.1.12: Contar número de contas ativas
+- [X] 5.1.13: Adicionar todos os dados ao context
 
 #### Tarefa 5.2: Template do Dashboard
 **Descrição**: Criar template HTML do dashboard principal
 
 **Subtarefas**:
-- [ ] 5.2.1: Criar arquivo `templates/dashboard.html`
-- [ ] 5.2.2: Extender base.html
-- [ ] 5.2.3: Adicionar título "Dashboard"
-- [ ] 5.2.4: Criar seção de boas-vindas com nome do usuário
-- [ ] 5.2.5: Criar grid com 4 cards de estatísticas principais
-- [ ] 5.2.6: Card 1: Saldo Total (gradiente primário)
-- [ ] 5.2.7: Card 2: Entradas do Mês (verde)
-- [ ] 5.2.8: Card 3: Saídas do Mês (vermelho)
-- [ ] 5.2.9: Card 4: Balanço do Mês (azul se positivo, vermelho se negativo)
-- [ ] 5.2.10: Criar seção "Ações Rápidas" com botões
-- [ ] 5.2.11: Botão para Nova Transação
-- [ ] 5.2.12: Botão para Nova Conta
-- [ ] 5.2.13: Botão para Nova Categoria
-- [ ] 5.2.14: Criar seção "Transações Recentes"
-- [ ] 5.2.15: Listar últimas transações em tabela compacta
-- [ ] 5.2.16: Link "Ver Todas" para página de transações
-- [ ] 5.2.17: Criar seção "Gastos por Categoria"
-- [ ] 5.2.18: Exibir top 5 categorias do mês com barras de progresso
-- [ ] 5.2.19: Usar cores das categorias
-- [ ] 5.2.20: Adicionar responsividade mobile-first
+- [X] 5.2.1: Criar arquivo `templates/dashboard.html`
+- [X] 5.2.2: Extender base.html
+- [X] 5.2.3: Adicionar título "Dashboard"
+- [X] 5.2.4: Criar seção de boas-vindas com nome do usuário
+- [X] 5.2.5: Criar grid com 4 cards de estatísticas principais
+- [X] 5.2.6: Card 1: Saldo Total (gradiente primário)
+- [X] 5.2.7: Card 2: Entradas do Mês (verde)
+- [X] 5.2.8: Card 3: Saídas do Mês (vermelho)
+- [X] 5.2.9: Card 4: Balanço do Mês (azul se positivo, vermelho se negativo)
+- [X] 5.2.10: Criar seção "Ações Rápidas" com botões
+- [X] 5.2.11: Botão para Nova Transação
+- [X] 5.2.12: Botão para Nova Conta
+- [X] 5.2.13: Botão para Nova Categoria
+- [X] 5.2.14: Criar seção "Transações Recentes"
+- [X] 5.2.15: Listar últimas transações em tabela compacta
+- [X] 5.2.16: Link "Ver Todas" para página de transações
+- [X] 5.2.17: Criar seção "Gastos por Categoria"
+- [X] 5.2.18: Exibir top 5 categorias do mês com barras de progresso
+- [X] 5.2.19: Usar cores das categorias
+- [X] 5.2.20: Adicionar responsividade mobile-first
 
 #### Tarefa 5.3: Menu de Navegação Principal
 **Descrição**: Criar componente de navegação consistente
 
 **Subtarefas**:
-- [ ] 5.3.1: Criar arquivo `templates/includes/navbar.html`
-- [ ] 5.3.2: Criar estrutura de navbar com TailwindCSS
-- [ ] 5.3.3: Adicionar logo/nome Finanpy à esquerda
-- [ ] 5.3.4: Adicionar links de navegação no centro
-- [ ] 5.3.5: Link para Dashboard
-- [ ] 5.3.6: Link para Contas
-- [ ] 5.3.7: Link para Categorias
-- [ ] 5.3.8: Link para Transações
-- [ ] 5.3.9: Adicionar dropdown de usuário à direita
-- [ ] 5.3.10: Exibir nome/email do usuário
-- [ ] 5.3.11: Link para Ver Perfil
-- [ ] 5.3.12: Link para Editar Perfil
-- [ ] 5.3.13: Botão de Logout
-- [ ] 5.3.14: Adicionar indicador de página ativa
-- [ ] 5.3.15: Implementar menu hambúrguer para mobile
-- [ ] 5.3.16: Incluir navbar no base.html
+- [X] 5.3.1: Criar arquivo `templates/includes/navbar.html`
+- [X] 5.3.2: Criar estrutura de navbar com TailwindCSS
+- [X] 5.3.3: Adicionar logo/nome Finanpy à esquerda
+- [X] 5.3.4: Adicionar links de navegação no centro
+- [X] 5.3.5: Link para Dashboard
+- [X] 5.3.6: Link para Contas
+- [X] 5.3.7: Link para Categorias
+- [X] 5.3.8: Link para Transações
+- [X] 5.3.9: Adicionar dropdown de usuário à direita
+- [X] 5.3.10: Exibir nome/email do usuário
+- [X] 5.3.11: Link para Ver Perfil
+- [X] 5.3.12: Link para Editar Perfil
+- [X] 5.3.13: Botão de Logout
+- [X] 5.3.14: Adicionar indicador de página ativa
+- [X] 5.3.15: Implementar menu hambúrguer para mobile
+- [X] 5.3.16: Incluir navbar no base.html
 
 #### Tarefa 5.4: Visualização de Perfil
 **Descrição**: Criar página para visualizar dados do perfil
 
 **Subtarefas**:
-- [ ] 5.4.1: No `profiles/views.py`, criar ProfileDetailView
-- [ ] 5.4.2: Configurar para buscar perfil do usuário logado
-- [ ] 5.4.3: Configurar template_name
-- [ ] 5.4.4: Criar `templates/profiles/profile_detail.html`
-- [ ] 5.4.5: Exibir foto placeholder (círculo com iniciais)
-- [ ] 5.4.6: Exibir nome completo
-- [ ] 5.4.7: Exibir email (não editável)
-- [ ] 5.4.8: Exibir telefone
-- [ ] 5.4.9: Exibir data de cadastro
-- [ ] 5.4.10: Adicionar botão "Editar Perfil"
-- [ ] 5.4.11: Criar design com cards estilizados
+- [X] 5.4.1: No `profiles/views.py`, criar ProfileDetailView
+- [X] 5.4.2: Configurar para buscar perfil do usuário logado
+- [X] 5.4.3: Configurar template_name
+- [X] 5.4.4: Criar `templates/profiles/profile_detail.html`
+- [X] 5.4.5: Exibir foto placeholder (círculo com iniciais)
+- [X] 5.4.6: Exibir nome completo
+- [X] 5.4.7: Exibir email (não editável)
+- [X] 5.4.8: Exibir telefone
+- [X] 5.4.9: Exibir data de cadastro
+- [X] 5.4.10: Adicionar botão "Editar Perfil"
+- [X] 5.4.11: Criar design com cards estilizados
 
 #### Tarefa 5.5: Edição de Perfil
 **Descrição**: Criar formulário para editar perfil
 
 **Subtarefas**:
-- [ ] 5.5.1: Criar `profiles/forms.py`
-- [ ] 5.5.2: Criar ProfileForm
-- [ ] 5.5.3: Incluir fields: full_name, phone
-- [ ] 5.5.4: Aplicar widgets com TailwindCSS
-- [ ] 5.5.5: Adicionar labels e placeholders em português
-- [ ] 5.5.6: No `profiles/views.py`, criar ProfileUpdateView
-- [ ] 5.5.7: Configurar para editar perfil do usuário logado
-- [ ] 5.5.8: Criar `templates/profiles/profile_form.html`
-- [ ] 5.5.9: Criar formulário estilizado
-- [ ] 5.5.10: Adicionar botões Salvar e Cancelar
+- [X] 5.5.1: Criar `profiles/forms.py`
+- [X] 5.5.2: Criar ProfileForm
+- [X] 5.5.3: Incluir fields: full_name, phone
+- [X] 5.5.4: Aplicar widgets com TailwindCSS
+- [X] 5.5.5: Adicionar labels e placeholders em português
+- [X] 5.5.6: No `profiles/views.py`, criar ProfileUpdateView
+- [X] 5.5.7: Configurar para editar perfil do usuário logado
+- [X] 5.5.8: Criar `templates/profiles/profile_form.html`
+- [X] 5.5.9: Criar formulário estilizado
+- [X] 5.5.10: Adicionar botões Salvar e Cancelar
 
 #### Tarefa 5.6: URLs de Dashboard e Profile
 **Descrição**: Configurar URLs para dashboard e perfil
 
 **Subtarefas**:
-- [ ] 5.6.1: Criar `profiles/urls.py`
-- [ ] 5.6.2: Adicionar paths para profile detail e update
-- [ ] 5.6.3: Incluir no `core/urls.py`
-- [ ] 5.6.4: Adicionar URL do dashboard no `core/urls.py`
-- [ ] 5.6.5: Configurar LOGIN_REDIRECT_URL = '/dashboard/' no settings.py
+- [X] 5.6.1: Criar `profiles/urls.py`
+- [X] 5.6.2: Adicionar paths para profile detail e update
+- [X] 5.6.3: Incluir no `core/urls.py`
+- [X] 5.6.4: Adicionar URL do dashboard no `core/urls.py`
+- [X] 5.6.5: Configurar LOGIN_REDIRECT_URL = '/dashboard/' no settings.py
 
 #### Tarefa 5.7: Formatação de Valores Monetários
 **Descrição**: Criar template tags para formatar valores em reais
 
 **Subtarefas**:
-- [ ] 5.7.1: Criar diretório `users/templatetags/`
-- [ ] 5.7.2: Criar arquivo `__init__.py`
-- [ ] 5.7.3: Criar arquivo `currency_filters.py`
-- [ ] 5.7.4: Criar filtro currency para formatar em R$
-- [ ] 5.7.5: Usar locale pt_BR
-- [ ] 5.7.6: Testar formatação em templates
-- [ ] 5.7.7: Aplicar em todos os templates que exibem valores
+- [X] 5.7.1: Criar diretório `users/templatetags/`
+- [X] 5.7.2: Criar arquivo `__init__.py`
+- [X] 5.7.3: Criar arquivo `currency_filters.py`
+- [X] 5.7.4: Criar filtro currency para formatar em R$
+- [X] 5.7.5: Usar locale pt_BR
+- [X] 5.7.6: Testar formatação em templates
+- [X] 5.7.7: Aplicar em todos os templates que exibem valores
 
 #### Tarefa 5.8: Mensagens de Feedback
 **Descrição**: Padronizar sistema de mensagens do Django
 
 **Subtarefas**:
-- [ ] 5.8.1: No base.html, criar seção para mensagens
-- [ ] 5.8.2: Estilizar mensagens de sucesso (verde)
-- [ ] 5.8.3: Estilizar mensagens de erro (vermelho)
-- [ ] 5.8.4: Estilizar mensagens de aviso (amarelo)
-- [ ] 5.8.5: Estilizar mensagens de info (azul)
-- [ ] 5.8.6: Adicionar botão para fechar mensagens
-- [ ] 5.8.7: Adicionar auto-dismiss com JavaScript (opcional)
-- [ ] 5.8.8: Testar em todas as views
+- [X] 5.8.1: No base.html, criar seção para mensagens
+- [X] 5.8.2: Estilizar mensagens de sucesso (verde)
+- [X] 5.8.3: Estilizar mensagens de erro (vermelho)
+- [X] 5.8.4: Estilizar mensagens de aviso (amarelo)
+- [X] 5.8.5: Estilizar mensagens de info (azul)
+- [X] 5.8.6: Adicionar botão para fechar mensagens
+- [X] 5.8.7: Adicionar auto-dismiss com JavaScript (opcional)
+- [X] 5.8.8: Testar em todas as views
 
 #### Tarefa 5.9: Melhorias de UX
 **Descrição**: Implementar melhorias de experiência do usuário
 
 **Subtarefas**:
-- [ ] 5.9.1: Adicionar breadcrumbs nas páginas internas
-- [ ] 5.9.2: Adicionar título da página no navegador (tag title)
-- [ ] 5.9.3: Adicionar confirmação JavaScript para exclusões
-- [ ] 5.9.4: Adicionar loading states em botões (opcional)
-- [ ] 5.9.5: Melhorar responsividade em mobile
-- [ ] 5.9.6: Adicionar tooltips onde necessário
-- [ ] 5.9.7: Padronizar espaçamentos
-- [ ] 5.9.8: Adicionar animações suaves (transitions)
+- [X] 5.9.1: Adicionar breadcrumbs nas páginas internas
+- [X] 5.9.2: Adicionar título da página no navegador (tag title)
+- [X] 5.9.3: Adicionar confirmação JavaScript para exclusões
+- [X] 5.9.4: Adicionar loading states em botões (opcional)
+- [X] 5.9.5: Melhorar responsividade em mobile
+- [X] 5.9.6: Adicionar tooltips onde necessário
+- [X] 5.9.7: Padronizar espaçamentos
+- [X] 5.9.8: Adicionar animações suaves (transitions)
 
 #### Tarefa 5.10: Testes Manuais Completos
 **Descrição**: Testar fluxo completo da aplicação
 
 **Subtarefas**:
-- [ ] 5.10.1: Testar cadastro de novo usuário
-- [ ] 5.10.2: Verificar criação automática de perfil e categorias
-- [ ] 5.10.3: Navegar pelo dashboard
-- [ ] 5.10.4: Criar contas, categorias e transações
-- [ ] 5.10.5: Verificar cálculos no dashboard
-- [ ] 5.10.6: Testar filtros de transações
-- [ ] 5.10.7: Editar perfil
-- [ ] 5.10.8: Testar navegação entre páginas
-- [ ] 5.10.9: Testar responsividade mobile
-- [ ] 5.10.10: Verificar mensagens de feedback
-- [ ] 5.10.11: Testar logout e login novamente
-- [ ] 5.10.12: Verificar isolamento de dados entre usuários
+- [X] 5.10.1: Testar cadastro de novo usuário
+- [X] 5.10.2: Verificar criação automática de perfil e categorias
+- [X] 5.10.3: Navegar pelo dashboard
+- [X] 5.10.4: Criar contas, categorias e transações
+- [X] 5.10.5: Verificar cálculos no dashboard
+- [X] 5.10.6: Testar filtros de transações
+- [X] 5.10.7: Editar perfil
+- [X] 5.10.8: Testar navegação entre páginas
+- [X] 5.10.9: Testar responsividade mobile
+- [X] 5.10.10: Verificar mensagens de feedback
+- [X] 5.10.11: Testar logout e login novamente
+- [X] 5.10.12: Verificar isolamento de dados entre usuários
 
 ---
 

@@ -1,9 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Minhas Categorias - Finanpy{% endblock %}
+{% block title %}Minhas Categorias{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Breadcrumbs -->
+    <nav class="mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm">
+            <li class="flex items-center">
+                <a href="{% url 'dashboard' %}"
+                   class="text-slate-400 hover:text-purple-400 transition-colors duration-200">
+                    Dashboard
+                </a>
+                <svg class="w-4 h-4 mx-2 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </li>
+            <li>
+                <span class="text-slate-100 font-medium">Categorias</span>
+            </li>
+        </ol>
+    </nav>
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
@@ -26,16 +43,20 @@
             <h2 class="text-2xl font-bold text-emerald-400 mb-4">Categorias de Entrada</h2>
             <div class="space-y-4">
                 {% for category in income_categories %}
-                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-emerald-500/50 transition-colors">
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-emerald-500/50 transition-all duration-300">
                     <div class="flex items-center">
                         <div class="w-4 h-4 rounded-full mr-4" style="background-color: {{ category.color }};"></div>
                         <span class="font-medium text-slate-200">{{ category.name }}</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <a href="{% url 'categories:category_update' category.pk %}" class="text-slate-400 hover:text-white transition-colors">
+                        <a href="{% url 'categories:category_update' category.pk %}"
+                           title="Editar categoria {{ category.name }}"
+                           class="text-slate-400 hover:text-white transition-colors duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </a>
-                        <a href="{% url 'categories:category_delete' category.pk %}" class="text-slate-400 hover:text-red-400 transition-colors">
+                        <a href="{% url 'categories:category_delete' category.pk %}"
+                           title="Excluir categoria {{ category.name }}"
+                           class="text-slate-400 hover:text-red-400 transition-colors duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </a>
                     </div>
@@ -55,16 +76,20 @@
             <h2 class="text-2xl font-bold text-red-400 mb-4">Categorias de Saída</h2>
             <div class="space-y-4">
                 {% for category in expense_categories %}
-                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-red-500/50 transition-colors">
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-red-500/50 transition-all duration-300">
                     <div class="flex items-center">
                         <div class="w-4 h-4 rounded-full mr-4" style="background-color: {{ category.color }};"></div>
                         <span class="font-medium text-slate-200">{{ category.name }}</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <a href="{% url 'categories:category_update' category.pk %}" class="text-slate-400 hover:text-white transition-colors">
+                        <a href="{% url 'categories:category_update' category.pk %}"
+                           title="Editar categoria {{ category.name }}"
+                           class="text-slate-400 hover:text-white transition-colors duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </a>
-                        <a href="{% url 'categories:category_delete' category.pk %}" class="text-slate-400 hover:text-red-400 transition-colors">
+                        <a href="{% url 'categories:category_delete' category.pk %}"
+                           title="Excluir categoria {{ category.name }}"
+                           class="text-slate-400 hover:text-red-400 transition-colors duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </a>
                     </div>

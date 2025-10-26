@@ -1,0 +1,24 @@
+<!-- Breadcrumb Navigation Component -->
+<nav class="bg-slate-800 border-b border-slate-700 py-3 px-4" aria-label="Breadcrumb">
+    <div class="container mx-auto max-w-7xl">
+        <ol class="flex items-center space-x-2 text-sm">
+            {% for crumb in breadcrumbs %}
+                {% if not forloop.last %}
+                    <li class="flex items-center">
+                        <a href="{{ crumb.url }}"
+                           class="text-slate-400 hover:text-purple-400 transition-colors duration-200">
+                            {{ crumb.title }}
+                        </a>
+                        <svg class="w-4 h-4 mx-2 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </li>
+                {% else %}
+                    <li>
+                        <span class="text-slate-100 font-medium">{{ crumb.title }}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+</nav>

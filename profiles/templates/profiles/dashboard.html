@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% load currency_filters %}
+
+{% block title %}Dashboard - Finanpy{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">
+            Olá, {{ user.get_full_name|default:user.username }}!
+        </h1>
+        <p class="text-slate-400">Bem-vindo ao seu painel financeiro - {{ current_month }}</p>
+    </div>
+
+    <!-- Statistics Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Card 1: Total Balance -->
+        <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl shadow-lg p-6 border border-purple-400 hover:shadow-xl transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-purple-100 text-sm font-medium mb-1">Saldo Total</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white">
+                        {{ total_balance|currency }}
+                    </h2>
+                </div>
+                <div class="flex-shrink-0">
+                    <svg class="w-10 h-10 text-purple-200 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center text-purple-100 text-xs">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+                <span>{{ active_accounts_count }} conta{{ active_accounts_count|pluralize }} ativa{{ active_accounts_count|pluralize }}</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Month Income -->
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700 hover:shadow-xl transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-slate-400 text-sm font-medium mb-1">Entradas do Mês</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-emerald-400">
+                        + {{ month_income|currency }}
+                    </h2>
+                </div>
+                <div class="flex-shrink-0">
+                    <svg class="w-10 h-10 text-emerald-500 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center text-emerald-500 text-xs">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Receitas</span>
+            </div>
+        </div>
+
+        <!-- Card 3: Month Expenses -->
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700 hover:shadow-xl transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-slate-400 text-sm font-medium mb-1">Saídas do Mês</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-red-400">
+                        - {{ month_expenses|currency }}
+                    </h2>
+                </div>
+                <div class="flex-shrink-0">
+                    <svg class="w-10 h-10 text-red-500 opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center text-red-500 text-xs">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Despesas</span>
+            </div>
+        </div>
+
+        <!-- Card 4: Month Balance -->
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700 hover:shadow-xl transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <p class="text-slate-400 text-sm font-medium mb-1">Balanço do Mês</p>
+                    <h2 class="text-2xl md:text-3xl font-bold {% if month_balance >= 0 %}text-blue-400{% else %}text-red-400{% endif %}">
+                        {% if month_balance >= 0 %}+{% endif %} {{ month_balance|currency }}
+                    </h2>
+                </div>
+                <div class="flex-shrink-0">
+                    <svg class="w-10 h-10 {% if month_balance >= 0 %}text-blue-500{% else %}text-red-500{% endif %} opacity-75" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center {% if month_balance >= 0 %}text-blue-500{% else %}text-red-500{% endif %} text-xs">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+                <span>{% if month_balance >= 0 %}Positivo{% else %}Negativo{% endif %}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-slate-100 mb-4">Ações Rápidas</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <!-- New Transaction -->
+            <a href="{% url 'transactions:transaction_create' %}"
+               class="group bg-slate-800 rounded-lg border border-slate-700 p-6 hover:border-purple-500 hover:shadow-lg transition-all duration-200">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center group-hover:bg-opacity-30 transition-all">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-slate-100 font-semibold mb-1">Nova Transação</h3>
+                        <p class="text-slate-400 text-sm">Registrar receita ou despesa</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- New Account -->
+            <a href="{% url 'accounts:account_create' %}"
+               class="group bg-slate-800 rounded-lg border border-slate-700 p-6 hover:border-purple-500 hover:shadow-lg transition-all duration-200">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center group-hover:bg-opacity-30 transition-all">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-slate-100 font-semibold mb-1">Nova Conta</h3>
+                        <p class="text-slate-400 text-sm">Adicionar conta bancária</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- New Category -->
+            <a href="{% url 'categories:category_create' %}"
+               class="group bg-slate-800 rounded-lg border border-slate-700 p-6 hover:border-purple-500 hover:shadow-lg transition-all duration-200">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-emerald-500 bg-opacity-20 rounded-lg flex items-center justify-center group-hover:bg-opacity-30 transition-all">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-slate-100 font-semibold mb-1">Nova Categoria</h3>
+                        <p class="text-slate-400 text-sm">Organizar transações</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Transactions Section -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-slate-100">Transações Recentes</h2>
+            <a href="{% url 'transactions:transaction_list' %}"
+               class="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
+                Ver Todas
+                <svg class="w-4 h-4 inline-block ml-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+
+        <div class="bg-slate-800 rounded-lg border border-slate-700 shadow-lg overflow-hidden">
+            {% if recent_transactions %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-slate-700 bg-opacity-50">
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Data</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Descrição</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider hidden md:table-cell">Categoria</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider hidden sm:table-cell">Conta</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700">
+                        {% for transaction in recent_transactions %}
+                        <tr class="hover:bg-slate-700 hover:bg-opacity-30 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-slate-300">{{ transaction.transaction_date|date:'d/m/Y' }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-slate-100">{{ transaction.description|truncatewords:5 }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                      style="background-color: {{ transaction.category.color }}20; color: {{ transaction.category.color }};">
+                                    {{ transaction.category.name }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                <div class="text-sm text-slate-400">{{ transaction.account.name }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <div class="text-sm font-bold {% if transaction.transaction_type == 'income' %}text-emerald-400{% else %}text-red-400{% endif %}">
+                                    {% if transaction.transaction_type == 'income' %}+{% else %}-{% endif %} {{ transaction.amount|currency }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-12 text-center">
+                <svg class="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3 class="text-lg font-semibold text-slate-300 mb-2">Nenhuma transação registrada</h3>
+                <p class="text-slate-400 mb-4">Comece registrando sua primeira transação.</p>
+                <a href="{% url 'transactions:transaction_create' %}"
+                   class="inline-flex items-center px-4 py-2 gradient-primary text-white text-sm font-semibold rounded-lg hover:shadow-lg transition-all">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Nova Transação
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Top Categories Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-slate-100 mb-4">Gastos por Categoria</h2>
+        <div class="bg-slate-800 rounded-lg border border-slate-700 shadow-lg p-6">
+            {% if top_categories %}
+            <div class="space-y-4">
+                {% for category_data in top_categories %}
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3 flex-1">
+                            <div class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: {{ category_data.category__color }};"></div>
+                            <span class="text-sm font-medium text-slate-100">{{ category_data.category__name }}</span>
+                        </div>
+                        <span class="text-sm font-bold text-slate-100 ml-4">
+                            {{ category_data.total_amount|currency }}
+                        </span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
+                        <div class="h-2.5 rounded-full transition-all duration-300"
+                             style="background-color: {{ category_data.category__color }}; width: {{ category_data.percentage }}%;">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <svg class="w-12 h-12 mx-auto text-slate-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                <p class="text-slate-400 text-sm">Nenhuma despesa por categoria neste mês.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

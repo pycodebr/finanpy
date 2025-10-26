@@ -1,9 +1,17 @@
+from datetime import datetime
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjangoLogoutView
+from django.db.models import Sum, Q, Count
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView, TemplateView
+
+from accounts.models import Account
+from categories.models import Category
+from transactions.models import Transaction
 
 from .forms import LoginForm, SignupForm
 
@@ -131,25 +139,113 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     """
     Dashboard view for authenticated users.
 
-    Displays a welcome message and placeholder sections for upcoming features
-    (Accounts, Categories, Transactions - to be implemented in Sprints 2-4).
+    Displays comprehensive financial statistics including:
+    - Total balance across all accounts
+    - Current month income and expenses
+    - Month balance (income - expenses)
+    - Recent transactions (last 10)
+    - Top 5 expense categories for the current month
+    - Number of active accounts
 
-    This is a minimal implementation to fix the authentication redirect issue.
-    The dashboard will be enhanced with real data and widgets in Sprint 5.
+    All data is filtered by the authenticated user for security.
     """
 
     template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
         """
-        Add user information to the template context.
+        Calculate and add financial statistics to the template context.
+
+        Performs optimized queries with select_related/prefetch_related
+        to avoid N+1 queries. All monetary calculations use Decimal
+        for precision.
 
         Args:
             **kwargs: Arbitrary keyword arguments
 
         Returns:
-            dict: Context dictionary with user information
+            dict: Context dictionary with comprehensive dashboard data
         """
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        user = self.request.user
+
+        # Get current month date range
+        now = datetime.now()
+        current_month_start = now.replace(day=1)
+
+        # 1. Calculate total balance across all user accounts
+        total_balance_data = Account.objects.filter(
+            user=user
+        ).aggregate(
+            total=Sum('balance')
+        )
+        total_balance = total_balance_data['total'] or Decimal('0.00')
+
+        # 2. Calculate current month income
+        month_income_data = Transaction.objects.filter(
+            account__user=user,
+            transaction_type=Transaction.TransactionType.INCOME,
+            transaction_date__gte=current_month_start
+        ).aggregate(
+            total=Sum('amount')
+        )
+        month_income = month_income_data['total'] or Decimal('0.00')
+
+        # 3. Calculate current month expenses
+        month_expenses_data = Transaction.objects.filter(
+            account__user=user,
+            transaction_type=Transaction.TransactionType.EXPENSE,
+            transaction_date__gte=current_month_start
+        ).aggregate(
+            total=Sum('amount')
+        )
+        month_expenses = month_expenses_data['total'] or Decimal('0.00')
+
+        # 4. Calculate month balance (income - expenses)
+        month_balance = month_income - month_expenses
+
+        # 5. Get last 10 transactions with optimized queries
+        recent_transactions = Transaction.objects.filter(
+            account__user=user
+        ).select_related(
+            'account',
+            'category'
+        ).order_by(
+            '-transaction_date',
+            '-created_at'
+        )[:10]
+
+        # 6. Get top 5 expense categories for current month
+        top_categories = Transaction.objects.filter(
+            account__user=user,
+            transaction_type=Transaction.TransactionType.EXPENSE,
+            transaction_date__gte=current_month_start
+        ).values(
+            'category__name',
+            'category__color'
+        ).annotate(
+            total_amount=Sum('amount')
+        ).order_by(
+            '-total_amount'
+        )[:5]
+
+        # 7. Count active accounts
+        active_accounts_count = Account.objects.filter(
+            user=user,
+            is_active=True
+        ).count()
+
+        # Add all data to context
+        context.update({
+            'user': user,
+            'total_balance': total_balance,
+            'month_income': month_income,
+            'month_expenses': month_expenses,
+            'month_balance': month_balance,
+            'recent_transactions': recent_transactions,
+            'top_categories': top_categories,
+            'active_accounts_count': active_accounts_count,
+            'current_month': now.strftime('%B %Y'),
+        })
+
         return context
