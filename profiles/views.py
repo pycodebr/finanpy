@@ -28,11 +28,12 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         1. User cannot access other users' profiles
         2. No need for pk in URL
         3. Simple and secure access pattern
+        Optimized with select_related to avoid N+1 queries.
 
         Returns:
             Profile: The profile instance of the logged-in user
         """
-        return self.request.user.profile
+        return Profile.objects.select_related('user').get(user=self.request.user)
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -56,11 +57,12 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
         This ensures users can only edit their own profile and prevents
         unauthorized access to other users' profiles.
+        Optimized with select_related to avoid N+1 queries.
 
         Returns:
             Profile: The profile instance of the logged-in user
         """
-        return self.request.user.profile
+        return Profile.objects.select_related('user').get(user=self.request.user)
 
     def form_valid(self, form):
         """

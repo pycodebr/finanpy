@@ -37,6 +37,33 @@
         </a>
     </div>
 
+    <!-- Filters -->
+    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg mb-8 p-6">
+        <form method="get" class="flex flex-col md:flex-row md:items-end gap-4">
+            <div class="flex-1">
+                <label for="status" class="block text-sm font-semibold text-slate-300 mb-2">Status</label>
+                <select
+                    id="status"
+                    name="status"
+                    class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                >
+                    <option value="">Todas as contas</option>
+                    <option value="active" {% if filters.status == 'active' %}selected{% endif %}>Apenas ativas</option>
+                    <option value="inactive" {% if filters.status == 'inactive' %}selected{% endif %}>Apenas inativas</option>
+                </select>
+            </div>
+            <div class="flex gap-3">
+                <button type="submit" class="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
+                    Filtrar
+                </button>
+                <a href="{% url 'accounts:account_list' %}"
+                   class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 {% if not has_filters %}opacity-60 cursor-not-allowed pointer-events-none{% endif %}">
+                    Limpar
+                </a>
+            </div>
+        </form>
+    </div>
+
     <!-- Consolidated Balance Card -->
     {% if accounts %}
     <div class="mb-8">
@@ -163,13 +190,13 @@
             </div>
             <div class="flex items-center gap-2">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}"
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                        class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Anterior</a>
                 {% else %}
                     <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500">Anterior</span>
                 {% endif %}
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}"
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
                        class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Próxima</a>
                 {% else %}
                     <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500">Próxima</span>

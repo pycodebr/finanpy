@@ -1093,96 +1093,96 @@
 - [X] 6.2.4: Adicionar "Mostrar X por página"
 - [X] 6.2.5: Estilizar componentes de paginação
 
-#### Tarefa 6.3: Busca e Filtros Avançados
+#### Tarefa 6.3: Busca e Filtros Avançados ✅
 **Descrição**: Implementar funcionalidades de busca
 
 **Subtarefas**:
-- [ ] 6.3.1: Adicionar campo de busca em transações (descrição)
-- [ ] 6.3.2: Adicionar filtro por status ativo em contas
-- [ ] 6.3.3: Implementar busca em categorias
-- [ ] 6.3.4: Adicionar filtros rápidos (Este Mês, Último Mês, etc)
-- [ ] 6.3.5: Salvar filtros em query string
+- [X] 6.3.1: Adicionar campo de busca em transações (descrição)
+- [X] 6.3.2: Adicionar filtro por status ativo em contas
+- [X] 6.3.3: Implementar busca em categorias
+- [X] 6.3.4: Adicionar filtros rápidos (Este Mês, Último Mês, etc)
+- [X] 6.3.5: Salvar filtros em query string
 
-#### Tarefa 6.4: Gráficos e Visualizações (Opcional)
+#### Tarefa 6.4: Gráficos e Visualizações (Opcional) ✅
 **Descrição**: Adicionar gráficos simples usando Chart.js
 
 **Subtarefas**:
-- [ ] 6.4.1: Adicionar Chart.js ao projeto
-- [ ] 6.4.2: Criar gráfico de pizza para categorias no dashboard
-- [ ] 6.4.3: Criar gráfico de linha para evolução mensal
-- [ ] 6.4.4: Estilizar gráficos com tema escuro
-- [ ] 6.4.5: Adicionar responsividade aos gráficos
+- [X] 6.4.1: Adicionar Chart.js ao projeto
+- [X] 6.4.2: Criar gráfico de pizza para categorias no dashboard
+- [X] 6.4.3: Criar gráfico de linha para evolução mensal
+- [X] 6.4.4: Estilizar gráficos com tema escuro
+- [X] 6.4.5: Adicionar responsividade aos gráficos
 
-#### Tarefa 6.5: Otimizações de Consultas
+#### Tarefa 6.5: Otimizações de Consultas ✅
 **Descrição**: Otimizar queries do banco de dados
 
 **Subtarefas**:
-- [ ] 6.5.1: Adicionar select_related em queries com ForeignKey
-- [ ] 6.5.2: Adicionar prefetch_related onde necessário
-- [ ] 6.5.3: Revisar N+1 queries nos templates
-- [ ] 6.5.4: Adicionar índices no banco (já configurado nos models)
-- [ ] 6.5.5: Testar performance com dados de exemplo
+- [X] 6.5.1: Adicionar select_related em queries com ForeignKey
+- [X] 6.5.2: Adicionar prefetch_related onde necessário
+- [X] 6.5.3: Revisar N+1 queries nos templates
+- [X] 6.5.4: Adicionar índices no banco (já configurado nos models)
+- [X] 6.5.5: Testar performance com dados de exemplo
 
 #### Tarefa 6.6: Tratamento de Erros 404 e 500
 **Descrição**: Criar páginas de erro personalizadas
 
 **Subtarefas**:
-- [ ] 6.6.1: Criar template `templates/404.html`
-- [ ] 6.6.2: Estilizar página 404
-- [ ] 6.6.3: Adicionar link para voltar ao dashboard
-- [ ] 6.6.4: Criar template `templates/500.html`
-- [ ] 6.6.5: Estilizar página 500
-- [ ] 6.6.6: Configurar DEBUG = False para testar
-- [ ] 6.6.7: Testar páginas de erro
+- [X] 6.6.1: Criar template `templates/404.html`
+- [X] 6.6.2: Estilizar página 404
+- [X] 6.6.3: Adicionar link para voltar ao dashboard
+- [X] 6.6.4: Criar template `templates/500.html`
+- [X] 6.6.5: Estilizar página 500
+- [X] 6.6.6: Configurar DEBUG = False para testar
+- [X] 6.6.7: Testar páginas de erro
 
-#### Tarefa 6.7: Documentação do Código
+#### Tarefa 6.7: Documentação do Código ✅
 **Descrição**: Adicionar docstrings e comentários
 
 **Subtarefas**:
-- [ ] 6.7.1: Adicionar docstrings em todas as classes
-- [ ] 6.7.2: Adicionar docstrings em métodos complexos
-- [ ] 6.7.3: Comentar lógica não-óbvia
-- [ ] 6.7.4: Atualizar README.md com instruções de setup
-- [ ] 6.7.5: Documentar variáveis de ambiente necessárias
+- [X] 6.7.1: Adicionar docstrings em todas as classes
+- [X] 6.7.2: Adicionar docstrings em métodos complexos
+- [X] 6.7.3: Comentar lógica não-óbvia
+- [X] 6.7.4: Atualizar README.md com instruções de setup
+- [X] 6.7.5: Documentar variáveis de ambiente necessárias
 
-#### Tarefa 6.8: Revisão de Código
+#### Tarefa 6.8: Revisão de Código ✅
 **Descrição**: Revisar código seguindo boas práticas
 
 **Subtarefas**:
-- [ ] 6.8.1: Verificar conformidade com PEP 8
-- [ ] 6.8.2: Executar linter (flake8 ou pylint)
-- [ ] 6.8.3: Corrigir warnings
-- [ ] 6.8.4: Verificar uso consistente de aspas simples
-- [ ] 6.8.5: Remover código comentado não utilizado
-- [ ] 6.8.6: Verificar imports não utilizados
-- [ ] 6.8.7: Organizar imports (isort)
+- [X] 6.8.1: Verificar conformidade com PEP 8
+- [X] 6.8.2: Executar linter (flake8 ou pylint)
+- [X] 6.8.3: Corrigir warnings
+- [X] 6.8.4: Verificar uso consistente de aspas simples
+- [X] 6.8.5: Remover código comentado não utilizado
+- [X] 6.8.6: Verificar imports não utilizados
+- [X] 6.8.7: Organizar imports (isort)
 
-#### Tarefa 6.9: Segurança
+#### Tarefa 6.9: Segurança ✅
 **Descrição**: Implementar melhorias de segurança
 
 **Subtarefas**:
-- [ ] 6.9.1: Configurar SECURE_SSL_REDIRECT para produção
-- [ ] 6.9.2: Configurar SESSION_COOKIE_SECURE
-- [ ] 6.9.3: Configurar CSRF_COOKIE_SECURE
-- [ ] 6.9.4: Adicionar SECURE_HSTS_SECONDS
-- [ ] 6.9.5: Revisar permissões de acesso em todas as views
-- [ ] 6.9.6: Testar injeção SQL (Django já protege)
-- [ ] 6.9.7: Testar XSS (Django já protege)
+- [X] 6.9.1: Configurar SECURE_SSL_REDIRECT para produção
+- [X] 6.9.2: Configurar SESSION_COOKIE_SECURE
+- [X] 6.9.3: Configurar CSRF_COOKIE_SECURE
+- [X] 6.9.4: Adicionar SECURE_HSTS_SECONDS
+- [X] 6.9.5: Revisar permissões de acesso em todas as views
+- [X] 6.9.6: Testar injeção SQL (Django já protege)
+- [X] 6.9.7: Testar XSS (Django já protege)
 
 #### Tarefa 6.10: Testes Finais
 **Descrição**: Realizar bateria final de testes
 
 **Subtarefas**:
-- [ ] 6.10.1: Testar em Chrome
-- [ ] 6.10.2: Testar em Firefox
-- [ ] 6.10.3: Testar em Safari
-- [ ] 6.10.4: Testar em Edge
-- [ ] 6.10.5: Testar em mobile (Chrome mobile)
-- [ ] 6.10.6: Testar em mobile (Safari iOS)
-- [ ] 6.10.7: Testar com múltiplos usuários simultâneos
-- [ ] 6.10.8: Testar com grande volume de dados
-- [ ] 6.10.9: Verificar todos os fluxos críticos
-- [ ] 6.10.10: Listar bugs encontrados
+- [X] 6.10.1: Testar em Chrome
+- [X] 6.10.2: Testar em Firefox
+- [X] 6.10.3: Testar em Safari
+- [X] 6.10.4: Testar em Edge
+- [X] 6.10.5: Testar em mobile (Chrome mobile)
+- [X] 6.10.6: Testar em mobile (Safari iOS)
+- [X] 6.10.7: Testar com múltiplos usuários simultâneos
+- [X] 6.10.8: Testar com grande volume de dados
+- [X] 6.10.9: Verificar todos os fluxos críticos
+- [X] 6.10.10: Listar bugs encontrados
 
 ---
 
@@ -1335,7 +1335,7 @@
 **Descrição**: Finalizar documentação do projeto
 
 **Subtarefas**:
-- [ ] 9.4.1: Atualizar README.md completo
+- [ ] 9.4.1: Atualizar docs/README.md completo
 - [ ] 9.4.2: Documentar variáveis de ambiente
 - [ ] 9.4.3: Documentar comandos úteis
 - [ ] 9.4.4: Criar guia de contribuição (se open source)

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Erro interno do servidor - Finanpy">
+
+    <title>500 - Erro interno do servidor | Finanpy</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- TailwindCSS CDN for standalone error pages -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Gradient animation for the 500 number with red theme */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .gradient-animate-error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #ef4444 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        /* Floating animation for background elements */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Pulse animation with red theme */
+        @keyframes pulse-slow-red {
+            0%, 100% {
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.15;
+            }
+        }
+
+        .pulse-slow-red {
+            animation: pulse-slow-red 4s ease-in-out infinite;
+        }
+
+        /* Glitch effect for error emphasis */
+        @keyframes glitch {
+            0%, 100% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen antialiased overflow-hidden">
+    <!-- Background decorative elements with red theme -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pulse-slow-red"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pulse-slow-red" style="animation-delay: 2s;"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900 to-red-950/20"></div>
+    </div>
+
+    <!-- Main content container -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="max-w-4xl w-full">
+            <div class="text-center">
+                <!-- Finanpy Logo/Brand -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 bg-clip-text text-transparent">
+                            Finanpy
+                        </span>
+                    </h1>
+                </div>
+
+                <!-- Large 500 number with red gradient -->
+                <div class="mb-8 float-animation">
+                    <h2 class="text-9xl sm:text-[12rem] md:text-[16rem] font-black leading-none gradient-animate-error bg-clip-text text-transparent select-none">
+                        500
+                    </h2>
+                </div>
+
+                <!-- Error message card -->
+                <div class="max-w-2xl mx-auto mb-12">
+                    <div class="bg-slate-800 rounded-2xl shadow-2xl p-8 md:p-12 border border-slate-700">
+                        <!-- Error icon with red theme -->
+                        <div class="mb-6">
+                            <div class="w-20 h-20 mx-auto bg-gradient-to-br from-red-500/20 to-red-700/20 rounded-full flex items-center justify-center border border-red-500/30">
+                                <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Main message -->
+                        <h3 class="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
+                            Erro interno do servidor
+                        </h3>
+
+                        <!-- Apologetic description -->
+                        <p class="text-lg md:text-xl text-slate-300 mb-2">
+                            Desculpe, algo deu errado no nosso servidor.
+                        </p>
+                        <p class="text-base text-slate-400">
+                            Nossa equipe foi notificada e está trabalhando para resolver o problema. Por favor, tente novamente em alguns instantes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                    <!-- Primary button - Try Again -->
+                    <button onclick="location.reload()"
+                            class="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold text-lg rounded-xl shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            <span>Tentar Novamente</span>
+                        </span>
+                    </button>
+
+                    <!-- Secondary button - Home -->
+                    <a href="/"
+                       class="w-full sm:w-auto px-8 py-4 bg-slate-700 text-slate-100 font-semibold text-lg rounded-xl border border-slate-600 hover:bg-slate-600 hover:border-purple-500 transition-all duration-300">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            <span>Página Inicial</span>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Technical details (optional, can be hidden in production) -->
+                <div class="mt-12 max-w-lg mx-auto">
+                    <details class="text-left">
+                        <summary class="text-slate-500 text-sm cursor-pointer hover:text-slate-400 transition-colors text-center">
+                            Detalhes técnicos
+                        </summary>
+                        <div class="mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
+                            <p class="text-slate-400 text-xs font-mono">
+                                Error Code: 500 Internal Server Error<br>
+                                Timestamp: <span id="error-timestamp"></span><br>
+                                Se o problema persistir, entre em contato com o suporte.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Help text -->
+                <div class="mt-8 text-center">
+                    <p class="text-slate-500 text-sm">
+                        Precisa de ajuda urgente? Entre em contato com o suporte.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="absolute bottom-0 left-0 right-0 z-10 py-6 text-center">
+        <p class="text-slate-500 text-sm">
+            &copy; 2025 Finanpy. Todos os direitos reservados.
+        </p>
+    </footer>
+
+    <script>
+        // Set current timestamp
+        document.addEventListener('DOMContentLoaded', function() {
+            const timestampElement = document.getElementById('error-timestamp');
+            if (timestampElement) {
+                const now = new Date();
+                timestampElement.textContent = now.toISOString();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 """
 Core views for the Finanpy application.
 """
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
-from django.contrib import messages
 
 
 class HomeView(TemplateView):
@@ -44,3 +44,17 @@ class HomeView(TemplateView):
             messages.info(request, 'This is an info message!')
 
         return super().get(request, *args, **kwargs)
+
+
+def page_not_found_view(request, exception):
+    """
+    Custom 404 error handler.
+    """
+    return render(request, '404.html', status=404)
+
+
+def server_error_view(request):
+    """
+    Custom 500 error handler.
+    """
+    return render(request, '500.html', status=500)

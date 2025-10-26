@@ -8,14 +8,55 @@ from categories.models import Category
 
 
 class Transaction(models.Model):
-    """
-    Represents a financial transaction belonging to a user's account.
+    '''
+    Financial transaction model linking accounts and categories.
 
-    Transactions can be of type income or expense and are associated with
-    both an account and a category owned by the user.
-    """
+    Transactions represent financial movements (income or expense) that
+    automatically update account balances through signals. Each transaction
+    must be associated with an account and category owned by the same user.
+
+    Attributes:
+        account: ForeignKey to Account (PROTECT on delete - cannot delete account with transactions)
+        category: ForeignKey to Category (PROTECT on delete - cannot delete category with transactions)
+        transaction_type: Type of transaction (INCOME or EXPENSE)
+        amount: Transaction amount in BRL (must be positive, min 0.01)
+        transaction_date: Date when the transaction occurred
+        description: Optional text description
+        created_at: Timestamp when transaction was created (auto-generated)
+        updated_at: Timestamp when transaction was last modified (auto-updated)
+
+    Relationships:
+        - Many-to-one with Account via account field
+        - Many-to-one with Category via category field
+        - Related names: account.transactions, category.transactions
+
+    Balance Updates (Automatic via Signals):
+        - CREATE: Adds to balance if INCOME, subtracts if EXPENSE
+        - UPDATE: Reverses old transaction, applies new values
+        - DELETE: Reverses the transaction effect on balance
+        See transactions/signals.py for implementation details
+
+    Validation:
+        - transaction_type must match category.category_type
+        - amount must be positive (>= 0.01)
+        - transaction_date cannot be in the future (form validation)
+
+    Security:
+        All queries MUST filter by account__user=request.user to ensure data isolation
+
+    Example:
+        transaction = Transaction.objects.create(
+            account=user_account,
+            category=food_category,
+            transaction_type=Transaction.TransactionType.EXPENSE,
+            amount=Decimal('50.00'),
+            transaction_date=date.today(),
+            description='Almoço no restaurante'
+        )
+    '''
 
     class TransactionType(models.TextChoices):
+        '''Enum for transaction types: INCOME for income, EXPENSE for expenses.'''
         INCOME = 'INCOME', 'Entrada'
         EXPENSE = 'EXPENSE', 'Saída'
 

@@ -170,6 +170,9 @@ python manage.py runserver
 # Em outro terminal, aplicar migrations quando criar/modificar models
 python manage.py makemigrations
 python manage.py migrate
+
+# Buildar frontend após alterações visuais
+python manage.py tailwind build
 ```
 
 ### 3. Ao Criar Novos Models

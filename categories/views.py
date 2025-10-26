@@ -8,20 +8,36 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from .forms import CategoryForm
 from .models import Category
 
+
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = 'categories/category_list.html'
     context_object_name = 'categories'
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user).order_by('category_type', 'name')
+        queryset = Category.objects.filter(
+            user=self.request.user
+        ).select_related('user')
+
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+
+        self.filters = {
+            'search': search,
+        }
+
+        return queryset.order_by('category_type', 'name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = self.get_queryset()
         context['income_categories'] = queryset.filter(category_type=Category.CategoryType.INCOME)
         context['expense_categories'] = queryset.filter(category_type=Category.CategoryType.EXPENSE)
+        context['filters'] = getattr(self, 'filters', {})
+        context['has_filters'] = any(filter_value for filter_value in getattr(self, 'filters', {}).values())
         return context
+
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
@@ -39,6 +55,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         context['title'] = 'Nova Categoria'
         return context
 
+
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
@@ -46,7 +63,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('categories:category_list')
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return Category.objects.filter(user=self.request.user).select_related('user')
 
     def form_valid(self, form):
         messages.success(self.request, 'Categoria atualizada com sucesso!')
@@ -57,24 +74,25 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
         context['title'] = 'Editar Categoria'
         return context
 
+
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     template_name = 'categories/category_confirm_delete.html'
     success_url = reverse_lazy('categories:category_list')
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        return Category.objects.filter(user=self.request.user).select_related('user')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
         try:
             self.object.delete()
-            messages.success(request, "Categoria excluída com sucesso!")
+            messages.success(request, 'Categoria excluída com sucesso!')
             return HttpResponseRedirect(success_url)
         except ProtectedError:
             messages.error(
                 request,
-                "Não é possível excluir esta categoria, pois existem transações associadas a ela."
+                'Não é possível excluir esta categoria, pois existem transações associadas a ela.'
             )
             return HttpResponseRedirect(success_url)

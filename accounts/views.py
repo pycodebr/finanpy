@@ -26,10 +26,23 @@ class AccountListView(LoginRequiredMixin, ListView):
         """
         Filter accounts to show only those belonging to the current user.
         Orders results by account name.
+        Optimized with select_related to avoid N+1 queries on user relationship.
         """
-        return Account.objects.filter(
+        queryset = Account.objects.filter(
             user=self.request.user
-        ).order_by('name')
+        ).select_related('user')
+
+        status = self.request.GET.get('status')
+        if status == 'active':
+            queryset = queryset.filter(is_active=True)
+        elif status == 'inactive':
+            queryset = queryset.filter(is_active=False)
+
+        self.filters = {
+            'status': status,
+        }
+
+        return queryset.order_by('name')
 
     def get_context_data(self, **kwargs):
         """
@@ -39,18 +52,21 @@ class AccountListView(LoginRequiredMixin, ListView):
         """
         context = super().get_context_data(**kwargs)
 
+        # Get all accounts (unfiltered) for statistics
+        all_accounts = Account.objects.filter(user=self.request.user)
+
         # Calculate total balance across all user accounts
-        total_balance = Account.objects.filter(
-            user=self.request.user
-        ).aggregate(
+        total_balance = all_accounts.aggregate(
             total=Sum('balance')
         )['total'] or 0
 
         context['total_balance'] = total_balance
-        context['accounts_count'] = self.get_queryset().count()
-        context['accounts_active_count'] = self.get_queryset().filter(is_active=True).count()
-        last_updated_account = self.get_queryset().order_by('-updated_at').first()
+        context['accounts_count'] = all_accounts.count()
+        context['accounts_active_count'] = all_accounts.filter(is_active=True).count()
+        last_updated_account = all_accounts.order_by('-updated_at').first()
         context['last_updated'] = last_updated_account.updated_at if last_updated_account else None
+        context['filters'] = getattr(self, 'filters', {})
+        context['has_filters'] = any(filter_value for filter_value in getattr(self, 'filters', {}).values())
 
         return context
 
@@ -105,11 +121,12 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         """
         Filter queryset to only include accounts belonging to the current user.
+        Optimized with select_related to avoid N+1 queries.
 
         Returns:
             QuerySet: Filtered Account queryset for the authenticated user
         """
-        return Account.objects.filter(user=self.request.user)
+        return Account.objects.filter(user=self.request.user).select_related('user')
 
     def form_valid(self, form):
         """
@@ -141,22 +158,23 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         """
         Filter queryset to only include accounts belonging to the current user.
+        Optimized with select_related to avoid N+1 queries.
 
         Returns:
             QuerySet: Filtered Account queryset for the authenticated user
         """
-        return Account.objects.filter(user=self.request.user)
+        return Account.objects.filter(user=self.request.user).select_related('user')
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
         try:
             self.object.delete()
-            messages.success(request, "Conta excluída com sucesso!")
+            messages.success(request, 'Conta excluída com sucesso!')
             return HttpResponseRedirect(success_url)
         except ProtectedError:
             messages.error(
                 request,
-                "Não é possível excluir esta conta, pois existem transações associadas a ela."
+                'Não é possível excluir esta conta, pois existem transações associadas a ela.'
             )
             return HttpResponseRedirect(success_url)

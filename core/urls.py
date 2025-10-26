@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from core import views as core_views
 from core.views import HomeView
 from users.views import DashboardView
 
@@ -30,3 +31,6 @@ urlpatterns = [
     path('categories/', include('categories.urls', namespace='categories')),
     path('transactions/', include('transactions.urls', namespace='transactions')),
 ]
+
+handler404 = core_views.page_not_found_view
+handler500 = core_views.server_error_view

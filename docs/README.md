@@ -19,6 +19,9 @@ Estrutura dos models Django e relacionamentos entre entidades.
 ### 5. [Setup e Desenvolvimento](./setup.md)
 Instruções para configurar o ambiente e iniciar o desenvolvimento.
 
+### 6. [Segurança](./security.md)
+Instruções de segurança da aplicação.
+
 ---
 
 ## Visão Geral do Projeto

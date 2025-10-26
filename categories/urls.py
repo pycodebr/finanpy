@@ -1,10 +1,6 @@
 from django.urls import path
-from .views import (
-    CategoryListView,
-    CategoryCreateView,
-    CategoryUpdateView,
-    CategoryDeleteView
-)
+
+from .views import CategoryCreateView, CategoryDeleteView, CategoryListView, CategoryUpdateView
 
 app_name = 'categories'
 

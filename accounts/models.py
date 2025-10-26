@@ -5,13 +5,45 @@ User = get_user_model()
 
 
 class Account(models.Model):
-    """
-    Model representing a bank account or wallet.
+    '''
+    Bank account or wallet model for tracking user finances.
 
-    Each account belongs to a specific user and can be of different types:
-    checking, savings, or wallet. Accounts track their balance and can be
-    activated/deactivated.
-    """
+    Each account belongs to a specific user and maintains a balance that is
+    automatically updated through transaction signals. Accounts support three
+    types: checking, savings, and wallet. Deleting an account cascades to all
+    associated transactions.
+
+    Attributes:
+        user: ForeignKey to CustomUser (CASCADE on delete)
+        name: Custom name for the account (e.g., 'Conta Principal')
+        bank_name: Name of the financial institution
+        account_type: Type of account (CHECKING, SAVINGS, or WALLET)
+        balance: Current account balance (auto-updated via signals)
+        is_active: Whether the account is currently active
+        created_at: Timestamp when account was created (auto-generated)
+        updated_at: Timestamp when account was last modified (auto-updated)
+
+    Relationships:
+        - Many-to-one with CustomUser via user field
+        - One-to-many with Transaction via transactions reverse relation
+        - Related name: user.accounts
+
+    Balance Calculation:
+        Balance is automatically recalculated when transactions are
+        created, updated, or deleted through signals in transactions/signals.py
+
+    Security:
+        All queries MUST filter by user=request.user to ensure data isolation
+
+    Example:
+        account = Account.objects.create(
+            user=request.user,
+            name='Conta Corrente',
+            bank_name='Banco do Brasil',
+            account_type=Account.CHECKING,
+            balance=1000.00
+        )
+    '''
 
     # Account type choices
     CHECKING = 'checking'
@@ -74,5 +106,10 @@ class Account(models.Model):
         ]
 
     def __str__(self):
-        """Return the account name."""
-        return self.name
+        '''
+        Return string representation of the account.
+
+        Returns:
+            str: The account name
+        '''
+        return f'{self.name} - {self.bank_name}'

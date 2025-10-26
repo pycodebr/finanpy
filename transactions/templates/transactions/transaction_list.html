@@ -37,251 +37,286 @@
         </a>
     </div>
 
-    <!-- Filters -->
-    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg mb-8">
-        <form method="get" class="p-6 space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label for="data_inicio" class="block text-sm font-semibold text-slate-300 mb-2">Data início</label>
-                    <input
-                        type="date"
-                        id="data_inicio"
-                        name="data_inicio"
-                        value="{{ filters.data_inicio }}"
-                        class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
-                    >
-                </div>
-                <div>
-                    <label for="data_fim" class="block text-sm font-semibold text-slate-300 mb-2">Data fim</label>
-                    <input
-                        type="date"
-                        id="data_fim"
-                        name="data_fim"
-                        value="{{ filters.data_fim }}"
-                        class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
-                    >
-                </div>
-                <div>
-                    <label for="conta" class="block text-sm font-semibold text-slate-300 mb-2">Conta</label>
-                    <select
-                        id="conta"
-                        name="conta"
-                        class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
-                    >
-                        <option value="">Todas as contas</option>
-                        {% for account in accounts %}
-                        <option value="{{ account.id }}" {% if filters.conta == account.id|stringformat:'s' %}selected{% endif %}>
-                            {{ account.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label for="categoria" class="block text-sm font-semibold text-slate-300 mb-2">Categoria</label>
-                    <select
-                        id="categoria"
-                        name="categoria"
-                        class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
-                    >
-                        <option value="">Todas as categorias</option>
-                        {% for category in categories %}
-                        <option value="{{ category.id }}" {% if filters.categoria == category.id|stringformat:'s' %}selected{% endif %}>
-                            {{ category.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label for="show" class="block text-sm font-semibold text-slate-300 mb-2">Mostrar por página</label>
-                    <select
-                        id="show"
-                        name="show"
-                        class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
-                        onchange="this.form.submit()"
-                    >
-                        <option value="10" {% if show == '10' %}selected{% endif %}>10</option>
-                        <option value="20" {% if show == '20' %}selected{% endif %}>20</option>
-                        <option value="50" {% if show == '50' %}selected{% endif %}>50</option>
-                        <option value="100" {% if show == '100' %}selected{% endif %}>100</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <p class="text-sm text-slate-500">Use os filtros para refinar sua listagem de transações.</p>
-                <div class="flex gap-3">
-                    <button type="submit" class="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
-                        Filtrar
-                    </button>
-                    <a href="{% url 'transactions:transaction_list' %}"
-                       class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 {% if not has_filters %}opacity-60 cursor-not-allowed pointer-events-none{% endif %}">
-                        Limpar Filtros
+    <!-- Filters, Stats, and Table Form -->
+    <form method="get">
+        <!-- Filters -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg mb-8">
+            <div class="p-6 space-y-6">
+                <!-- Quick Date Filters -->
+                <div class="flex flex-wrap gap-2 pb-4 border-b border-slate-700">
+                    <span class="text-sm font-semibold text-slate-300 mr-2 self-center">Filtros rápidos:</span>
+                    <a href="?period=this_month"
+                       class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if filters.period == 'this_month' %}gradient-primary text-white{% else %}bg-slate-700 text-slate-100 hover:bg-slate-600{% endif %}">
+                        Este Mês
+                    </a>
+                    <a href="?period=last_month"
+                       class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if filters.period == 'last_month' %}gradient-primary text-white{% else %}bg-slate-700 text-slate-100 hover:bg-slate-600{% endif %}">
+                        Último Mês
+                    </a>
+                    <a href="?period=this_year"
+                       class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {% if filters.period == 'this_year' %}gradient-primary text-white{% else %}bg-slate-700 text-slate-100 hover:bg-slate-600{% endif %}">
+                        Este Ano
                     </a>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="md:col-span-2">
+                        <label for="search" class="block text-sm font-semibold text-slate-300 mb-2">Buscar</label>
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            value="{{ filters.search|default_if_none:'' }}"
+                            placeholder="Buscar por descrição..."
+                            class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                    </div>
+                    <div>
+                        <label for="data_inicio" class="block text-sm font-semibold text-slate-300 mb-2">Data início</label>
+                        <input
+                            type="date"
+                            id="data_inicio"
+                            name="data_inicio"
+                            value="{{ filters.data_inicio|default_if_none:'' }}"
+                            class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                    </div>
+                    <div>
+                        <label for="data_fim" class="block text-sm font-semibold text-slate-300 mb-2">Data fim</label>
+                        <input
+                            type="date"
+                            id="data_fim"
+                            name="data_fim"
+                            value="{{ filters.data_fim|default_if_none:'' }}"
+                            class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                    </div>
+                    <div>
+                        <label for="conta" class="block text-sm font-semibold text-slate-300 mb-2">Conta</label>
+                        <select
+                            id="conta"
+                            name="conta"
+                            class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                            <option value="">Todas as contas</option>
+                            {% for account in accounts %}
+                            <option value="{{ account.id }}" {% if filters.conta == account.id|stringformat:'s' %}selected{% endif %}>
+                                {{ account.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="categoria" class="block text-sm font-semibold text-slate-300 mb-2">Categoria</label>
+                        <select
+                            id="categoria"
+                            name="categoria"
+                            class="form-select w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                            <option value="">Todas as categorias</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if filters.categoria == category.id|stringformat:'s' %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <p class="text-sm text-slate-500">Use os filtros para refinar sua listagem de transações.</p>
+                    <div class="flex gap-3">
+                        <button type="submit" class="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
+                            Filtrar
+                        </button>
+                        <a href="{% url 'transactions:transaction_list' %}"
+                           class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 {% if not has_filters %}opacity-60 cursor-not-allowed pointer-events-none{% endif %}">
+                            Limpar Filtros
+                        </a>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl shadow-lg p-6 border border-emerald-400">
-            <p class="text-emerald-100 text-sm font-medium mb-1">Total Entradas</p>
-            <h2 class="text-3xl font-bold text-white">+ {{ total_income|currency }}</h2>
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl shadow-lg p-6 border border-emerald-400">
+                <p class="text-emerald-100 text-sm font-medium mb-1">Total Entradas</p>
+                <h2 class="text-3xl font-bold text-white">+ {{ total_income|currency }}</h2>
+            </div>
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-lg p-6 border border-red-400">
+                <p class="text-red-100 text-sm font-medium mb-1">Total Saídas</p>
+                <h2 class="text-3xl font-bold text-white">- {{ total_expense|currency }}</h2>
+            </div>
+            <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg p-6">
+                <p class="text-slate-400 text-sm font-medium mb-1">Balanço</p>
+                <h2 class="text-3xl font-bold {% if balance >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
+                    {{ balance|currency }}
+                </h2>
+            </div>
         </div>
-        <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-lg p-6 border border-red-400">
-            <p class="text-red-100 text-sm font-medium mb-1">Total Saídas</p>
-            <h2 class="text-3xl font-bold text-white">- {{ total_expense|currency }}</h2>
-        </div>
-        <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg p-6">
-            <p class="text-slate-400 text-sm font-medium mb-1">Balanço</p>
-            <h2 class="text-3xl font-bold {% if balance >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
-                {{ balance|currency }}
-            </h2>
-        </div>
-    </div>
 
-    <!-- Transactions Table -->
-    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg overflow-hidden">
-        <div class="overflow-x-auto -mx-4 sm:mx-0">
-            <table class="min-w-full divide-y divide-slate-700">
-                <thead class="bg-slate-900/60">
-                    <tr>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'transaction_date' %}-transaction_date{% else %}transaction_date{% endif %}">
-                                Data
-                                {% if filters.orderby == 'transaction_date' %}▲{% elif filters.orderby == '-transaction_date' %}▼{% endif %}
-                            </a>
-                        </th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'description' %}-description{% else %}description{% endif %}">
-                                Descrição
-                                {% if filters.orderby == 'description' %}▲{% elif filters.orderby == '-description' %}▼{% endif %}
-                            </a>
-                        </th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Conta</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'category' %}-category{% else %}category{% endif %}">
-                                Categoria
-                                {% if filters.orderby == 'category' %}▲{% elif filters.orderby == '-category' %}▼{% endif %}
-                            </a>
-                        </th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
-                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'amount' %}-amount{% else %}amount{% endif %}">
-                                Valor
-                                {% if filters.orderby == 'amount' %}▲{% elif filters.orderby == '-amount' %}▼{% endif %}
-                            </a>
-                        </th>
-                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">Ações</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-700">
-                {% for transaction in transactions %}
-                    <tr class="hover:bg-slate-700/40 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                            {{ transaction.transaction_date|date:'d/m/Y' }}
-                        </td>
-                        <td class="px-6 py-4 text-sm">
-                            <div class="text-slate-100 font-medium">{{ transaction.description|default:'(Sem descrição)' }}</div>
-                            <div class="text-xs text-slate-500 mt-1">Criada em {{ transaction.created_at|date:'d/m/Y H:i' }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                            {{ transaction.account.name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
-                            <span class="inline-flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full border border-slate-600" style="background-color: {{ transaction.category.color }};"></span>
-                                {{ transaction.category.name }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            {% if transaction.transaction_type == 'INCOME' %}
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400">
-                                {{ transaction.get_transaction_type_display }}
-                            </span>
-                            {% else %}
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400">
-                                {{ transaction.get_transaction_type_display }}
-                            </span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold {% if transaction.transaction_type == 'INCOME' %}text-emerald-400{% else %}text-red-400{% endif %}">
-                            {% if transaction.transaction_type == 'INCOME' %}+{% else %}-{% endif %} {{ transaction.amount|currency }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                            <div class="flex items-center justify-end gap-2">
-                                <a href="{% url 'transactions:transaction_update' transaction.pk %}"
-                                   title="Editar transação"
-                                   class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 text-xs font-medium flex items-center gap-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        <!-- Transactions Table -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg overflow-hidden">
+            <div class="overflow-x-auto -mx-4 sm:mx-0">
+                <table class="min-w-full divide-y divide-slate-700">
+                    <thead class="bg-slate-900/60">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'transaction_date' %}-transaction_date{% else %}transaction_date{% endif %}">
+                                    Data
+                                    {% if filters.orderby == 'transaction_date' %}▲{% elif filters.orderby == '-transaction_date' %}▼{% endif %}
+                                </a>
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'description' %}-description{% else %}description{% endif %}">
+                                    Descrição
+                                    {% if filters.orderby == 'description' %}▲{% elif filters.orderby == '-description' %}▼{% endif %}
+                                </a>
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Conta</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'category' %}-category{% else %}category{% endif %}">
+                                    Categoria
+                                    {% if filters.orderby == 'category' %}▲{% elif filters.orderby == '-category' %}▼{% endif %}
+                                </a>
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <a href="?{% for key, value in filters.items %}{% if value and key != 'orderby' %}&{{ key }}={{ value }}{% endif %}{% endfor %}&orderby={% if filters.orderby == 'amount' %}-amount{% else %}amount{% endif %}">
+                                    Valor
+                                    {% if filters.orderby == 'amount' %}▲{% elif filters.orderby == '-amount' %}▼{% endif %}
+                                </a>
+                            </th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700">
+                    {% for transaction in transactions %}
+                        <tr class="hover:bg-slate-700/40 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                                {{ transaction.transaction_date|date:'d/m/Y' }}
+                            </td>
+                            <td class="px-6 py-4 text-sm">
+                                <div class="text-slate-100 font-medium">{{ transaction.description|default:'(Sem descrição)' }}</div>
+                                <div class="text-xs text-slate-500 mt-1">Criada em {{ transaction.created_at|date:'d/m/Y H:i' }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                                {{ transaction.account.name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                                <span class="inline-flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full border border-slate-600" style="background-color: {{ transaction.category.color }};"></span>
+                                    {{ transaction.category.name }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if transaction.transaction_type == 'INCOME' %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400">
+                                    {{ transaction.get_transaction_type_display }}
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400">
+                                    {{ transaction.get_transaction_type_display }}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold {% if transaction.transaction_type == 'INCOME' %}text-emerald-400{% else %}text-red-400{% endif %}">
+                                {% if transaction.transaction_type == 'INCOME' %}+{% else %}-{% endif %} {{ transaction.amount|currency }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{% url 'transactions:transaction_update' transaction.pk %}"
+                                       title="Editar transação"
+                                       class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 text-xs font-medium flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                        Editar
+                                    </a>
+                                    <a href="{% url 'transactions:transaction_delete' transaction.pk %}"
+                                       title="Excluir transação"
+                                       class="px-3 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-all duration-200 text-xs font-medium flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                        Excluir
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                                <div class="flex flex-col items-center gap-3">
+                                    <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Editar
-                                </a>
-                                <a href="{% url 'transactions:transaction_delete' transaction.pk %}"
-                                   title="Excluir transação"
-                                   class="px-3 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-all duration-200 text-xs font-medium flex items-center gap-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                    Excluir
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="7" class="px-6 py-12 text-center text-slate-400">
-                            <div class="flex flex-col items-center gap-3">
-                                <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <p class="text-lg font-semibold text-slate-300">Nenhuma transação encontrada</p>
-                                <p class="text-sm text-slate-500">Experimente ajustar os filtros ou crie uma nova transação.</p>
-                                <a href="{% url 'transactions:transaction_create' %}"
-                                   class="inline-flex items-center justify-center px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
-                                    Nova Transação
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        {% if is_paginated %}
-        <div class="px-6 py-4 border-t border-slate-700 bg-slate-800/80 flex items-center justify-between text-sm text-slate-400">
-            <div class="flex items-center gap-4">
-                <span class="text-sm text-slate-400">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                                    <p class="text-lg font-semibold text-slate-300">Nenhuma transação encontrada</p>
+                                    <p class="text-sm text-slate-500">Experimente ajustar os filtros ou crie uma nova transação.</p>
+                                    <a href="{% url 'transactions:transaction_create' %}"
+                                       class="inline-flex items-center justify-center px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
+                                        Nova Transação
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="flex items-center gap-2">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                       class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Primeira</a>
-                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                       class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Anterior</a>
-                {% else %}
-                    <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Primeira</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Anterior</span>
-                {% endif %}
 
-                <span class="text-sm text-slate-400">
-                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-                </span>
+            {% if is_paginated %}
+            <div class="px-6 py-4 border-t border-slate-700 bg-slate-800/80 flex items-center justify-between text-sm text-slate-400">
+                <div>
+                    <span class="text-sm text-slate-400">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                               class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Primeira</a>
+                            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                               class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Anterior</a>
+                        {% else %}
+                            <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Primeira</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Anterior</span>
+                        {% endif %}
+                    </div>
 
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                       class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Próxima</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
-                       class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Última</a>
-                {% else %}
-                    <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Próxima</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Última</span>
-                {% endif %}
+                    <span class="text-sm text-slate-400">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    <div class="flex items-center gap-2">
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                               class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Próxima</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+                               class="px-3 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 transition-colors">Última</a>
+                        {% else %}
+                            <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Próxima</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-700/50 text-slate-500 cursor-not-allowed">Última</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="show" class="text-sm font-semibold text-slate-300">Mostrar</label>
+                        <select
+                            id="show"
+                            name="show"
+                            class="form-select w-auto px-2 py-1 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-transparent transition duration-200 text-xs"
+                            onchange="this.form.submit()"
+                        >
+                            <option value="10" {% if show == '10' %}selected{% endif %}>10</option>
+                            <option value="20" {% if show == '20' %}selected{% endif %}>20</option>
+                            <option value="50" {% if show == '50' %}selected{% endif %}>50</option>
+                            <option value="100" {% if show == '100' %}selected{% endif %}>100</option>
+                        </select>
+                    </div>
+                </div>
             </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
+    </form>
 </div>
 {% endblock %}

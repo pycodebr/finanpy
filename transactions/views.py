@@ -1,8 +1,10 @@
+from datetime import date
 from decimal import Decimal
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
+from django.db.models import Q, Sum
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.dateparse import parse_date
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -22,11 +24,10 @@ class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = 'transactions/transaction_list.html'
     context_object_name = 'transactions'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_paginate_by(self, queryset):
         return self.request.GET.get('show', self.paginate_by)
-
 
     def dispatch(self, request, *args, **kwargs):
         self.filtered_queryset = Transaction.objects.none()
@@ -44,6 +45,30 @@ class TransactionListView(LoginRequiredMixin, ListView):
         end_date = self.request.GET.get('data_fim')
         account_id = self.request.GET.get('conta')
         category_id = self.request.GET.get('categoria')
+        search = self.request.GET.get('search')
+        period = self.request.GET.get('period')
+
+        # Handle quick date filters
+        if period:
+            today = date.today()
+            if period == 'this_month':
+                start_date = today.replace(day=1).isoformat()
+                end_date = today.isoformat()
+            elif period == 'last_month':
+                if today.month == 1:
+                    last_month = today.replace(year=today.year - 1, month=12, day=1)
+                else:
+                    last_month = today.replace(month=today.month - 1, day=1)
+                start_date = last_month.isoformat()
+                # Last day of last month
+                if last_month.month == 12:
+                    end_date = last_month.replace(year=last_month.year + 1, month=1, day=1)
+                else:
+                    end_date = last_month.replace(month=last_month.month + 1, day=1)
+                end_date = (end_date.replace(day=1) - __import__('datetime').timedelta(days=1)).isoformat()
+            elif period == 'this_year':
+                start_date = today.replace(month=1, day=1).isoformat()
+                end_date = today.isoformat()
 
         if start_date:
             parsed_start = parse_date(start_date)
@@ -61,6 +86,11 @@ class TransactionListView(LoginRequiredMixin, ListView):
         if category_id:
             queryset = queryset.filter(category_id=category_id)
 
+        if search:
+            queryset = queryset.filter(
+                Q(description__icontains=search)
+            )
+
         orderby = self.request.GET.get('orderby', '-transaction_date')
         queryset = queryset.order_by(orderby)
 
@@ -69,6 +99,8 @@ class TransactionListView(LoginRequiredMixin, ListView):
             'data_fim': end_date,
             'conta': account_id,
             'categoria': category_id,
+            'search': search,
+            'period': period,
             'show': self.request.GET.get('show', self.paginate_by),
             'orderby': self.request.GET.get('orderby', '-transaction_date'),
         }
@@ -89,8 +121,8 @@ class TransactionListView(LoginRequiredMixin, ListView):
         ).aggregate(total=Sum('amount'))['total'] or Decimal('0')
 
         context.update({
-            'accounts': Account.objects.filter(user=self.request.user).order_by('name'),
-            'categories': Category.objects.filter(user=self.request.user).order_by('name'),
+            'accounts': Account.objects.filter(user=self.request.user).select_related('user').order_by('name'),
+            'categories': Category.objects.filter(user=self.request.user).select_related('user').order_by('name'),
             'total_income': income_total,
             'total_expense': expense_total,
             'balance': income_total - expense_total,
@@ -114,6 +146,7 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
     extra_context = {
         'page_title': 'Nova Transação',
     }
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -227,5 +260,5 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         self.object.delete()
-        messages.success(self.request, "Transação excluída com sucesso!")
+        messages.success(self.request, 'Transação excluída com sucesso!')
         return HttpResponseRedirect(success_url)

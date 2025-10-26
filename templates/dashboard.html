@@ -1,67 +1,387 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load currency_filters %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-bg-primary py-8">
+<div class="min-h-screen bg-slate-900 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Welcome Section -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-text-primary">
-                Bem-vindo, {{ user.email }}!
+            <h1 class="text-3xl font-bold text-slate-100">
+                Bem-vindo, {{ user.profile.full_name|default:user.email }}!
             </h1>
-            <p class="text-text-secondary mt-2">
-                Este é o seu dashboard. Em breve você poderá visualizar suas finanças aqui.
+            <p class="text-slate-300 mt-2">
+                Aqui está um resumo das suas finanças em {{ current_month }}.
             </p>
         </div>
 
-        <!-- Quick Actions Card -->
-        <div class="bg-bg-secondary border border-slate-700 rounded-lg p-6 shadow-lg">
-            <h2 class="text-xl font-semibold text-text-primary mb-4">
-                Ações Rápidas
-            </h2>
-            <div class="space-y-3">
-                <a href="{% url 'accounts:account_list' %}"
-                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
-                    <span class="text-2xl">🏦</span>
-                    <div>
-                        <p class="text-text-primary font-medium">Gerenciar Contas</p>
-                        <p class="text-text-secondary text-sm">Visualize e gerencie suas contas</p>
+        <!-- Statistics Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Balance Card -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Saldo Total</h3>
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                     </div>
+                </div>
+                <p class="text-3xl font-bold text-slate-100">{{ total_balance|currency }}</p>
+                <p class="text-slate-400 text-sm mt-2">Em {{ active_accounts_count }} conta{{ active_accounts_count|pluralize }}</p>
+            </div>
+
+            <!-- Month Income Card -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Entradas do Mês</h3>
+                    <div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-emerald-500">{{ month_income|currency }}</p>
+                <p class="text-slate-400 text-sm mt-2">Receitas recebidas</p>
+            </div>
+
+            <!-- Month Expenses Card -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Saídas do Mês</h3>
+                    <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-red-500">{{ month_expenses|currency }}</p>
+                <p class="text-slate-400 text-sm mt-2">Despesas realizadas</p>
+            </div>
+
+            <!-- Month Balance Card -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-slate-400 text-sm font-semibold uppercase tracking-wide">Balanço do Mês</h3>
+                    <div class="w-10 h-10 {% if month_balance >= 0 %}bg-blue-500{% else %}bg-amber-500{% endif %} rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold {% if month_balance >= 0 %}text-blue-500{% else %}text-amber-500{% endif %}">
+                    {{ month_balance|currency }}
+                </p>
+                <p class="text-slate-400 text-sm mt-2">
+                    {% if month_balance >= 0 %}Resultado positivo{% else %}Resultado negativo{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Pie Chart - Category Breakdown -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <h2 class="text-xl font-semibold text-slate-100 mb-4">
+                    Despesas por Categoria
+                </h2>
+                <p class="text-slate-400 text-sm mb-6">Distribuição de gastos no mês atual</p>
+
+                {% if top_categories %}
+                <div class="relative" style="height: 300px;">
+                    <canvas id="categoryPieChart"></canvas>
+                </div>
+                {% else %}
+                <div class="bg-slate-700/50 rounded-lg p-8 text-center" style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                    <div>
+                        <svg class="w-16 h-16 text-slate-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <p class="text-slate-400">Nenhuma despesa registrada este mês</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Line Chart - Monthly Evolution -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+                <h2 class="text-xl font-semibold text-slate-100 mb-4">
+                    Evolução Mensal
+                </h2>
+                <p class="text-slate-400 text-sm mb-6">Entradas vs Saídas nos últimos 6 meses</p>
+
+                <div class="relative" style="height: 300px;">
+                    <canvas id="monthlyLineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700 mb-8">
+            <h2 class="text-xl font-semibold text-slate-100 mb-4">Ações Rápidas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="{% url 'transactions:transaction_create' %}"
+                   class="px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-purple-800 transition-all shadow-lg text-center">
+                    Nova Transação
                 </a>
-                <a href="{% url 'categories:category_list' %}"
-                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
-                    <span class="text-2xl">🏷️</span>
-                    <div>
-                        <p class="text-text-primary font-medium">Gerenciar Categorias</p>
-                        <p class="text-text-secondary text-sm">Organize suas categorias</p>
-                    </div>
+                <a href="{% url 'accounts:account_create' %}"
+                   class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all text-center">
+                    Nova Conta
                 </a>
-                <a href="{% url 'transactions:transaction_list' %}"
-                   class="flex items-center space-x-3 p-3 rounded bg-slate-800/50 border border-slate-700 hover:border-purple-500 transition-all duration-300 hover:bg-slate-700/50">
-                    <span class="text-2xl">💰</span>
-                    <div>
-                        <p class="text-text-primary font-medium">Gerenciar Transações</p>
-                        <p class="text-text-secondary text-sm">Acompanhe suas movimentações</p>
-                    </div>
+                <a href="{% url 'categories:category_create' %}"
+                   class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all text-center">
+                    Nova Categoria
                 </a>
             </div>
         </div>
 
-        <!-- Logout Link -->
-        <div class="mt-6">
-            <form method="post" action="{% url 'users:logout' %}">
-                {% csrf_token %}
-                <button type="submit"
-                        class="text-red-400 hover:text-red-300 transition-colors duration-200 inline-flex items-center space-x-2 bg-transparent border-0 p-0 focus:outline-none">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                    <span>Sair</span>
-                </button>
-            </form>
+        <!-- Recent Transactions -->
+        <div class="bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-slate-100">Transações Recentes</h2>
+                <a href="{% url 'transactions:transaction_list' %}"
+                   class="text-purple-400 hover:text-purple-300 font-medium text-sm transition-colors">
+                    Ver todas →
+                </a>
+            </div>
+
+            {% if recent_transactions %}
+            <div class="space-y-3">
+                {% for transaction in recent_transactions %}
+                <div class="bg-slate-700/50 rounded-lg p-4 border-l-4
+                            {% if transaction.transaction_type == 'INCOME' %}border-emerald-500{% else %}border-red-500{% endif %}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3">
+                                <span class="px-2 py-1 rounded text-xs font-semibold
+                                           {% if transaction.transaction_type == 'INCOME' %}bg-emerald-500/20 text-emerald-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+                                    {{ transaction.get_transaction_type_display }}
+                                </span>
+                                <p class="font-medium text-slate-100">{{ transaction.description|truncatewords:10 }}</p>
+                            </div>
+                            <div class="flex items-center space-x-4 mt-2 text-sm text-slate-400">
+                                <span>{{ transaction.transaction_date|date:'d/m/Y' }}</span>
+                                <span>•</span>
+                                <span>{{ transaction.account.name }}</span>
+                                <span>•</span>
+                                <span class="px-2 py-0.5 rounded" style="background-color: {{ transaction.category.color }}20; color: {{ transaction.category.color }};">
+                                    {{ transaction.category.name }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ml-4 text-right">
+                            <p class="text-lg font-bold {% if transaction.transaction_type == 'INCOME' %}text-emerald-500{% else %}text-red-500{% endif %}">
+                                {% if transaction.transaction_type == 'INCOME' %}+{% else %}-{% endif %}{{ transaction.amount|currency }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-slate-700/50 rounded-lg p-8 text-center">
+                <svg class="w-16 h-16 text-slate-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <p class="text-slate-400">Nenhuma transação registrada ainda.</p>
+                <a href="{% url 'transactions:transaction_create' %}"
+                   class="inline-block mt-4 px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-purple-800 transition-all">
+                    Criar primeira transação
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse chart data from Django context
+    const categoryData = {{ category_chart_data|safe }};
+    const monthlyData = {{ monthly_chart_data|safe }};
+
+    // Chart.js default configuration for dark theme
+    Chart.defaults.color = '#cbd5e1'; // slate-300
+    Chart.defaults.borderColor = '#334155'; // slate-700
+    Chart.defaults.backgroundColor = 'rgba(99, 102, 241, 0.1)';
+
+    // Only initialize pie chart if we have data
+    {% if top_categories %}
+    // Pie Chart - Category Breakdown
+    const pieCtx = document.getElementById('categoryPieChart');
+    if (pieCtx && categoryData.length > 0) {
+        new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: categoryData.map(item => item.name),
+                datasets: [{
+                    data: categoryData.map(item => item.total),
+                    backgroundColor: categoryData.map(item => item.color),
+                    borderColor: '#1e293b', // slate-800
+                    borderWidth: 2,
+                    hoverBorderColor: '#f1f5f9', // slate-100
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#cbd5e1',
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                family: 'Inter'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#334155',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: R$ ${value.toFixed(2)} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    {% endif %}
+
+    // Line Chart - Monthly Evolution
+    const lineCtx = document.getElementById('monthlyLineChart');
+    if (lineCtx && monthlyData) {
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: monthlyData.labels,
+                datasets: [
+                    {
+                        label: 'Entradas',
+                        data: monthlyData.income,
+                        borderColor: '#10b981', // emerald-500
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#f1f5f9',
+                        pointBorderWidth: 2,
+                        pointHoverBorderWidth: 3
+                    },
+                    {
+                        label: 'Saídas',
+                        data: monthlyData.expense,
+                        borderColor: '#ef4444', // red-500
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: '#ef4444',
+                        pointBorderColor: '#f1f5f9',
+                        pointBorderWidth: 2,
+                        pointHoverBorderWidth: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#cbd5e1',
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                family: 'Inter',
+                                weight: '600'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#334155',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.parsed.y || 0;
+                                return `${label}: R$ ${value.toFixed(2)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#334155',
+                            borderColor: '#475569'
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 11,
+                                family: 'Inter'
+                            },
+                            callback: function(value) {
+                                return 'R$ ' + value.toFixed(0);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: '#334155',
+                            borderColor: '#475569'
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 11,
+                                family: 'Inter'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

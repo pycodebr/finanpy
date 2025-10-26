@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config, Csv
+
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -143,3 +144,44 @@ NPM_BIN_PATH = '/opt/homebrew/bin/npm'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================================
+# Security Settings
+# ============================================================================
+# Production security settings that should be enabled when DEBUG=False
+# These settings protect the application from common web vulnerabilities
+
+if not DEBUG:
+    # HTTPS/SSL Configuration
+    # Force all connections to use HTTPS instead of HTTP
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+
+    # Cookie Security
+    # Ensure session cookies are only sent over HTTPS
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=True, cast=bool)
+
+    # Ensure CSRF cookies are only sent over HTTPS
+    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
+
+    # HTTP Strict Transport Security (HSTS)
+    # Tells browsers to only access this site via HTTPS for the specified time
+    # 31536000 seconds = 1 year
+    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)
+
+    # Apply HSTS to all subdomains
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
+        'SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True, cast=bool
+    )
+
+    # Allow browser to preload HSTS (submit to browser preload lists)
+    SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=True, cast=bool)
+
+# Additional Security Headers (enabled in all environments)
+# Prevent browsers from guessing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser's XSS filtering protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent site from being embedded in frames (clickjacking protection)
+X_FRAME_OPTIONS = 'DENY'
