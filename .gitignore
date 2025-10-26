@@ -269,3 +269,6 @@ pyrightconfig.json
 theme/static_src/node_modules/
 theme/static_src/package-lock.json
 theme/static/css/dist/
+
+.claude
+.gemini-clipboard

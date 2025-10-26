@@ -548,169 +548,169 @@
 
 ---
 
-### Sprint 3: Gestão de Categorias
+### Sprint 3: Gestão de Categorias ✅ CONCLUÍDA
 
 #### Tarefa 3.1: Model de Category
 **Descrição**: Criar model para categorias de transações
 
 **Subtarefas**:
-- [ ] 3.1.1: Abrir arquivo `categories/models.py`
-- [ ] 3.1.2: Importar models e get_user_model
-- [ ] 3.1.3: Criar classe Category com ForeignKey para User
-- [ ] 3.1.4: Adicionar campo name (CharField, max_length=50)
-- [ ] 3.1.5: Criar choices para category_type (INCOME, EXPENSE)
-- [ ] 3.1.6: Adicionar campo category_type com choices
-- [ ] 3.1.7: Adicionar campo color (CharField, max_length=7, default='#667eea')
-- [ ] 3.1.8: Adicionar campos created_at e updated_at
-- [ ] 3.1.9: Adicionar método __str__ retornando name
-- [ ] 3.1.10: Adicionar Meta com ordering e verbose_name
-- [ ] 3.1.11: Adicionar unique_together para (user, name)
+- [X] 3.1.1: Abrir arquivo `categories/models.py`
+- [X] 3.1.2: Importar models e get_user_model
+- [X] 3.1.3: Criar classe Category com ForeignKey para User
+- [X] 3.1.4: Adicionar campo name (CharField, max_length=50)
+- [X] 3.1.5: Criar choices para category_type (INCOME, EXPENSE)
+- [X] 3.1.6: Adicionar campo category_type com choices
+- [X] 3.1.7: Adicionar campo color (CharField, max_length=7, default='#667eea')
+- [X] 3.1.8: Adicionar campos created_at e updated_at
+- [X] 3.1.9: Adicionar método __str__ retornando name
+- [X] 3.1.10: Adicionar Meta com ordering e verbose_name
+- [X] 3.1.11: Adicionar unique_together para (user, name)
 
 #### Tarefa 3.2: Admin de Category
 **Descrição**: Configurar Django Admin para categorias
 
 **Subtarefas**:
-- [ ] 3.2.1: Abrir arquivo `categories/admin.py`
-- [ ] 3.2.2: Importar admin e Category model
-- [ ] 3.2.3: Criar classe CategoryAdmin
-- [ ] 3.2.4: Configurar list_display: user email, name, category_type, color
-- [ ] 3.2.5: Configurar list_filter: category_type
-- [ ] 3.2.6: Configurar search_fields: name, user__email
-- [ ] 3.2.7: Configurar readonly_fields: created_at, updated_at
-- [ ] 3.2.8: Registrar Category com CategoryAdmin
+- [X] 3.2.1: Abrir arquivo `categories/admin.py`
+- [X] 3.2.2: Importar admin e Category model
+- [X] 3.2.3: Criar classe CategoryAdmin
+- [X] 3.2.4: Configurar list_display: user email, name, category_type, color
+- [X] 3.2.5: Configurar list_filter: category_type
+- [X] 3.2.6: Configurar search_fields: name, user__email
+- [X] 3.2.7: Configurar readonly_fields: created_at, updated_at
+- [X] 3.2.8: Registrar Category com CategoryAdmin
 
 #### Tarefa 3.3: Form de Category
 **Descrição**: Criar formulário para categorias
 
 **Subtarefas**:
-- [ ] 3.3.1: Criar arquivo `categories/forms.py`
-- [ ] 3.3.2: Importar forms e Category model
-- [ ] 3.3.3: Criar CategoryForm herdando de forms.ModelForm
-- [ ] 3.3.4: Configurar Meta com model e fields
-- [ ] 3.3.5: Definir fields: name, category_type, color
-- [ ] 3.3.6: Configurar widgets com classes TailwindCSS
-- [ ] 3.3.7: Usar input type color para campo color
-- [ ] 3.3.8: Adicionar labels em português
-- [ ] 3.3.9: Adicionar placeholders
-- [ ] 3.3.10: Traduzir choices para português
+- [X] 3.3.1: Criar arquivo `categories/forms.py`
+- [X] 3.3.2: Importar forms e Category model
+- [X] 3.3.3: Criar CategoryForm herdando de forms.ModelForm
+- [X] 3.3.4: Configurar Meta com model e fields
+- [X] 3.3.5: Definir fields: name, category_type, color
+- [X] 3.3.6: Configurar widgets com classes TailwindCSS
+- [X] 3.3.7: Usar input type color para campo color
+- [X] 3.3.8: Adicionar labels em português
+- [X] 3.3.9: Adicionar placeholders
+- [X] 3.3.10: Traduzir choices para português
 
 #### Tarefa 3.4: View de Listagem de Categorias
 **Descrição**: Criar view para listar categorias
 
 **Subtarefas**:
-- [ ] 3.4.1: Abrir arquivo `categories/views.py`
-- [ ] 3.4.2: Importar LoginRequiredMixin e ListView
-- [ ] 3.4.3: Importar Category model
-- [ ] 3.4.4: Criar CategoryListView
-- [ ] 3.4.5: Configurar model, template_name e context_object_name
-- [ ] 3.4.6: Override get_queryset para filtrar por usuário
-- [ ] 3.4.7: Adicionar ordenação por categoria_type e name
-- [ ] 3.4.8: Adicionar separação de categorias de entrada e saída no context
+- [X] 3.4.1: Abrir arquivo `categories/views.py`
+- [X] 3.4.2: Importar LoginRequiredMixin e ListView
+- [X] 3.4.3: Importar Category model
+- [X] 3.4.4: Criar CategoryListView
+- [X] 3.4.5: Configurar model, template_name e context_object_name
+- [X] 3.4.6: Override get_queryset para filtrar por usuário
+- [X] 3.4.7: Adicionar ordenação por categoria_type e name
+- [X] 3.4.8: Adicionar separação de categorias de entrada e saída no context
 
 #### Tarefa 3.5: Template de Listagem de Categorias
 **Descrição**: Criar template para listar categorias
 
 **Subtarefas**:
-- [ ] 3.5.1: Criar arquivo `templates/categories/category_list.html`
-- [ ] 3.5.2: Extender base.html
-- [ ] 3.5.3: Adicionar título "Minhas Categorias"
-- [ ] 3.5.4: Criar header com botão "Nova Categoria"
-- [ ] 3.5.5: Criar duas seções: Entradas e Saídas
-- [ ] 3.5.6: Iterar sobre categorias de entrada
-- [ ] 3.5.7: Para cada categoria, criar badge com nome e cor
-- [ ] 3.5.8: Adicionar botões de Editar e Excluir
-- [ ] 3.5.9: Repetir para categorias de saída
-- [ ] 3.5.10: Adicionar mensagem quando não houver categorias
-- [ ] 3.5.11: Usar cores diferentes para entrada (verde) e saída (vermelho)
+- [X] 3.5.1: Criar arquivo `templates/categories/category_list.html`
+- [X] 3.5.2: Extender base.html
+- [X] 3.5.3: Adicionar título "Minhas Categorias"
+- [X] 3.5.4: Criar header com botão "Nova Categoria"
+- [X] 3.5.5: Criar duas seções: Entradas e Saídas
+- [X] 3.5.6: Iterar sobre categorias de entrada
+- [X] 3.5.7: Para cada categoria, criar badge com nome e cor
+- [X] 3.5.8: Adicionar botões de Editar e Excluir
+- [X] 3.5.9: Repetir para categorias de saída
+- [X] 3.5.10: Adicionar mensagem quando não houver categorias
+- [X] 3.5.11: Usar cores diferentes para entrada (verde) e saída (vermelho)
 
 #### Tarefa 3.6: View de Criação de Categoria
 **Descrição**: Criar view para cadastrar categoria
 
 **Subtarefas**:
-- [ ] 3.6.1: No `categories/views.py`, importar CreateView
-- [ ] 3.6.2: Importar CategoryForm
-- [ ] 3.6.3: Criar CategoryCreateView
-- [ ] 3.6.4: Configurar model, form_class e template_name
-- [ ] 3.6.5: Configurar success_url
-- [ ] 3.6.6: Override form_valid para associar usuário
-- [ ] 3.6.7: Adicionar mensagem de sucesso
-- [ ] 3.6.8: Adicionar tratamento de erro para nome duplicado
+- [X] 3.6.1: No `categories/views.py`, importar CreateView
+- [X] 3.6.2: Importar CategoryForm
+- [X] 3.6.3: Criar CategoryCreateView
+- [X] 3.6.4: Configurar model, form_class e template_name
+- [X] 3.6.5: Configurar success_url
+- [X] 3.6.6: Override form_valid para associar usuário
+- [X] 3.6.7: Adicionar mensagem de sucesso
+- [X] 3.6.8: Adicionar tratamento de erro para nome duplicado
 
 #### Tarefa 3.7: View de Edição de Categoria
 **Descrição**: Criar view para editar categoria
 
 **Subtarefas**:
-- [ ] 3.7.1: No `categories/views.py`, importar UpdateView
-- [ ] 3.7.2: Criar CategoryUpdateView
-- [ ] 3.7.3: Configurar atributos necessários
-- [ ] 3.7.4: Override get_queryset para filtrar por usuário
-- [ ] 3.7.5: Adicionar mensagem de sucesso
+- [X] 3.7.1: No `categories/views.py`, importar UpdateView
+- [X] 3.7.2: Criar CategoryUpdateView
+- [X] 3.7.3: Configurar atributos necessários
+- [X] 3.7.4: Override get_queryset para filtrar por usuário
+- [X] 3.7.5: Adicionar mensagem de sucesso
 
 #### Tarefa 3.8: View de Exclusão de Categoria
 **Descrição**: Criar view para excluir categoria
 
 **Subtarefas**:
-- [ ] 3.8.1: No `categories/views.py`, importar DeleteView
-- [ ] 3.8.2: Criar CategoryDeleteView
-- [ ] 3.8.3: Configurar atributos necessários
-- [ ] 3.8.4: Override get_queryset
-- [ ] 3.8.5: Adicionar mensagem de sucesso
-- [ ] 3.8.6: Adicionar validação para não excluir categoria com transações
+- [X] 3.8.1: No `categories/views.py`, importar DeleteView
+- [X] 3.8.2: Criar CategoryDeleteView
+- [X] 3.8.3: Configurar atributos necessários
+- [X] 3.8.4: Override get_queryset
+- [X] 3.8.5: Adicionar mensagem de sucesso
+- [X] 3.8.6: Adicionar validação para não excluir categoria com transações
 
 #### Tarefa 3.9: Templates de Form e Delete de Categoria
 **Descrição**: Criar templates para forms de categoria
 
 **Subtarefas**:
-- [ ] 3.9.1: Criar `templates/categories/category_form.html`
-- [ ] 3.9.2: Extender base e criar formulário estilizado
-- [ ] 3.9.3: Adicionar preview da cor selecionada
-- [ ] 3.9.4: Adicionar botões de ação
-- [ ] 3.9.5: Criar `templates/categories/category_confirm_delete.html`
-- [ ] 3.9.6: Adicionar mensagem de confirmação
-- [ ] 3.9.7: Estilizar com cores de alerta
+- [X] 3.9.1: Criar `templates/categories/category_form.html`
+- [X] 3.9.2: Extender base e criar formulário estilizado
+- [X] 3.9.3: Adicionar preview da cor selecionada
+- [X] 3.9.4: Adicionar botões de ação
+- [X] 3.9.5: Criar `templates/categories/category_confirm_delete.html`
+- [X] 3.9.6: Adicionar mensagem de confirmação
+- [X] 3.9.7: Estilizar com cores de alerta
 
 #### Tarefa 3.10: URLs de Categories
 **Descrição**: Configurar URLs para views de categorias
 
 **Subtarefas**:
-- [ ] 3.10.1: Criar arquivo `categories/urls.py`
-- [ ] 3.10.2: Adicionar paths para todas as views
-- [ ] 3.10.3: Incluir no `core/urls.py`
+- [X] 3.10.1: Criar arquivo `categories/urls.py`
+- [X] 3.10.2: Adicionar paths para todas as views
+- [X] 3.10.3: Incluir no `core/urls.py`
 
 #### Tarefa 3.11: Migration de Category
 **Descrição**: Criar e aplicar migrations
 
 **Subtarefas**:
-- [ ] 3.11.1: Executar makemigrations
-- [ ] 3.11.2: Verificar migration
-- [ ] 3.11.3: Executar migrate
-- [ ] 3.11.4: Verificar no banco
+- [X] 3.11.1: Executar makemigrations
+- [X] 3.11.2: Verificar migration
+- [X] 3.11.3: Executar migrate
+- [X] 3.11.4: Verificar no banco
 
 #### Tarefa 3.12: Categorias Padrão
 **Descrição**: Criar signal para adicionar categorias padrão ao novo usuário
 
 **Subtarefas**:
-- [ ] 3.12.1: Criar arquivo `categories/signals.py`
-- [ ] 3.12.2: Criar função para criar categorias padrão
-- [ ] 3.12.3: Definir lista de categorias padrão (Salário, Alimentação, Transporte, etc)
-- [ ] 3.12.4: Conectar ao signal post_save de User
-- [ ] 3.12.5: Importar signals no apps.py
-- [ ] 3.12.6: Testar criação automática
+- [X] 3.12.1: Criar arquivo `categories/signals.py`
+- [X] 3.12.2: Criar função para criar categorias padrão
+- [X] 3.12.3: Definir lista de categorias padrão (Salário, Alimentação, Transporte, etc)
+- [X] 3.12.4: Conectar ao signal post_save de User
+- [X] 3.12.5: Importar signals no apps.py
+- [X] 3.12.6: Testar criação automática
 
-#### Tarefa 3.13: Testes Manuais de Categories
+#### Tarefa 3.13: Testes Manuais de Categories ✅
 **Descrição**: Testar CRUD de categorias
 
 **Subtarefas**:
-- [ ] 3.13.1: Fazer login
-- [ ] 3.13.2: Acessar página de categorias
-- [ ] 3.13.3: Verificar categorias padrão criadas
-- [ ] 3.13.4: Criar categoria de entrada personalizada
-- [ ] 3.13.5: Criar categoria de saída personalizada
-- [ ] 3.13.6: Testar seletor de cor
-- [ ] 3.13.7: Editar categoria
-- [ ] 3.13.8: Tentar criar categoria com nome duplicado
-- [ ] 3.13.9: Excluir categoria
-- [ ] 3.13.10: Verificar separação visual entre entradas e saídas
+- [X] 3.13.1: Fazer login
+- [X] 3.13.2: Acessar página de categorias
+- [X] 3.13.3: Verificar categorias padrão criadas
+- [X] 3.13.4: Criar categoria de entrada personalizada
+- [X] 3.13.5: Criar categoria de saída personalizada
+- [X] 3.13.6: Testar seletor de cor
+- [X] 3.13.7: Editar categoria
+- [X] 3.13.8: Tentar criar categoria com nome duplicado
+- [X] 3.13.9: Excluir categoria
+- [X] 3.13.10: Verificar separação visual entre entradas e saídas
 
 ---
 

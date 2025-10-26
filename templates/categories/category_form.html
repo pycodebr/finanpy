@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Finanpy{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">{{ title }}</h1>
+        <p class="text-slate-400">Crie e edite suas categorias para organizar suas transações.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg p-6 md:p-8">
+        <form method="POST" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            <!-- Non-field Errors -->
+            {% if form.non_field_errors %}
+            <div class="bg-red-500 bg-opacity-20 border border-red-500 rounded-lg p-4">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="flex-1">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-red-400 text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Name Field -->
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-slate-300 font-semibold mb-2">{{ form.name.label }} <span class="text-red-400">*</span></label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <div class="mt-2">
+                    {% for error in form.name.errors %}
+                    <p class="text-red-400 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Ex: Alimentação, Salário, Transporte.</p>
+            </div>
+
+            <!-- Category Type Field -->
+            <div>
+                <label for="{{ form.category_type.id_for_label }}" class="block text-slate-300 font-semibold mb-2">{{ form.category_type.label }} <span class="text-red-400">*</span></label>
+                {{ form.category_type }}
+                {% if form.category_type.errors %}
+                <div class="mt-2">
+                    {% for error in form.category_type.errors %}
+                    <p class="text-red-400 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Define se a categoria é para receitas ou despesas.</p>
+            </div>
+
+            <!-- Color Field -->
+            <div>
+                <label for="{{ form.color.id_for_label }}" class="block text-slate-300 font-semibold mb-2">{{ form.color.label }} <span class="text-red-400">*</span></label>
+                <div class="flex items-center gap-3">
+                    {{ form.color }}
+                    <input type="text" id="color-hex-input" value="{{ form.color.value|default:'#667eea' }}" readonly class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-slate-100 font-mono">
+                </div>
+                {% if form.color.errors %}
+                <div class="mt-2">
+                    {% for error in form.color.errors %}
+                    <p class="text-red-400 text-sm flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Escolha uma cor para identificar a categoria.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                <button type="submit" class="flex-1 px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Salvar Categoria
+                </button>
+                <a href="{% url 'categories:category_list' %}" class="flex-1 px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 flex items-center justify-center text-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorInput = document.getElementById('{{ form.color.id_for_label }}');
+        const hexInput = document.getElementById('color-hex-input');
+        
+        if (colorInput && hexInput) {
+            // Set initial value for hex input
+            hexInput.value = colorInput.value.toUpperCase();
+
+            // Update hex input when color picker changes
+            colorInput.addEventListener('input', function() {
+                hexInput.value = colorInput.value.toUpperCase();
+            });
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Categorias - Finanpy{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">Minhas Categorias</h1>
+            <p class="text-slate-400">Organize suas transações com categorias personalizadas.</p>
+        </div>
+        <a href="{% url 'categories:category_create' %}"
+           class="inline-flex items-center justify-center px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nova Categoria
+        </a>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Income Column -->
+        <div class="bg-slate-800/50 rounded-xl border border-slate-700 p-6">
+            <h2 class="text-2xl font-bold text-emerald-400 mb-4">Categorias de Entrada</h2>
+            <div class="space-y-4">
+                {% for category in income_categories %}
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-emerald-500/50 transition-colors">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full mr-4" style="background-color: {{ category.color }};"></div>
+                        <span class="font-medium text-slate-200">{{ category.name }}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="{% url 'categories:category_update' category.pk %}" class="text-slate-400 hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </a>
+                        <a href="{% url 'categories:category_delete' category.pk %}" class="text-slate-400 hover:text-red-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-10 px-6 bg-slate-900/50 rounded-lg">
+                    <svg class="w-12 h-12 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h3 class="text-lg font-semibold text-slate-300">Sem categorias de entrada</h3>
+                    <p class="text-slate-400 text-sm">Adicione categorias para organizar suas receitas.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Expense Column -->
+        <div class="bg-slate-800/50 rounded-xl border border-slate-700 p-6">
+            <h2 class="text-2xl font-bold text-red-400 mb-4">Categorias de Saída</h2>
+            <div class="space-y-4">
+                {% for category in expense_categories %}
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 flex items-center justify-between hover:border-red-500/50 transition-colors">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full mr-4" style="background-color: {{ category.color }};"></div>
+                        <span class="font-medium text-slate-200">{{ category.name }}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="{% url 'categories:category_update' category.pk %}" class="text-slate-400 hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </a>
+                        <a href="{% url 'categories:category_delete' category.pk %}" class="text-slate-400 hover:text-red-400 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-10 px-6 bg-slate-900/50 rounded-lg">
+                    <svg class="w-12 h-12 mx-auto text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    <h3 class="text-lg font-semibold text-slate-300">Sem categorias de saída</h3>
+                    <p class="text-slate-400 text-sm">Adicione categorias para organizar seus gastos.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
