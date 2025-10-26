@@ -61,9 +61,13 @@
                         aria-expanded="false"
                         aria-haspopup="true">
                     <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold">
-                        {{ user.first_name|default:user.username|slice:":1"|upper }}
+                        {% if user.profile.full_name %}
+                            {{ user.profile.full_name|slice:":1"|upper }}
+                        {% else %}
+                            {{ user.email|slice:":1"|upper }}
+                        {% endif %}
                     </div>
-                    <span class="font-medium">{{ user.first_name|default:user.username }}</span>
+                    <span class="font-medium">{{ user.profile.full_name|default:user.email }}</span>
                     <svg class="w-4 h-4 text-slate-400 transition-transform" id="userMenuIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
@@ -73,11 +77,10 @@
                 <div id="userDropdown"
                      class="hidden absolute right-0 mt-2 w-56 bg-slate-800 border border-slate-700 rounded-lg shadow-lg py-2 transform opacity-0 scale-95 transition-all duration-200 ease-out origin-top-right">
                     <div class="px-4 py-3 border-b border-slate-700">
-                        <p class="text-sm font-medium text-slate-100">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="text-sm font-medium text-slate-100">{{ user.profile.full_name|default:user.email }}</p>
                         <p class="text-xs text-slate-400 mt-1">{{ user.email }}</p>
                     </div>
 
-                    <!-- TODO: Uncomment when profiles URLs are implemented
                     <a href="{% url 'profiles:profile_detail' %}"
                        class="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-slate-100 transition-colors">
                         <div class="flex items-center space-x-2">
@@ -97,7 +100,6 @@
                             <span>Editar Perfil</span>
                         </div>
                     </a>
-                    -->
 
                     <div class="border-t border-slate-700 mt-2 pt-2">
                         <form method="POST" action="{% url 'users:logout' %}">
@@ -141,10 +143,14 @@
             <!-- User Info -->
             <div class="flex items-center space-x-3 px-4 py-3 bg-slate-700 rounded-lg mb-4">
                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-purple-700 text-white font-semibold text-lg">
-                    {{ user.first_name|default:user.username|slice:":1"|upper }}
+                    {% if user.profile.full_name %}
+                        {{ user.profile.full_name|slice:":1"|upper }}
+                    {% else %}
+                        {{ user.email|slice:":1"|upper }}
+                    {% endif %}
                 </div>
                 <div>
-                    <p class="text-sm font-medium text-slate-100">{{ user.get_full_name|default:user.username }}</p>
+                    <p class="text-sm font-medium text-slate-100">{{ user.profile.full_name|default:user.email }}</p>
                     <p class="text-xs text-slate-400">{{ user.email }}</p>
                 </div>
             </div>
@@ -192,7 +198,6 @@
 
             <!-- Profile Links -->
             <div class="border-t border-slate-700 mt-4 pt-4 space-y-2">
-                <!-- TODO: Uncomment when profiles URLs are implemented
                 <a href="{% url 'profiles:profile_detail' %}"
                    class="flex items-center space-x-2 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-slate-100 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +213,6 @@
                     </svg>
                     <span>Editar Perfil</span>
                 </a>
-                -->
 
                 <form method="POST" action="{% url 'users:logout' %}">
                     {% csrf_token %}
