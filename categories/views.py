@@ -1,9 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
-from .models import Category
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.deletion import ProtectedError
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
 from .forms import CategoryForm
+from .models import Category
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
@@ -62,6 +65,16 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Categoria excluída com sucesso!')
-        return super().form_valid(form)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        try:
+            self.object.delete()
+            messages.success(request, "Categoria excluída com sucesso!")
+            return HttpResponseRedirect(success_url)
+        except ProtectedError:
+            messages.error(
+                request,
+                "Não é possível excluir esta categoria, pois existem transações associadas a ela."
+            )
+            return HttpResponseRedirect(success_url)

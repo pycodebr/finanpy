@@ -125,9 +125,9 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
     View for deleting a bank account.
 
     Requires user authentication and ensures users can only delete their own
-    accounts through queryset filtering. Displays a success message upon
-    successful deletion. All associated transactions will be deleted due to
-    CASCADE relationship.
+    accounts through queryset filtering. Validates that the account has no
+    associated transactions before allowing deletion. Displays appropriate
+    error or success messages.
     """
     model = Account
     template_name = 'accounts/account_confirm_delete.html'
@@ -142,17 +142,16 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
         """
         return Account.objects.filter(user=self.request.user)
 
-    def delete(self, request, *args, **kwargs):
-        """
-        Attempt to delete the account, handling existing transaction protection.
-        """
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        success_url = self.get_success_url()
         try:
-            messages.success(self.request, 'Conta excluída com sucesso!')
-            return super().delete(request, *args, **kwargs)
+            self.object.delete()
+            messages.success(request, "Conta excluída com sucesso!")
+            return HttpResponseRedirect(success_url)
         except ProtectedError:
             messages.error(
-                self.request,
-                'Não é possível excluir contas com transações associadas. Exclua ou transfira as transações antes de tentar novamente.',
+                request,
+                "Não é possível excluir esta conta, pois existem transações associadas a ela."
             )
-            return HttpResponseRedirect(self.success_url)
+            return HttpResponseRedirect(success_url)

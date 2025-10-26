@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 
 {% block title %}Confirmar Exclusão - Finanpy{% endblock %}
 
@@ -56,7 +57,7 @@
                 <div>
                     <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Valor</p>
                     <p class="text-2xl font-bold {% if object.transaction_type == 'INCOME' %}text-emerald-400{% else %}text-red-400{% endif %}">
-                        {% if object.transaction_type == 'INCOME' %}+{% else %}-{% endif %} R$ {{ object.amount|floatformat:2 }}
+                        {% if object.transaction_type == 'INCOME' %}+{% else %}-{% endif %} {{ object.amount|currency }}
                     </p>
                 </div>
             </div>

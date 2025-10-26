@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load currency_filters %}
 
 {% block title %}Confirmar Exclusão - Finanpy{% endblock %}
 
@@ -53,7 +54,7 @@
             <div class="border-t border-slate-700 pt-4">
                 <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Saldo Atual</p>
                 <p class="text-3xl font-bold {% if object.balance >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
-                    R$ {{ object.balance|floatformat:2 }}
+                    {{ object.balance|currency }}
                 </p>
             </div>
         </div>

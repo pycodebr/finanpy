@@ -130,6 +130,9 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        # Check for balance warning (non-blocking)
+        if hasattr(form, 'balance_warning') and form.balance_warning:
+            messages.warning(self.request, form.balance_warning)
         messages.success(self.request, 'Transação criada com sucesso!')
         return super().form_valid(form)
 
@@ -180,6 +183,9 @@ class TransactionUpdateView(LoginRequiredMixin, UpdateView):
         return kwargs
 
     def form_valid(self, form):
+        # Check for balance warning (non-blocking)
+        if hasattr(form, 'balance_warning') and form.balance_warning:
+            messages.warning(self.request, form.balance_warning)
         messages.success(self.request, 'Transação atualizada com sucesso!')
         return super().form_valid(form)
 
@@ -204,5 +210,14 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
         )
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Transação excluída com sucesso!')
-        return super().delete(request, *args, **kwargs)
+        """
+        Handles the deletion of a transaction.
+
+        This method attempts to delete the transaction and displays a success
+        message upon completion.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(self.request, "Transação excluída com sucesso!")
+        return HttpResponseRedirect(success_url)

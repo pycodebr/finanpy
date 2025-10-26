@@ -1076,12 +1076,12 @@
 **Descrição**: Implementar validações de negócio adicionais
 
 **Subtarefas**:
-- [ ] 6.1.1: Validar que não é possível excluir conta com transações
-- [ ] 6.1.2: Validar que não é possível excluir categoria com transações
-- [ ] 6.1.3: Adicionar validação de data no futuro para transações
-- [ ] 6.1.4: Validar valores negativos
-- [ ] 6.1.5: Adicionar validação de saldo suficiente (opcional)
-- [ ] 6.1.6: Testar todas as validações
+- [X] 6.1.1: Validar que não é possível excluir conta com transações
+- [X] 6.1.2: Validar que não é possível excluir categoria com transações
+- [X] 6.1.3: Adicionar validação de data no futuro para transações
+- [X] 6.1.4: Validar valores negativos
+- [X] 6.1.5: Adicionar validação de saldo suficiente (opcional)
+- [X] 6.1.6: Testar todas as validações
 
 #### Tarefa 6.2: Ordenação e Paginação
 **Descrição**: Melhorar ordenação e adicionar paginação onde necessário

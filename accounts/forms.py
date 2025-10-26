@@ -41,3 +41,9 @@ class AccountForm(forms.ModelForm):
                 'min': '0',
             }),
         }
+
+    def clean_balance(self):
+        balance = self.cleaned_data.get('balance')
+        if balance is not None and balance < 0:
+            raise forms.ValidationError('O saldo inicial não pode ser negativo.')
+        return balance
