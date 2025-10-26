@@ -714,182 +714,195 @@
 
 ---
 
-### Sprint 4: Gestão de Transações
+### Sprint 4: Gestão de Transações ✅ CONCLUÍDA
 
 #### Tarefa 4.1: Model de Transaction
 **Descrição**: Criar model para transações financeiras
 
 **Subtarefas**:
-- [ ] 4.1.1: Abrir arquivo `transactions/models.py`
-- [ ] 4.1.2: Importar models, Account e Category
-- [ ] 4.1.3: Criar classe Transaction
-- [ ] 4.1.4: Adicionar ForeignKey para Account (on_delete=PROTECT)
-- [ ] 4.1.5: Adicionar ForeignKey para Category (on_delete=PROTECT)
-- [ ] 4.1.6: Criar choices para transaction_type (INCOME, EXPENSE)
-- [ ] 4.1.7: Adicionar campo transaction_type
-- [ ] 4.1.8: Adicionar campo amount (DecimalField, max_digits=12, decimal_places=2)
-- [ ] 4.1.9: Adicionar campo transaction_date (DateField)
-- [ ] 4.1.10: Adicionar campo description (TextField, blank=True)
-- [ ] 4.1.11: Adicionar created_at e updated_at
-- [ ] 4.1.12: Adicionar método __str__
-- [ ] 4.1.13: Adicionar Meta com ordering por -transaction_date
+- [X] 4.1.1: Abrir arquivo `transactions/models.py`
+- [X] 4.1.2: Importar models, Account e Category
+- [X] 4.1.3: Criar classe Transaction
+- [X] 4.1.4: Adicionar ForeignKey para Account (on_delete=PROTECT)
+- [X] 4.1.5: Adicionar ForeignKey para Category (on_delete=PROTECT)
+- [X] 4.1.6: Criar choices para transaction_type (INCOME, EXPENSE)
+- [X] 4.1.7: Adicionar campo transaction_type
+- [X] 4.1.8: Adicionar campo amount (DecimalField, max_digits=12, decimal_places=2)
+- [X] 4.1.9: Adicionar campo transaction_date (DateField)
+- [X] 4.1.10: Adicionar campo description (TextField, blank=True)
+- [X] 4.1.11: Adicionar created_at e updated_at
+- [X] 4.1.12: Adicionar método __str__
+- [X] 4.1.13: Adicionar Meta com ordering por -transaction_date
+- [X] Tarefa 4.1 concluída
 
 #### Tarefa 4.2: Signal para Atualização de Saldo
 **Descrição**: Criar signals para atualizar saldo da conta automaticamente
 
 **Subtarefas**:
-- [ ] 4.2.1: Criar arquivo `transactions/signals.py`
-- [ ] 4.2.2: Importar post_save, post_delete, pre_save
-- [ ] 4.2.3: Criar função update_balance_on_create
-- [ ] 4.2.4: Conectar ao post_save de Transaction
-- [ ] 4.2.5: Implementar lógica: se INCOME adiciona, se EXPENSE subtrai
-- [ ] 4.2.6: Criar função update_balance_on_delete
-- [ ] 4.2.7: Implementar lógica reversa ao excluir
-- [ ] 4.2.8: Criar função update_balance_on_update usando pre_save
-- [ ] 4.2.9: Salvar valores antigos antes de atualizar
-- [ ] 4.2.10: Recalcular saldo considerando mudanças
-- [ ] 4.2.11: Importar signals no apps.py
-- [ ] 4.2.12: Adicionar tratamento de erros
+- [X] 4.2.1: Criar arquivo `transactions/signals.py`
+- [X] 4.2.2: Importar post_save, post_delete, pre_save
+- [X] 4.2.3: Criar função update_balance_on_create
+- [X] 4.2.4: Conectar ao post_save de Transaction
+- [X] 4.2.5: Implementar lógica: se INCOME adiciona, se EXPENSE subtrai
+- [X] 4.2.6: Criar função update_balance_on_delete
+- [X] 4.2.7: Implementar lógica reversa ao excluir
+- [X] 4.2.8: Criar função update_balance_on_update usando pre_save
+- [X] 4.2.9: Salvar valores antigos antes de atualizar
+- [X] 4.2.10: Recalcular saldo considerando mudanças
+- [X] 4.2.11: Importar signals no apps.py
+- [X] 4.2.12: Adicionar tratamento de erros
+- [X] Tarefa 4.2 concluída
 
 #### Tarefa 4.3: Admin de Transaction
 **Descrição**: Configurar Django Admin para transações
 
 **Subtarefas**:
-- [ ] 4.3.1: Abrir arquivo `transactions/admin.py`
-- [ ] 4.3.2: Criar TransactionAdmin
-- [ ] 4.3.3: Configurar list_display: transaction_date, description, account, category, transaction_type, amount
-- [ ] 4.3.4: Configurar list_filter: transaction_type, transaction_date, category
-- [ ] 4.3.5: Configurar search_fields: description, account__name
-- [ ] 4.3.6: Configurar date_hierarchy: transaction_date
-- [ ] 4.3.7: Configurar readonly_fields: created_at, updated_at
-- [ ] 4.3.8: Registrar Transaction
+- [X] 4.3.1: Abrir arquivo `transactions/admin.py`
+- [X] 4.3.2: Criar TransactionAdmin
+- [X] 4.3.3: Configurar list_display: transaction_date, description, account, category, transaction_type, amount
+- [X] 4.3.4: Configurar list_filter: transaction_type, transaction_date, category
+- [X] 4.3.5: Configurar search_fields: description, account__name
+- [X] 4.3.6: Configurar date_hierarchy: transaction_date
+- [X] 4.3.7: Configurar readonly_fields: created_at, updated_at
+- [X] 4.3.8: Registrar Transaction
+- [X] Tarefa 4.3 concluída
 
 #### Tarefa 4.4: Form de Transaction
 **Descrição**: Criar formulário para transações
 
 **Subtarefas**:
-- [ ] 4.4.1: Criar arquivo `transactions/forms.py`
-- [ ] 4.4.2: Criar TransactionForm
-- [ ] 4.4.3: Definir fields: account, category, transaction_type, amount, transaction_date, description
-- [ ] 4.4.4: Configurar widgets com TailwindCSS
-- [ ] 4.4.5: Usar DateInput com type='date'
-- [ ] 4.4.6: Adicionar labels em português
-- [ ] 4.4.7: Adicionar placeholders
-- [ ] 4.4.8: Adicionar método __init__ para filtrar accounts e categories do usuário
-- [ ] 4.4.9: Adicionar validação: category_type deve corresponder a transaction_type
-- [ ] 4.4.10: Adicionar validação: amount deve ser positivo
+- [X] 4.4.1: Criar arquivo `transactions/forms.py`
+- [X] 4.4.2: Criar TransactionForm
+- [X] 4.4.3: Definir fields: account, category, transaction_type, amount, transaction_date, description
+- [X] 4.4.4: Configurar widgets com TailwindCSS
+- [X] 4.4.5: Usar DateInput com type='date'
+- [X] 4.4.6: Adicionar labels em português
+- [X] 4.4.7: Adicionar placeholders
+- [X] 4.4.8: Adicionar método __init__ para filtrar accounts e categories do usuário
+- [X] 4.4.9: Adicionar validação: category_type deve corresponder a transaction_type
+- [X] 4.4.10: Adicionar validação: amount deve ser positivo
+- [X] Tarefa 4.4 concluída
 
 #### Tarefa 4.5: View de Listagem de Transações
 **Descrição**: Criar view para listar transações com filtros
 
 **Subtarefas**:
-- [ ] 4.5.1: Abrir `transactions/views.py`
-- [ ] 4.5.2: Importar ListView e Transaction
-- [ ] 4.5.3: Criar TransactionListView
-- [ ] 4.5.4: Override get_queryset para filtrar por usuário (via account__user)
-- [ ] 4.5.5: Implementar filtros por data_inicio, data_fim (GET params)
-- [ ] 4.5.6: Implementar filtro por conta (GET param)
-- [ ] 4.5.7: Implementar filtro por categoria (GET param)
-- [ ] 4.5.8: Adicionar paginação (paginate_by = 20)
-- [ ] 4.5.9: Adicionar estatísticas no context: total_income, total_expense, balance
-- [ ] 4.5.10: Passar contas e categorias do usuário para o context (para filtros)
+- [X] 4.5.1: Abrir `transactions/views.py`
+- [X] 4.5.2: Importar ListView e Transaction
+- [X] 4.5.3: Criar TransactionListView
+- [X] 4.5.4: Override get_queryset para filtrar por usuário (via account__user)
+- [X] 4.5.5: Implementar filtros por data_inicio, data_fim (GET params)
+- [X] 4.5.6: Implementar filtro por conta (GET param)
+- [X] 4.5.7: Implementar filtro por categoria (GET param)
+- [X] 4.5.8: Adicionar paginação (paginate_by = 20)
+- [X] 4.5.9: Adicionar estatísticas no context: total_income, total_expense, balance
+- [X] 4.5.10: Passar contas e categorias do usuário para o context (para filtros)
+- [X] Tarefa 4.5 concluída
 
 #### Tarefa 4.6: Template de Listagem de Transações
 **Descrição**: Criar template para listar transações
 
 **Subtarefas**:
-- [ ] 4.6.1: Criar `templates/transactions/transaction_list.html`
-- [ ] 4.6.2: Extender base.html
-- [ ] 4.6.3: Criar header com título e botão "Nova Transação"
-- [ ] 4.6.4: Criar seção de filtros com formulário GET
-- [ ] 4.6.5: Adicionar inputs para data início e fim
-- [ ] 4.6.6: Adicionar select para conta
-- [ ] 4.6.7: Adicionar select para categoria
-- [ ] 4.6.8: Adicionar botão "Filtrar" e "Limpar Filtros"
-- [ ] 4.6.9: Criar seção de cards com estatísticas (Total Entradas, Total Saídas, Balanço)
-- [ ] 4.6.10: Criar tabela responsiva para transações
-- [ ] 4.6.11: Colunas: Data, Descrição, Conta, Categoria, Tipo, Valor, Ações
-- [ ] 4.6.12: Usar cores diferentes para INCOME (verde) e EXPENSE (vermelho)
-- [ ] 4.6.13: Adicionar botões Editar e Excluir
-- [ ] 4.6.14: Adicionar paginação
-- [ ] 4.6.15: Adicionar mensagem quando lista vazia
+- [X] 4.6.1: Criar `templates/transactions/transaction_list.html`
+- [X] 4.6.2: Extender base.html
+- [X] 4.6.3: Criar header com título e botão "Nova Transação"
+- [X] 4.6.4: Criar seção de filtros com formulário GET
+- [X] 4.6.5: Adicionar inputs para data início e fim
+- [X] 4.6.6: Adicionar select para conta
+- [X] 4.6.7: Adicionar select para categoria
+- [X] 4.6.8: Adicionar botão "Filtrar" e "Limpar Filtros"
+- [X] 4.6.9: Criar seção de cards com estatísticas (Total Entradas, Total Saídas, Balanço)
+- [X] 4.6.10: Criar tabela responsiva para transações
+- [X] 4.6.11: Colunas: Data, Descrição, Conta, Categoria, Tipo, Valor, Ações
+- [X] 4.6.12: Usar cores diferentes para INCOME (verde) e EXPENSE (vermelho)
+- [X] 4.6.13: Adicionar botões Editar e Excluir
+- [X] 4.6.14: Adicionar paginação
+- [X] 4.6.15: Adicionar mensagem quando lista vazia
+- [X] Tarefa 4.6 concluída
 
 #### Tarefa 4.7: View de Criação de Transação
 **Descrição**: Criar view para registrar nova transação
 
 **Subtarefas**:
-- [ ] 4.7.1: No `transactions/views.py`, criar TransactionCreateView
-- [ ] 4.7.2: Configurar form_class = TransactionForm
-- [ ] 4.7.3: Configurar template e success_url
-- [ ] 4.7.4: Override get_form_kwargs para passar request.user ao form
-- [ ] 4.7.5: Adicionar mensagem de sucesso
-- [ ] 4.7.6: Adicionar tratamento de erro
+- [X] 4.7.1: No `transactions/views.py`, criar TransactionCreateView
+- [X] 4.7.2: Configurar form_class = TransactionForm
+- [X] 4.7.3: Configurar template e success_url
+- [X] 4.7.4: Override get_form_kwargs para passar request.user ao form
+- [X] 4.7.5: Adicionar mensagem de sucesso
+- [X] 4.7.6: Adicionar tratamento de erro
+- [X] Tarefa 4.7 concluída
 
 #### Tarefa 4.8: View de Edição de Transação
 **Descrição**: Criar view para editar transação
 
 **Subtarefas**:
-- [ ] 4.8.1: Criar TransactionUpdateView
-- [ ] 4.8.2: Configurar atributos necessários
-- [ ] 4.8.3: Override get_queryset para filtrar por usuário
-- [ ] 4.8.4: Override get_form_kwargs
-- [ ] 4.8.5: Adicionar mensagem de sucesso
+- [X] 4.8.1: Criar TransactionUpdateView
+- [X] 4.8.2: Configurar atributos necessários
+- [X] 4.8.3: Override get_queryset para filtrar por usuário
+- [X] 4.8.4: Override get_form_kwargs
+- [X] 4.8.5: Adicionar mensagem de sucesso
+- [X] Tarefa 4.8 concluída
 
 #### Tarefa 4.9: View de Exclusão de Transação
 **Descrição**: Criar view para excluir transação
 
 **Subtarefas**:
-- [ ] 4.9.1: Criar TransactionDeleteView
-- [ ] 4.9.2: Configurar atributos
-- [ ] 4.9.3: Override get_queryset
-- [ ] 4.9.4: Adicionar mensagem de sucesso
+- [X] 4.9.1: Criar TransactionDeleteView
+- [X] 4.9.2: Configurar atributos
+- [X] 4.9.3: Override get_queryset
+- [X] 4.9.4: Adicionar mensagem de sucesso
+- [X] Tarefa 4.9 concluída
 
 #### Tarefa 4.10: Templates de Form e Delete
 **Descrição**: Criar templates para forms de transação
 
 **Subtarefas**:
-- [ ] 4.10.1: Criar `templates/transactions/transaction_form.html`
-- [ ] 4.10.2: Criar formulário estilizado
-- [ ] 4.10.3: Adicionar JavaScript para filtrar categorias baseado no tipo
-- [ ] 4.10.4: Criar `templates/transactions/transaction_confirm_delete.html`
-- [ ] 4.10.5: Adicionar informações da transação
-- [ ] 4.10.6: Adicionar aviso sobre atualização de saldo
+- [X] 4.10.1: Criar `templates/transactions/transaction_form.html`
+- [X] 4.10.2: Criar formulário estilizado
+- [X] 4.10.3: Adicionar JavaScript para filtrar categorias baseado no tipo
+- [X] 4.10.4: Criar `templates/transactions/transaction_confirm_delete.html`
+- [X] 4.10.5: Adicionar informações da transação
+- [X] 4.10.6: Adicionar aviso sobre atualização de saldo
+- [X] Tarefa 4.10 concluída
 
 #### Tarefa 4.11: URLs de Transactions
 **Descrição**: Configurar URLs para transações
 
 **Subtarefas**:
-- [ ] 4.11.1: Criar `transactions/urls.py`
-- [ ] 4.11.2: Adicionar paths para list, create, update, delete
-- [ ] 4.11.3: Incluir no `core/urls.py`
+- [X] 4.11.1: Criar `transactions/urls.py`
+- [X] 4.11.2: Adicionar paths para list, create, update, delete
+- [X] 4.11.3: Incluir no `core/urls.py`
+- [X] Tarefa 4.11 concluída
 
 #### Tarefa 4.12: Migration de Transaction
 **Descrição**: Criar e aplicar migrations
 
 **Subtarefas**:
-- [ ] 4.12.1: Executar makemigrations
-- [ ] 4.12.2: Revisar migration
-- [ ] 4.12.3: Executar migrate
-- [ ] 4.12.4: Verificar tabela
+- [X] 4.12.1: Executar makemigrations
+- [X] 4.12.2: Revisar migration
+- [X] 4.12.3: Executar migrate
+- [X] 4.12.4: Verificar tabela
+- [X] Tarefa 4.12 concluída
 
 #### Tarefa 4.13: Testes Manuais de Transactions
 **Descrição**: Testar funcionalidades de transações
 
 **Subtarefas**:
-- [ ] 4.13.1: Criar transação de entrada
-- [ ] 4.13.2: Verificar atualização de saldo da conta
-- [ ] 4.13.3: Criar transação de saída
-- [ ] 4.13.4: Verificar subtração do saldo
-- [ ] 4.13.5: Editar transação e verificar recálculo
-- [ ] 4.13.6: Excluir transação e verificar reversão do saldo
-- [ ] 4.13.7: Testar filtros por data
-- [ ] 4.13.8: Testar filtros por conta
-- [ ] 4.13.9: Testar filtros por categoria
-- [ ] 4.13.10: Testar combinação de filtros
-- [ ] 4.13.11: Verificar cálculo de estatísticas
-- [ ] 4.13.12: Testar paginação
-- [ ] 4.13.13: Testar validação de categoria vs tipo
-- [ ] 4.13.14: Verificar que usuário só vê suas transações
+- [X] 4.13.1: Criar transação de entrada
+- [X] 4.13.2: Verificar atualização de saldo da conta
+- [X] 4.13.3: Criar transação de saída
+- [X] 4.13.4: Verificar subtração do saldo
+- [X] 4.13.5: Editar transação e verificar recálculo
+- [X] 4.13.6: Excluir transação e verificar reversão do saldo
+- [X] 4.13.7: Testar filtros por data
+- [X] 4.13.8: Testar filtros por conta
+- [X] 4.13.9: Testar filtros por categoria
+- [X] 4.13.10: Testar combinação de filtros
+- [X] 4.13.11: Verificar cálculo de estatísticas
+- [X] 4.13.12: Testar paginação
+- [X] 4.13.13: Testar validação de categoria vs tipo
+- [X] 4.13.14: Verificar que usuário só vê suas transações
+- [X] Tarefa 4.13 concluída
 
 ---
 

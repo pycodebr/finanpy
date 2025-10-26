@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }} - Finanpy{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">{{ page_title }}</h1>
+        <p class="text-slate-400">Registre movimentações financeiras mantendo o padrão visual do Finanpy</p>
+    </div>
+
+    <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg p-6 md:p-8">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="bg-red-500/20 border border-red-500 rounded-lg p-4">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 space-y-1">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-red-300 text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Account and Category -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.account.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                        {{ form.account.label }} <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.account }}
+                    {% if form.account.errors %}
+                    <div class="mt-2 space-y-1">
+                        {% for error in form.account.errors %}
+                        <p class="text-red-400 text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <p class="text-slate-500 text-xs mt-1">Selecione a conta que receberá ou realizará esta movimentação.</p>
+                </div>
+
+                <div>
+                    <label for="{{ form.category.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                        {{ form.category.label }} <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                    <div class="mt-2 space-y-1">
+                        {% for error in form.category.errors %}
+                        <p class="text-red-400 text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <p class="text-slate-500 text-xs mt-1">Categorias serão filtradas automaticamente conforme o tipo de transação.</p>
+                </div>
+            </div>
+
+            <!-- Transaction Type and Amount -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.transaction_type.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                        {{ form.transaction_type.label }} <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.transaction_type }}
+                    {% if form.transaction_type.errors %}
+                    <div class="mt-2 space-y-1">
+                        {% for error in form.transaction_type.errors %}
+                        <p class="text-red-400 text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <p class="text-slate-500 text-xs mt-1">Escolha se trata-se de uma entrada (INCOME) ou saída (EXPENSE).</p>
+                </div>
+
+                <div>
+                    <label for="{{ form.amount.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                        {{ form.amount.label }} <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="text-slate-400 font-medium">R$</span>
+                        </div>
+                        <input
+                            type="number"
+                            name="{{ form.amount.name }}"
+                            id="{{ form.amount.id_for_label }}"
+                            value="{% if form.amount.value %}{{ form.amount.value }}{% endif %}"
+                            step="0.01"
+                            min="0.01"
+                            placeholder="0,00"
+                            class="w-full pl-12 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+                        >
+                    </div>
+                    {% if form.amount.errors %}
+                    <div class="mt-2 space-y-1">
+                        {% for error in form.amount.errors %}
+                        <p class="text-red-400 text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <p class="text-slate-500 text-xs mt-1">Informe o valor absoluto da transação, sempre positivo.</p>
+                </div>
+            </div>
+
+            <!-- Date -->
+            <div>
+                <label for="{{ form.transaction_date.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.transaction_date.label }} <span class="text-red-400">*</span>
+                </label>
+                {{ form.transaction_date }}
+                {% if form.transaction_date.errors %}
+                <div class="mt-2 space-y-1">
+                    {% for error in form.transaction_date.errors %}
+                    <p class="text-red-400 text-sm flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Data em que a transação aconteceu.</p>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="{{ form.description.id_for_label }}" class="block text-slate-300 font-semibold mb-2">
+                    {{ form.description.label }}
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="mt-2 space-y-1">
+                    {% for error in form.description.errors %}
+                    <p class="text-red-400 text-sm flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <p class="text-slate-500 text-xs mt-1">Detalhe esta transação para facilitar buscas futuras.</p>
+            </div>
+
+            <div class="bg-slate-700/60 border border-slate-600 rounded-lg p-4 flex items-start gap-3">
+                <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+                <div>
+                    <p class="text-slate-300 font-semibold mb-1">Dica Finanpy</p>
+                    <p class="text-slate-400 text-sm">
+                        Categorias de entrada e saída possuem cores diferentes. Manter essa consistência ajuda a visualizar seu fluxo financeiro
+                        na listagem de transações e no dashboard.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                <button type="submit" class="flex-1 px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {% if is_editing %}Atualizar Transação{% else %}Salvar Transação{% endif %}
+                </button>
+                <a href="{% url 'transactions:transaction_list' %}" class="flex-1 px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg hover:bg-slate-600 transition-all duration-200 flex items-center justify-center text-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{ categories_data|json_script:'categories-data' }}
+<script>
+    (function() {
+        const categorySelect = document.getElementById('{{ form.category.id_for_label }}');
+        const typeSelect = document.getElementById('{{ form.transaction_type.id_for_label }}');
+        const categoriesData = JSON.parse(document.getElementById('categories-data').textContent || '[]');
+
+        function syncCategoryOptions(selectedType) {
+            if (!categorySelect || !selectedType) {
+                return;
+            }
+
+            const selectedValue = categorySelect.value;
+            let hasVisibleOption = false;
+
+            Array.from(categorySelect.options).forEach((option) => {
+                if (!option.value) {
+                    option.hidden = false;
+                    return;
+                }
+
+                const metadata = categoriesData.find((item) => item.id === option.value);
+                const matches = metadata ? metadata.category_type === selectedType : true;
+                option.hidden = !matches;
+
+                if (matches) {
+                    hasVisibleOption = true;
+                }
+            });
+
+            if (!hasVisibleOption) {
+                categorySelect.value = '';
+            } else if (selectedValue) {
+                const currentMetadata = categoriesData.find((item) => item.id === selectedValue);
+                if (!currentMetadata || currentMetadata.category_type !== selectedType) {
+                    categorySelect.value = '';
+                }
+            }
+        }
+
+        if (categorySelect && typeSelect) {
+            syncCategoryOptions(typeSelect.value);
+            typeSelect.addEventListener('change', function(event) {
+                syncCategoryOptions(event.target.value);
+            });
+        }
+    })();
+</script>
+{% endblock %}

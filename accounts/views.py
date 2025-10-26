@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
+from django.db.models.deletion import ProtectedError
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -140,15 +142,17 @@ class AccountDeleteView(LoginRequiredMixin, DeleteView):
         """
         return Account.objects.filter(user=self.request.user)
 
-    def form_valid(self, form):
+    def delete(self, request, *args, **kwargs):
         """
-        Display success message after successful account deletion.
-
-        Args:
-            form: The deletion form
-
-        Returns:
-            HttpResponse: Redirect to success_url after deletion
+        Attempt to delete the account, handling existing transaction protection.
         """
-        messages.success(self.request, 'Conta excluída com sucesso!')
-        return super().form_valid(form)
+        self.object = self.get_object()
+        try:
+            messages.success(self.request, 'Conta excluída com sucesso!')
+            return super().delete(request, *args, **kwargs)
+        except ProtectedError:
+            messages.error(
+                self.request,
+                'Não é possível excluir contas com transações associadas. Exclua ou transfira as transações antes de tentar novamente.',
+            )
+            return HttpResponseRedirect(self.success_url)
