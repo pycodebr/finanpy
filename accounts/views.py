@@ -20,6 +20,7 @@ class AccountListView(LoginRequiredMixin, ListView):
     model = Account
     template_name = 'accounts/account_list.html'
     context_object_name = 'accounts'
+    paginate_by = 9
 
     def get_queryset(self):
         """
@@ -46,6 +47,10 @@ class AccountListView(LoginRequiredMixin, ListView):
         )['total'] or 0
 
         context['total_balance'] = total_balance
+        context['accounts_count'] = self.get_queryset().count()
+        context['accounts_active_count'] = self.get_queryset().filter(is_active=True).count()
+        last_updated_account = self.get_queryset().order_by('-updated_at').first()
+        context['last_updated'] = last_updated_account.updated_at if last_updated_account else None
 
         return context
 

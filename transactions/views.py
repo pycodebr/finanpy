@@ -24,6 +24,10 @@ class TransactionListView(LoginRequiredMixin, ListView):
     context_object_name = 'transactions'
     paginate_by = 20
 
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('show', self.paginate_by)
+
+
     def dispatch(self, request, *args, **kwargs):
         self.filtered_queryset = Transaction.objects.none()
         return super().dispatch(request, *args, **kwargs)
@@ -57,13 +61,16 @@ class TransactionListView(LoginRequiredMixin, ListView):
         if category_id:
             queryset = queryset.filter(category_id=category_id)
 
-        queryset = queryset.order_by('-transaction_date', '-created_at')
+        orderby = self.request.GET.get('orderby', '-transaction_date')
+        queryset = queryset.order_by(orderby)
 
         self.filters = {
             'data_inicio': start_date,
             'data_fim': end_date,
             'conta': account_id,
             'categoria': category_id,
+            'show': self.request.GET.get('show', self.paginate_by),
+            'orderby': self.request.GET.get('orderby', '-transaction_date'),
         }
         self.filtered_queryset = queryset
 
@@ -89,6 +96,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
             'balance': income_total - expense_total,
             'filters': getattr(self, 'filters', {}),
             'has_filters': any(filter_value for filter_value in getattr(self, 'filters', {}).values()),
+            'show': self.request.GET.get('show', self.paginate_by),
         })
 
         return context

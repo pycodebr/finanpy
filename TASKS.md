@@ -1083,15 +1083,15 @@
 - [X] 6.1.5: Adicionar validação de saldo suficiente (opcional)
 - [X] 6.1.6: Testar todas as validações
 
-#### Tarefa 6.2: Ordenação e Paginação
+#### Tarefa 6.2: Ordenação e Paginação ✅
 **Descrição**: Melhorar ordenação e adicionar paginação onde necessário
 
 **Subtarefas**:
-- [ ] 6.2.1: Adicionar ordenação clicável em tabelas
-- [ ] 6.2.2: Implementar paginação em lista de contas
-- [ ] 6.2.3: Melhorar paginação de transações
-- [ ] 6.2.4: Adicionar "Mostrar X por página"
-- [ ] 6.2.5: Estilizar componentes de paginação
+- [X] 6.2.1: Adicionar ordenação clicável em tabelas
+- [X] 6.2.2: Implementar paginação em lista de contas
+- [X] 6.2.3: Melhorar paginação de transações
+- [X] 6.2.4: Adicionar "Mostrar X por página"
+- [X] 6.2.5: Estilizar componentes de paginação
 
 #### Tarefa 6.3: Busca e Filtros Avançados
 **Descrição**: Implementar funcionalidades de busca
