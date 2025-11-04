@@ -1397,21 +1397,22 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar camada de serviço para orquestrar análise
 
 **Subtarefas**:
-- [ ] 8.8.1: Criar arquivo `ai/services/analysis_service.py`
-- [ ] 8.8.2: Importar AIAnalysis model
-- [ ] 8.8.3: Importar get_user_model
-- [ ] 8.8.4: Importar funções do finance_insight_agent
-- [ ] 8.8.5: Criar função generate_analysis_for_user(user_id: int)
-- [ ] 8.8.6: Validar que usuário existe
-- [ ] 8.8.7: Verificar última análise (não gerar se < 24h)
-- [ ] 8.8.8: Chamar run_analysis do agente
-- [ ] 8.8.9: Parsear resultado do agente
-- [ ] 8.8.10: Extrair insights e recommendations do texto
-- [ ] 8.8.11: Criar objeto AIAnalysis e salvar no banco
-- [ ] 8.8.12: Retornar AIAnalysis criado
-- [ ] 8.8.13: Adicionar logging detalhado
-- [ ] 8.8.14: Adicionar tratamento de exceções completo
-- [ ] 8.8.15: Adicionar função get_latest_analysis(user_id: int)
+- [X] 8.8.1: Criar arquivo `ai/services/analysis_service.py`
+- [X] 8.8.2: Importar AIAnalysis model
+- [X] 8.8.3: Importar get_user_model
+- [X] 8.8.4: Importar funções do finance_insight_agent
+- [X] 8.8.5: Criar função generate_analysis_for_user(user_id: int)
+- [X] 8.8.6: Validar que usuário existe
+- [X] 8.8.7: Verificar última análise (não gerar se < 24h)
+- [X] 8.8.8: Chamar run_analysis do agente
+- [X] 8.8.9: Parsear resultado do agente
+- [X] 8.8.10: Extrair insights e recommendations do texto
+- [X] 8.8.11: Criar objeto AIAnalysis e salvar no banco
+- [X] 8.8.12: Retornar AIAnalysis criado
+- [X] 8.8.13: Adicionar logging detalhado
+- [X] 8.8.14: Adicionar tratamento de exceções completo
+- [X] 8.8.15: Adicionar função get_latest_analysis(user_id: int)
+- [X] Tarefa 8.8 concluída
 
 #### Tarefa 8.9: Django Command
 **Descrição**: Criar comando para executar análise via CLI
