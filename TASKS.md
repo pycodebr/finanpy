@@ -1320,16 +1320,17 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar estrutura de pastas e arquivos da app
 
 **Subtarefas**:
-- [ ] 8.5.1: Criar diretório `ai/agents/`
-- [ ] 8.5.2: Criar arquivo `ai/agents/__init__.py`
-- [ ] 8.5.3: Criar diretório `ai/tools/`
-- [ ] 8.5.4: Criar arquivo `ai/tools/__init__.py`
-- [ ] 8.5.5: Criar diretório `ai/services/`
-- [ ] 8.5.6: Criar arquivo `ai/services/__init__.py`
-- [ ] 8.5.7: Criar diretório `ai/management/`
-- [ ] 8.5.8: Criar diretório `ai/management/commands/`
-- [ ] 8.5.9: Criar arquivo `ai/management/__init__.py`
-- [ ] 8.5.10: Criar arquivo `ai/management/commands/__init__.py`
+- [X] 8.5.1: Criar diretório `ai/agents/`
+- [X] 8.5.2: Criar arquivo `ai/agents/__init__.py`
+- [X] 8.5.3: Criar diretório `ai/tools/`
+- [X] 8.5.4: Criar arquivo `ai/tools/__init__.py`
+- [X] 8.5.5: Criar diretório `ai/services/`
+- [X] 8.5.6: Criar arquivo `ai/services/__init__.py`
+- [X] 8.5.7: Criar diretório `ai/management/`
+- [X] 8.5.8: Criar diretório `ai/management/commands/`
+- [X] 8.5.9: Criar arquivo `ai/management/__init__.py`
+- [X] 8.5.10: Criar arquivo `ai/management/commands/__init__.py`
+- [X] Tarefa 8.5 concluída
 
 #### Tarefa 8.6: LangChain Database Tools
 **Descrição**: Criar tools LangChain para acessar dados Django
