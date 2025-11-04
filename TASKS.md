@@ -1309,11 +1309,12 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar e aplicar migration
 
 **Subtarefas**:
-- [ ] 8.4.1: Executar `python manage.py makemigrations ai`
-- [ ] 8.4.2: Revisar arquivo de migration gerado
-- [ ] 8.4.3: Executar `python manage.py migrate`
-- [ ] 8.4.4: Verificar tabela no banco de dados
-- [ ] 8.4.5: Testar criação manual de AIAnalysis no Django shell
+- [X] 8.4.1: Executar `python manage.py makemigrations ai`
+- [X] 8.4.2: Revisar arquivo de migration gerado
+- [X] 8.4.3: Executar `python manage.py migrate`
+- [X] 8.4.4: Verificar tabela no banco de dados
+- [X] 8.4.5: Testar criação manual de AIAnalysis no Django shell
+- [X] Tarefa 8.4 concluída
 
 #### Tarefa 8.5: Estrutura de Diretórios da App AI
 **Descrição**: Criar estrutura de pastas e arquivos da app
