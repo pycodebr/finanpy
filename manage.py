@@ -3,10 +3,23 @@
 import os
 import sys
 
+from decouple import config
+
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+    # Check for environment-specific settings
+    # First try to get from environment variable, then from .env file
+    env = os.environ.get('DJANGO_ENV', config('DJANGO_ENV', default='development'))
+    
+    if env == 'production':
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.production')
+    elif env == 'development':
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.development')
+    else:
+        # Default to development settings if environment is not specified or unknown
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.development')
+    
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

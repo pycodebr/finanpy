@@ -1,0 +1,4 @@
+-r base.txt
+
+# Production-specific packages
+gunicorn==23.0.0

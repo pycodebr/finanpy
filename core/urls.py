@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
@@ -31,6 +32,13 @@ urlpatterns = [
     path('categories/', include('categories.urls', namespace='categories')),
     path('transactions/', include('transactions.urls', namespace='transactions')),
 ]
+
+# Include debug toolbar URLs only in development when DEBUG is True
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
 
 handler404 = core_views.page_not_found_view
 handler500 = core_views.server_error_view

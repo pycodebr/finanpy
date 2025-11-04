@@ -1,0 +1,8 @@
+Django==5.2.7
+django-tailwind==3.8.0
+python-decouple==3.8
+asgiref==3.10.0
+sqlparse==0.5.3
+tzdata==2025.2
+psycopg2-binary==2.9.10
+whitenoise==6.10.0
