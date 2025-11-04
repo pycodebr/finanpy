@@ -1274,19 +1274,20 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar model Django para armazenar análises geradas pela IA
 
 **Subtarefas**:
-- [ ] 8.2.1: Abrir arquivo `ai/models.py`
-- [ ] 8.2.2: Importar models e get_user_model
-- [ ] 8.2.3: Criar classe AIAnalysis
-- [ ] 8.2.4: Adicionar ForeignKey para User (on_delete=CASCADE)
-- [ ] 8.2.5: Adicionar campo analysis_text (TextField)
-- [ ] 8.2.6: Adicionar campo key_insights (JSONField, default=list)
-- [ ] 8.2.7: Adicionar campo recommendations (JSONField, default=list)
-- [ ] 8.2.8: Adicionar campo period_analyzed (CharField, max_length=100)
-- [ ] 8.2.9: Adicionar campos created_at e updated_at
-- [ ] 8.2.10: Adicionar método __str__ retornando user email e data
-- [ ] 8.2.11: Adicionar Meta com ordering por -created_at
-- [ ] 8.2.12: Adicionar indexes em user e created_at
-- [ ] 8.2.13: Adicionar verbose_name e verbose_name_plural
+- [X] 8.2.1: Abrir arquivo `ai/models.py`
+- [X] 8.2.2: Importar models e get_user_model
+- [X] 8.2.3: Criar classe AIAnalysis
+- [X] 8.2.4: Adicionar ForeignKey para User (on_delete=CASCADE)
+- [X] 8.2.5: Adicionar campo analysis_text (TextField)
+- [X] 8.2.6: Adicionar campo key_insights (JSONField, default=list)
+- [X] 8.2.7: Adicionar campo recommendations (JSONField, default=list)
+- [X] 8.2.8: Adicionar campo period_analyzed (CharField, max_length=100)
+- [X] 8.2.9: Adicionar campos created_at e updated_at
+- [X] 8.2.10: Adicionar método __str__ retornando user email e data
+- [X] 8.2.11: Adicionar Meta com ordering por -created_at
+- [X] 8.2.12: Adicionar indexes em user e created_at
+- [X] 8.2.13: Adicionar verbose_name e verbose_name_plural
+- [X] Tarefa 8.2 concluída
 
 #### Tarefa 8.3: Admin de AIAnalysis
 **Descrição**: Configurar Django Admin para visualizar análises

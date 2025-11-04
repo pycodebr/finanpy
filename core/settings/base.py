@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'accounts',
+    'ai',
     'categories',
     'profiles',
     'transactions',
@@ -144,3 +145,20 @@ SECURE_BROWSER_XSS_FILTER = True
 
 # Prevent site from being embedded in frames (clickjacking protection)
 X_FRAME_OPTIONS = 'DENY'
+
+# ============================================================================
+# AI Configuration (OpenAI API)
+# ============================================================================
+# Settings for AI-powered financial analysis features
+
+# OpenAI API Key - Required for AI features
+OPENAI_API_KEY = config('OPENAI_API_KEY', default='')
+
+# AI Model to use (default: gpt-4o-mini for cost-effectiveness)
+AI_MODEL = config('AI_MODEL', default='gpt-4o-mini')
+
+# Maximum tokens in AI responses (controls response length and cost)
+AI_MAX_TOKENS = config('AI_MAX_TOKENS', default=1000, cast=int)
+
+# Temperature controls creativity/randomness (0.0 = deterministic, 1.0 = creative)
+AI_TEMPERATURE = config('AI_TEMPERATURE', default=0.7, cast=float)
