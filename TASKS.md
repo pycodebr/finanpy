@@ -1418,21 +1418,22 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar comando para executar análise via CLI
 
 **Subtarefas**:
-- [ ] 8.9.1: Criar arquivo `ai/management/commands/run_finance_analysis.py`
-- [ ] 8.9.2: Importar BaseCommand
-- [ ] 8.9.3: Importar get_user_model
-- [ ] 8.9.4: Importar generate_analysis_for_user
-- [ ] 8.9.5: Criar classe Command(BaseCommand)
-- [ ] 8.9.6: Definir help text descritivo
-- [ ] 8.9.7: Adicionar argumento --user-email (opcional)
-- [ ] 8.9.8: Adicionar flag --all para todos os usuários
-- [ ] 8.9.9: Implementar handle method
-- [ ] 8.9.10: Se --user-email: processar apenas esse usuário
-- [ ] 8.9.11: Se --all: iterar sobre todos os usuários ativos
-- [ ] 8.9.12: Adicionar output informativo (self.stdout.write)
-- [ ] 8.9.13: Adicionar barra de progresso para --all (opcional)
-- [ ] 8.9.14: Adicionar tratamento de erros por usuário
-- [ ] 8.9.15: Testar comando: `python manage.py run_finance_analysis --user-email test@test.com`
+- [X] 8.9.1: Criar arquivo `ai/management/commands/run_finance_analysis.py`
+- [X] 8.9.2: Importar BaseCommand
+- [X] 8.9.3: Importar get_user_model
+- [X] 8.9.4: Importar generate_analysis_for_user
+- [X] 8.9.5: Criar classe Command(BaseCommand)
+- [X] 8.9.6: Definir help text descritivo
+- [X] 8.9.7: Adicionar argumento --user-email (opcional)
+- [X] 8.9.8: Adicionar flag --all para todos os usuários
+- [X] 8.9.9: Implementar handle method
+- [X] 8.9.10: Se --user-email: processar apenas esse usuário
+- [X] 8.9.11: Se --all: iterar sobre todos os usuários ativos
+- [X] 8.9.12: Adicionar output informativo (self.stdout.write)
+- [X] 8.9.13: Adicionar barra de progresso para --all (opcional)
+- [X] 8.9.14: Adicionar tratamento de erros por usuário
+- [X] 8.9.15: Testar comando: `python manage.py run_finance_analysis --user-email test@test.com`
+- [X] Tarefa 8.9 concluída
 
 #### Tarefa 8.10: Exibição no Dashboard
 **Descrição**: Mostrar última análise no dashboard do usuário
