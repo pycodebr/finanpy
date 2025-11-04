@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView, TemplateView
 
 from accounts.models import Account
+from ai.models import AIAnalysis
 from transactions.models import Transaction
 
 from .forms import LoginForm, SignupForm
@@ -300,6 +301,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             'top_categories': top_categories,
             'active_accounts_count': active_accounts_count,
             'current_month': now.strftime('%B %Y'),
+            'latest_analysis': AIAnalysis.objects.filter(
+                user=user
+            ).order_by('-created_at').first(),
             # Chart data
             'category_chart_data': json.dumps(category_chart_data),
             'monthly_chart_data': json.dumps(monthly_chart_data),

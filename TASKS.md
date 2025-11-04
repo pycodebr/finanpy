@@ -1439,27 +1439,28 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Mostrar última análise no dashboard do usuário
 
 **Subtarefas**:
-- [ ] 8.10.1: Abrir `users/views.py` (ou app do dashboard)
-- [ ] 8.10.2: Importar AIAnalysis model
-- [ ] 8.10.3: No get_context_data do DashboardView:
-- [ ] 8.10.4: Buscar última análise do usuário:
+- [X] 8.10.1: Abrir `users/views.py` (ou app do dashboard)
+- [X] 8.10.2: Importar AIAnalysis model
+- [X] 8.10.3: No get_context_data do DashboardView:
+- [X] 8.10.4: Buscar última análise do usuário:
   ```python
   latest_analysis = AIAnalysis.objects.filter(
       user=self.request.user
   ).order_by('-created_at').first()
   ```
-- [ ] 8.10.5: Adicionar latest_analysis ao context
-- [ ] 8.10.6: Abrir template `templates/dashboard.html`
-- [ ] 8.10.7: Criar seção "Análise Financeira IA" após estatísticas
-- [ ] 8.10.8: Verificar {% if latest_analysis %}
-- [ ] 8.10.9: Exibir card com gradiente destacado
-- [ ] 8.10.10: Exibir ícone de IA (🤖)
-- [ ] 8.10.11: Exibir título "Sua Análise Financeira Personalizada"
-- [ ] 8.10.12: Exibir data da análise (created_at)
-- [ ] 8.10.13: Exibir analysis_text formatado (preservar quebras de linha)
-- [ ] 8.10.14: Adicionar botão "Gerar Nova Análise" (futuro)
-- [ ] 8.10.15: Se não houver análise, mostrar call-to-action
-- [ ] 8.10.16: Estilizar com TailwindCSS seguindo design system
+- [X] 8.10.5: Adicionar latest_analysis ao context
+- [X] 8.10.6: Abrir template `templates/dashboard.html`
+- [X] 8.10.7: Criar seção "Análise Financeira IA" após estatísticas
+- [X] 8.10.8: Verificar {% if latest_analysis %}
+- [X] 8.10.9: Exibir card com gradiente destacado
+- [X] 8.10.10: Exibir ícone de IA (🤖)
+- [X] 8.10.11: Exibir título "Sua Análise Financeira Personalizada"
+- [X] 8.10.12: Exibir data da análise (created_at)
+- [X] 8.10.13: Exibir analysis_text formatado (preservar quebras de linha)
+- [X] 8.10.14: Adicionar botão "Gerar Nova Análise" (futuro)
+- [X] 8.10.15: Se não houver análise, mostrar call-to-action
+- [X] 8.10.16: Estilizar com TailwindCSS seguindo design system
+- [X] Tarefa 8.10 concluída
 
 #### Tarefa 8.11: Template da Análise
 **Descrição**: Criar componente visual para exibir análise

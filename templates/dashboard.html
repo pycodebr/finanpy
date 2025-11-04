@@ -17,6 +17,85 @@
             </p>
         </div>
 
+        <!-- AI Analysis Section -->
+        <div class="mb-8" id="ai-analysis-section">
+            {% if latest_analysis %}
+            <div class="rounded-2xl border border-purple-500/60 bg-gradient-to-br from-purple-700 via-indigo-700 to-blue-700 shadow-xl overflow-hidden" data-ai-accordion>
+                <button type="button"
+                        class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 bg-white/10 hover:bg-white/15 transition-colors text-left"
+                        data-ai-accordion-toggle
+                        aria-expanded="false">
+                    <div class="flex items-center gap-3 text-slate-50">
+                        <span class="text-2xl" aria-hidden="true">🤖</span>
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.15em] text-slate-200/80">Análise Financeira IA</p>
+                            <p class="text-lg font-semibold text-white">
+                                Gerada em {{ latest_analysis.created_at|date:'d/m/Y H:i' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-purple-100/90">
+                        <span>Clique para visualizar a análise completa</span>
+                        <svg class="w-5 h-5 transition-transform duration-200 text-purple-100/90" data-ai-accordion-icon fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </button>
+                <div class="hidden border-t border-white/20 bg-gradient-to-br from-purple-700 via-indigo-700 to-blue-700 text-slate-50" data-ai-accordion-content>
+                    <div class="p-6 sm:p-8 space-y-6">
+                        <textarea id="ai-analysis-raw" class="hidden">{{ latest_analysis.analysis_text }}</textarea>
+                        <div id="ai-analysis-rendered" class="space-y-4 text-slate-100 leading-relaxed"></div>
+
+                        {% if latest_analysis.key_insights %}
+                        <div class="bg-white/10 rounded-xl p-4 border border-white/10">
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-purple-100 mb-3">Insights Principais</h3>
+                            <ul class="space-y-2 text-sm marker:text-purple-200 list-disc list-inside">
+                                {% for insight in latest_analysis.key_insights %}
+                                <li class="leading-relaxed">{{ insight }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if latest_analysis.recommendations %}
+                        <div class="bg-white/10 rounded-xl p-4 border border-white/10">
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-purple-100 mb-3">Recomendações</h3>
+                            <ol class="space-y-2 text-sm list-decimal list-inside marker:text-purple-200">
+                                {% for recommendation in latest_analysis.recommendations %}
+                                <li class="leading-relaxed">{{ recommendation }}</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="rounded-2xl border border-purple-500/60 bg-gradient-to-br from-purple-700 via-indigo-700 to-blue-700 p-8 text-center shadow-lg">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-3xl mb-4 text-white">
+                    🤖
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">Ainda sem análises inteligentes</h3>
+                <p class="text-purple-100 max-w-2xl mx-auto mb-6">
+                    Gere dados financeiros (contas, categorias e transações) e execute o comando
+                    <code class="px-2 py-1 bg-black/50 text-purple-100 rounded-md text-xs">python manage.py run_finance_analysis --user-email {{ user.email }}</code>
+                    para receber um resumo personalizado no seu dashboard.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="{% url 'transactions:transaction_create' %}"
+                       class="px-5 py-2.5 bg-white/15 hover:bg-white/25 text-white rounded-lg font-semibold transition">
+                        Adicionar Transação
+                    </a>
+                    <button type="button"
+                            disabled
+                            class="px-5 py-2.5 bg-white/10 text-purple-100 rounded-lg font-semibold cursor-not-allowed opacity-75">
+                        Gerar Nova Análise (em breve)
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
         <!-- Statistics Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Balance Card -->
@@ -198,8 +277,90 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if latest_analysis %}
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+{% endif %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    {% if latest_analysis %}
+    const accordion = document.querySelector('[data-ai-accordion]');
+    if (accordion) {
+        const toggleBtn = accordion.querySelector('[data-ai-accordion-toggle]');
+        const content = accordion.querySelector('[data-ai-accordion-content]');
+        const icon = accordion.querySelector('[data-ai-accordion-icon]');
+
+        if (toggleBtn && content) {
+            toggleBtn.addEventListener('click', function () {
+                const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+                toggleBtn.setAttribute('aria-expanded', (!expanded).toString());
+                if (expanded) {
+                    content.classList.add('hidden');
+                } else {
+                    content.classList.remove('hidden');
+                }
+                if (icon) {
+                    icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
+            });
+        }
+    }
+
+    const rawTextarea = document.getElementById('ai-analysis-raw');
+    const renderedContainer = document.getElementById('ai-analysis-rendered');
+    if (rawTextarea && renderedContainer && window.marked && window.DOMPurify) {
+        const rawText = rawTextarea.value || '';
+        const html = window.DOMPurify.sanitize(window.marked.parse(rawText));
+        renderedContainer.innerHTML = html;
+
+        renderedContainer.style.display = 'block';
+
+        renderedContainer.querySelectorAll('h1, h2, h3').forEach(function (heading, index) {
+            heading.style.color = '#f8fafc';
+            heading.style.fontWeight = '600';
+            heading.style.marginTop = index === 0 ? '0' : '1.5rem';
+            if (heading.tagName === 'H1') {
+                heading.style.fontSize = '1.5rem';
+            } else if (heading.tagName === 'H2') {
+                heading.style.fontSize = '1.35rem';
+            } else {
+                heading.style.fontSize = '1.2rem';
+            }
+        });
+        renderedContainer.querySelectorAll('p').forEach(function (paragraph) {
+            paragraph.style.color = '#e2e8f0';
+            paragraph.style.lineHeight = '1.75';
+            paragraph.style.marginTop = '0.75rem';
+        });
+        renderedContainer.querySelectorAll('ul').forEach(function (list) {
+            list.style.color = '#e2e8f0';
+            list.style.marginTop = '0.75rem';
+            list.style.paddingLeft = '1.25rem';
+        });
+        renderedContainer.querySelectorAll('ol').forEach(function (list) {
+            list.style.color = '#e2e8f0';
+            list.style.marginTop = '0.75rem';
+            list.style.paddingLeft = '1.25rem';
+        });
+        renderedContainer.querySelectorAll('li').forEach(function (item) {
+            item.style.lineHeight = '1.6';
+            item.style.marginTop = '0.35rem';
+        });
+        renderedContainer.querySelectorAll('a').forEach(function (link) {
+            link.style.color = '#c7d2fe';
+            link.style.textDecoration = 'underline';
+        });
+        renderedContainer.querySelectorAll('strong').forEach(function (strong) {
+            strong.style.color = '#f8fafc';
+            strong.style.fontWeight = '600';
+        });
+        renderedContainer.querySelectorAll('em').forEach(function (em) {
+            em.style.color = '#e0f2fe';
+            em.style.fontStyle = 'italic';
+        });
+    }
+    {% endif %}
+
     // Parse chart data from Django context
     const categoryData = {{ category_chart_data|safe }};
     const monthlyData = {{ monthly_chart_data|safe }};
