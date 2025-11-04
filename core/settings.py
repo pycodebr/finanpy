@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'accounts',
+    'ai',
     'categories',
     'profiles',
     'transactions',

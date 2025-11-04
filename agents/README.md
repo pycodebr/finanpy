@@ -331,6 +331,39 @@ Você também pode solicitar colaboração entre agentes:
 "Code Reviewer, revise o código. Depois QA/Tester Playwright teste a funcionalidade."
 ```
 
+### 6. [AI Integration Expert](./ai_integration_expert.md)
+**Função**: Especialista em Integração de IA com LangChain
+
+**Responsabilidades**:
+- Criar e configurar agentes LangChain
+- Desenvolver LangChain Tools para acesso a dados Django
+- Escrever prompts eficazes e context-aware
+- Integrar LLMs (OpenAI, Anthropic) com Django
+- Garantir segurança e isolamento de dados em análises de IA
+- Otimizar performance e custo de uso de APIs
+- Documentar padrões de desenvolvimento de agentes
+
+**Stack**:
+- LangChain 1.0
+- OpenAI API (gpt-4o-mini)
+- Django ORM
+- Python 3.13+
+
+**Quando usar**:
+- Criar novo agente de IA
+- Desenvolver tools LangChain para Django
+- Refinar prompts de agentes existentes
+- Integrar novo modelo de LLM
+- Debugar problemas com agentes
+- Otimizar custo de tokens da OpenAI
+- Garantir segurança em operações de IA
+- Consultar documentação LangChain via Context7
+
+**MCP Servers utilizados**:
+- `context7`: Para consultar documentação atualizada do LangChain
+
+---
+
 ## 📞 Quando Usar Cada Agente
 
 | Tarefa | Agente Recomendado |
@@ -347,6 +380,10 @@ Você também pode solicitar colaboração entre agentes:
 | Revisar código | Code Reviewer |
 | Otimizar performance | Code Reviewer |
 | Validar segurança | Code Reviewer |
+| Criar agente LangChain | AI Integration Expert |
+| Desenvolver tools de IA | AI Integration Expert |
+| Refinar prompts | AI Integration Expert |
+| Integrar LLM | AI Integration Expert |
 
 ## 🎓 Especialização vs Colaboração
 

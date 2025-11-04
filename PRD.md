@@ -44,19 +44,239 @@ Fornecer uma ferramenta simples, eficiente e acessível para que pessoas possam 
 
 ## 6. Requisitos Funcionais
 
-### 6.1 Autenticação e Usuários
+### 6.1 Agente de IA Financeiro
+
+#### Visão Geral
+O sistema incluirá um **agente de IA especializado em finanças pessoais** que analisará os dados financeiros de cada usuário e fornecerá **insights, dicas e recomendações personalizadas**. O agente utilizará LangChain 1.0 integrado com a API da OpenAI (modelo gpt-4o-mini) para processar transações, receitas, despesas e categorias, gerando análises contextualizadas e acionáveis.
+
+#### Objetivos da Funcionalidade
+- **Educação Financeira**: Fornecer dicas e insights que ajudem o usuário a entender melhor seus padrões de gasto
+- **Personalização**: Análises baseadas exclusivamente nos dados reais do usuário
+- **Ação**: Recomendações práticas e específicas que o usuário pode implementar imediatamente
+- **Histórico**: Manter registro de análises anteriores para acompanhamento de evolução
+
+#### Funcionalidades Principais
+
+**RF043**: Sistema deve permitir geração de análise financeira personalizada via IA
+- Análise deve considerar transações, receitas, despesas e categorias do usuário
+- Análise deve identificar padrões de gasto e receita
+- Análise deve fornecer recomendações específicas e acionáveis
+- Análise deve ser executada sob demanda via comando Django
+
+**RF044**: Sistema deve armazenar histórico de análises de IA
+- Cada análise deve ser persistida no banco de dados
+- Análises devem conter timestamp de criação
+- Análises devem estar associadas ao usuário
+- Sistema deve permitir consulta a análises anteriores
+
+**RF045**: Sistema deve exibir última análise no dashboard
+- Dashboard deve mostrar a análise mais recente
+- Exibição deve ser clara e destacada
+- Deve haver indicação de quando a análise foi gerada
+- Deve haver botão para gerar nova análise
+
+**RF046**: Sistema deve garantir isolamento de dados nas análises
+- Agente IA deve acessar apenas dados do usuário específico
+- Análises não devem vazar informações de outros usuários
+- Tools do agente devem ter filtros por usuário
+
+#### Arquitetura Técnica
+
+**Stack de IA**:
+- **Framework**: LangChain 1.0
+- **LLM Provider**: OpenAI API
+- **Modelo**: gpt-4o-mini
+- **Integração**: LangChain Tools para acesso ao banco de dados Django
+
+**Estrutura da App `ai/`**:
+```
+ai/
+├── __init__.py
+├── models.py                          # AIAnalysis model
+├── admin.py                           # Admin para AIAnalysis
+├── apps.py                            # Config da app
+├── agents/
+│   ├── __init__.py
+│   ├── finance_insight_agent.py      # Agente LangChain principal
+│   └── ai_integration_expert.md      # Documento de referência técnica
+├── tools/
+│   ├── __init__.py
+│   └── database_tools.py             # LangChain Tools para queries
+├── services/
+│   ├── __init__.py
+│   └── analysis_service.py           # Orquestração da análise
+├── management/
+│   └── commands/
+│       ├── __init__.py
+│       └── run_finance_analysis.py   # Django Command
+└── migrations/
+    └── __init__.py
+```
+
+**Model AIAnalysis**:
+```python
+class AIAnalysis(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ai_analyses')
+    analysis_text = models.TextField()  # Análise completa gerada pela IA
+    key_insights = models.JSONField(default=list)  # Lista de insights principais
+    recommendations = models.JSONField(default=list)  # Lista de recomendações
+    period_analyzed = models.CharField(max_length=100)  # Ex: "Últimos 30 dias"
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+```
+
+**LangChain Tools**:
+O agente terá acesso às seguintes tools para consultar dados:
+- `get_user_transactions`: Retorna transações do usuário com filtros
+- `get_user_accounts`: Retorna contas bancárias do usuário
+- `get_user_categories`: Retorna categorias do usuário
+- `get_spending_by_category`: Retorna gastos agrupados por categoria
+- `get_income_vs_expense`: Retorna comparativo receitas vs despesas
+
+#### Fluxo de Execução
+
+```mermaid
+flowchart TD
+    Start([Admin executa comando]) --> LoadUser[Carregar dados do usuário]
+    LoadUser --> InitAgent[Inicializar Agente LangChain]
+    InitAgent --> LoadTools[Carregar Database Tools]
+    LoadTools --> Execute[Executar análise com Agente]
+    Execute --> ProcessData[Agente processa dados via Tools]
+    ProcessData --> GenerateInsights[LLM gera insights e recomendações]
+    GenerateInsights --> SaveDB[Salvar análise no banco]
+    SaveDB --> ShowDashboard[Exibir no dashboard]
+    ShowDashboard --> End([Fim])
+
+    style Start fill:#667eea
+    style Execute fill:#764ba2
+    style GenerateInsights fill:#10b981
+    style SaveDB fill:#f59e0b
+    style End fill:#667eea
+```
+
+#### Exemplo de Análise Gerada
+
+**Entrada** (dados do usuário):
+- 45 transações no último mês
+- 3 contas bancárias
+- Receita total: R$ 5.000,00
+- Despesas totais: R$ 4.200,00
+- Principais categorias: Alimentação (R$ 1.200), Transporte (R$ 800), Lazer (R$ 600)
+
+**Saída** (análise IA):
+```
+Olá! Analisando suas finanças dos últimos 30 dias, identifiquei alguns pontos importantes:
+
+📊 Visão Geral:
+- Você teve um saldo positivo de R$ 800,00 neste mês, o que é excelente!
+- Suas despesas representaram 84% da sua receita.
+
+🔍 Insights Principais:
+1. Alimentação é seu maior gasto (28,5% do total) com R$ 1.200,00
+2. Você gastou R$ 600,00 com lazer - 14,3% das despesas
+3. Seus gastos com transporte foram de R$ 800,00 (19% do total)
+
+💡 Recomendações:
+1. Considere preparar mais refeições em casa para reduzir gastos com alimentação
+2. Seus gastos com lazer estão equilibrados, mas há espaço para otimização
+3. Avalie alternativas de transporte mais econômicas (transporte público, carona)
+4. Com sua taxa de poupança atual (16%), você economizará R$ 9.600,00 por ano
+
+🎯 Meta Sugerida:
+Tente reduzir 10% dos gastos com alimentação no próximo mês (economizando R$ 120).
+Isso elevaria sua taxa de poupança para 18,4%.
+```
+
+#### Execução da Análise
+
+**Django Command**:
+```bash
+# Gerar análise para usuário específico
+python manage.py run_finance_analysis --user-email user@example.com
+
+# Gerar análise para todos os usuários
+python manage.py run_finance_analysis --all
+```
+
+#### Configuração Necessária
+
+**Variáveis de Ambiente**:
+```env
+OPENAI_API_KEY=sk-xxx  # API key da OpenAI
+AI_MODEL=gpt-4o-mini    # Modelo a ser utilizado
+AI_MAX_TOKENS=1000      # Limite de tokens por análise
+AI_TEMPERATURE=0.7      # Criatividade do modelo (0-1)
+```
+
+**Requirements.txt** (novas dependências):
+```
+langchain==0.3.28
+langchain-openai==0.3.0
+langchain-community==0.3.28
+openai==1.59.5
+```
+
+#### Segurança e Privacidade
+
+- **Isolamento de Dados**: Tools sempre filtram por `user=request.user`
+- **Não Persistência de Prompts**: Prompts intermediários não são salvos
+- **Rate Limiting**: Limite de 1 análise por usuário a cada 24h
+- **API Key**: Armazenada em variável de ambiente, nunca em código
+- **Logs**: Não registrar dados financeiros sensíveis em logs
+
+#### Limitações da MVP
+
+**O que NÃO será implementado nesta versão**:
+- Interface web para solicitar análise (apenas comando)
+- Análises agendadas automaticamente
+- Comparação com outros usuários ou benchmarks
+- Alertas proativos via email/notificações
+- Gráficos ou visualizações dentro da análise
+- Perguntas interativas ao agente (chat)
+- Múltiplos idiomas (apenas português)
+
+#### Expansões Futuras
+
+**Roadmap pós-MVP**:
+- **Sprint 9**: Botão no dashboard para gerar análise via interface
+- **Sprint 10**: Análises automáticas agendadas (semanais/mensais)
+- **Sprint 11**: Chat interativo com o agente financeiro
+- **Sprint 12**: Alertas inteligentes (gastos anormais, metas atingidas)
+- **Sprint 13**: Previsões e projeções financeiras
+- **Sprint 14**: Integração com Open Banking (dados reais de bancos)
+
+#### Métricas de Sucesso
+
+**KPIs**:
+- Taxa de usuários que geram análises: > 30%
+- Satisfação com insights (pesquisa): > 70%
+- Tempo médio de geração de análise: < 30 segundos
+- Precisão das recomendações (feedback): > 80%
+- Taxa de implementação de recomendações: > 20%
+
+#### Referências Técnicas
+
+**Documentação**:
+- [LangChain Documentation](https://python.langchain.com/docs/get_started/introduction) - via Context7 MCP
+- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
+- Django ORM para Tools
+- Design patterns para agentes LangChain
+
+---
+
+### 6.2 Autenticação e Usuários
 - RF001: Sistema deve permitir cadastro de novos usuários com email e senha
 - RF002: Sistema deve permitir login de usuários através do email
 - RF003: Sistema deve permitir logout de usuários
 - RF004: Sistema deve validar formato de email e força de senha
 - RF005: Sistema deve impedir cadastro de emails duplicados
 
-### 6.2 Gestão de Perfis
+### 6.3 Gestão de Perfis
 - RF006: Sistema deve criar perfil automaticamente ao cadastrar usuário
 - RF007: Sistema deve permitir visualização de dados do perfil
 - RF008: Sistema deve permitir edição de informações do perfil
 
-### 6.3 Gestão de Contas Bancárias
+### 6.4 Gestão de Contas Bancárias
 - RF009: Sistema deve permitir cadastro de contas bancárias
 - RF010: Sistema deve permitir listagem de todas as contas do usuário
 - RF011: Sistema deve permitir edição de dados de contas
@@ -64,14 +284,14 @@ Fornecer uma ferramenta simples, eficiente e acessível para que pessoas possam 
 - RF013: Sistema deve exibir saldo atual de cada conta
 - RF014: Sistema deve associar contas ao usuário logado
 
-### 6.4 Gestão de Categorias
+### 6.5 Gestão de Categorias
 - RF015: Sistema deve permitir cadastro de categorias de transações
 - RF016: Sistema deve permitir listagem de categorias do usuário
 - RF017: Sistema deve permitir edição de categorias
 - RF018: Sistema deve permitir exclusão de categorias
 - RF019: Sistema deve diferenciar categorias de entrada e saída
 
-### 6.5 Gestão de Transações
+### 6.6 Gestão de Transações
 - RF020: Sistema deve permitir registro de transações de entrada
 - RF021: Sistema deve permitir registro de transações de saída
 - RF022: Sistema deve associar transação a uma conta bancária
@@ -85,7 +305,7 @@ Fornecer uma ferramenta simples, eficiente e acessível para que pessoas possam 
 - RF030: Sistema deve permitir edição de transações
 - RF031: Sistema deve permitir exclusão de transações
 
-### 6.6 Dashboard
+### 6.7 Dashboard
 - RF032: Sistema deve exibir saldo total consolidado de todas as contas
 - RF033: Sistema deve exibir total de entradas do período atual
 - RF034: Sistema deve exibir total de saídas do período atual
@@ -93,14 +313,14 @@ Fornecer uma ferramenta simples, eficiente e acessível para que pessoas possam 
 - RF036: Sistema deve exibir lista de transações recentes
 - RF037: Sistema deve exibir resumo por categorias
 
-### 6.7 Site Público
+### 6.8 Site Público
 - RF038: Sistema deve ter página inicial pública de apresentação
 - RF039: Página inicial deve ter botão de cadastro
 - RF040: Página inicial deve ter botão de login
 - RF041: Usuários não autenticados devem ser redirecionados ao site público
 - RF042: Usuários autenticados devem ser redirecionados ao dashboard
 
-### 6.2 Flowchart - Fluxos de UX
+### 6.9 Flowchart - Fluxos de UX
 
 ```mermaid
 flowchart TD

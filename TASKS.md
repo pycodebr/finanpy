@@ -1229,115 +1229,453 @@
 
 ---
 
-### Sprint 8: Testes Automatizados (Sprint Final)
+### Sprint 8: Agente de IA Financeiro
 
-#### Tarefa 8.1: Configuração de Testes
-**Descrição**: Configurar ambiente de testes
+#### Visão Geral da Sprint
+Implementar funcionalidade de análise financeira personalizada usando Inteligência Artificial. O agente utilizará LangChain 1.0 integrado com OpenAI (modelo gpt-4o-mini) para analisar transações, receitas e despesas do usuário, gerando insights e recomendações personalizadas.
 
-**Subtarefas**:
-- [ ] 8.1.1: Criar diretório tests em cada app
-- [ ] 8.1.2: Configurar pytest-django (opcional)
-- [ ] 8.1.3: Criar factories com factory_boy (opcional)
-- [ ] 8.1.4: Configurar coverage
+**Objetivo**: Adicionar capacidade de análise inteligente ao sistema, fornecendo valor adicional aos usuários através de insights automatizados sobre seus hábitos financeiros.
 
-#### Tarefa 8.2: Testes de Models
-**Descrição**: Criar testes para models
+**Dependências**:
+- Sprints 1-6 concluídas (models de User, Account, Category, Transaction)
+- Dashboard funcional (Sprint 5)
+- LangChain 1.0 e OpenAI API
 
-**Subtarefas**:
-- [ ] 8.2.1: Testes de CustomUser
-- [ ] 8.2.2: Testes de Profile
-- [ ] 8.2.3: Testes de Account
-- [ ] 8.2.4: Testes de Category
-- [ ] 8.2.5: Testes de Transaction
-- [ ] 8.2.6: Testar métodos __str__
-- [ ] 8.2.7: Testar validações
-
-#### Tarefa 8.3: Testes de Views
-**Descrição**: Criar testes para views
-
-**Subtarefas**:
-- [ ] 8.3.1: Testes de autenticação (signup, login, logout)
-- [ ] 8.3.2: Testes de CRUD de contas
-- [ ] 8.3.3: Testes de CRUD de categorias
-- [ ] 8.3.4: Testes de CRUD de transações
-- [ ] 8.3.5: Testes de dashboard
-- [ ] 8.3.6: Testes de perfil
-- [ ] 8.3.7: Testar permissões de acesso
-
-#### Tarefa 8.4: Testes de Signals
-**Descrição**: Testar signals e lógica de negócio
-
-**Subtarefas**:
-- [ ] 8.4.1: Testar criação automática de perfil
-- [ ] 8.4.2: Testar criação de categorias padrão
-- [ ] 8.4.3: Testar atualização de saldo ao criar transação
-- [ ] 8.4.4: Testar atualização de saldo ao editar transação
-- [ ] 8.4.5: Testar atualização de saldo ao excluir transação
-
-#### Tarefa 8.5: Testes de Integração
-**Descrição**: Testar fluxos completos
-
-**Subtarefas**:
-- [ ] 8.5.1: Testar fluxo completo de cadastro e primeira transação
-- [ ] 8.5.2: Testar fluxo de múltiplas transações e saldo
-- [ ] 8.5.3: Testar fluxo de filtros e busca
-- [ ] 8.5.4: Testar isolamento entre usuários
-
-#### Tarefa 8.6: Executar e Analisar Coverage
-**Descrição**: Verificar cobertura de testes
-
-**Subtarefas**:
-- [ ] 8.6.1: Executar todos os testes
-- [ ] 8.6.2: Gerar relatório de coverage
-- [ ] 8.6.3: Identificar áreas sem cobertura
-- [ ] 8.6.4: Adicionar testes faltantes
-- [ ] 8.6.5: Atingir pelo menos 80% de cobertura
+**Entregáveis**:
+- Model AIAnalysis para armazenar análises
+- LangChain Tools para acesso ao banco de dados
+- Agente de IA configurado e funcional
+- Django Command para executar análises
+- Exibição da última análise no dashboard
+- Documentação técnica completa
 
 ---
 
-### Sprint 9: Docker e CI/CD (Sprint Final)
+#### Tarefa 8.1: Instalação de Dependências de IA
+**Descrição**: Instalar e configurar LangChain e OpenAI
 
-#### Tarefa 9.1: Dockerfile
+**Subtarefas**:
+- [X] 8.1.1: Adicionar dependências ao requirements.txt:
+- [X] 8.1.2: Executar `pip install -r requirements.txt`
+- [ ] 8.1.3: Adicionar variáveis de ambiente ao .env:
+  ```
+  OPENAI_API_KEY=sk-xxx
+  AI_MODEL=gpt-4o-mini
+  AI_MAX_TOKENS=1000
+  AI_TEMPERATURE=0.7
+  ```
+- [ ] 8.1.4: Atualizar .env.example com novas variáveis (sem valores)
+- [ ] 8.1.5: Configurar settings.py para ler variáveis de IA
+- [ ] 8.1.6: Testar import de langchain e openai no shell Django
+- [ ] 8.1.7: Verificar que app 'ai' está em INSTALLED_APPS
+
+#### Tarefa 8.2: Model AIAnalysis
+**Descrição**: Criar model Django para armazenar análises geradas pela IA
+
+**Subtarefas**:
+- [ ] 8.2.1: Abrir arquivo `ai/models.py`
+- [ ] 8.2.2: Importar models e get_user_model
+- [ ] 8.2.3: Criar classe AIAnalysis
+- [ ] 8.2.4: Adicionar ForeignKey para User (on_delete=CASCADE)
+- [ ] 8.2.5: Adicionar campo analysis_text (TextField)
+- [ ] 8.2.6: Adicionar campo key_insights (JSONField, default=list)
+- [ ] 8.2.7: Adicionar campo recommendations (JSONField, default=list)
+- [ ] 8.2.8: Adicionar campo period_analyzed (CharField, max_length=100)
+- [ ] 8.2.9: Adicionar campos created_at e updated_at
+- [ ] 8.2.10: Adicionar método __str__ retornando user email e data
+- [ ] 8.2.11: Adicionar Meta com ordering por -created_at
+- [ ] 8.2.12: Adicionar indexes em user e created_at
+- [ ] 8.2.13: Adicionar verbose_name e verbose_name_plural
+
+#### Tarefa 8.3: Admin de AIAnalysis
+**Descrição**: Configurar Django Admin para visualizar análises
+
+**Subtarefas**:
+- [ ] 8.3.1: Abrir arquivo `ai/admin.py`
+- [ ] 8.3.2: Importar admin e AIAnalysis
+- [ ] 8.3.3: Criar AIAnalysisAdmin
+- [ ] 8.3.4: Configurar list_display: user, period_analyzed, created_at
+- [ ] 8.3.5: Configurar list_filter: created_at
+- [ ] 8.3.6: Configurar search_fields: user__email, analysis_text
+- [ ] 8.3.7: Configurar readonly_fields: created_at, updated_at
+- [ ] 8.3.8: Configurar date_hierarchy: created_at
+- [ ] 8.3.9: Registrar AIAnalysis com AIAnalysisAdmin
+- [ ] 8.3.10: Adicionar método para exibir preview da análise
+
+#### Tarefa 8.4: Migration de AIAnalysis
+**Descrição**: Criar e aplicar migration
+
+**Subtarefas**:
+- [ ] 8.4.1: Executar `python manage.py makemigrations ai`
+- [ ] 8.4.2: Revisar arquivo de migration gerado
+- [ ] 8.4.3: Executar `python manage.py migrate`
+- [ ] 8.4.4: Verificar tabela no banco de dados
+- [ ] 8.4.5: Testar criação manual de AIAnalysis no Django shell
+
+#### Tarefa 8.5: Estrutura de Diretórios da App AI
+**Descrição**: Criar estrutura de pastas e arquivos da app
+
+**Subtarefas**:
+- [ ] 8.5.1: Criar diretório `ai/agents/`
+- [ ] 8.5.2: Criar arquivo `ai/agents/__init__.py`
+- [ ] 8.5.3: Criar diretório `ai/tools/`
+- [ ] 8.5.4: Criar arquivo `ai/tools/__init__.py`
+- [ ] 8.5.5: Criar diretório `ai/services/`
+- [ ] 8.5.6: Criar arquivo `ai/services/__init__.py`
+- [ ] 8.5.7: Criar diretório `ai/management/`
+- [ ] 8.5.8: Criar diretório `ai/management/commands/`
+- [ ] 8.5.9: Criar arquivo `ai/management/__init__.py`
+- [ ] 8.5.10: Criar arquivo `ai/management/commands/__init__.py`
+
+#### Tarefa 8.6: LangChain Database Tools
+**Descrição**: Criar tools LangChain para acessar dados Django
+
+**Subtarefas**:
+- [ ] 8.6.1: Criar arquivo `ai/tools/database_tools.py`
+- [ ] 8.6.2: Importar tool decorator do LangChain
+- [ ] 8.6.3: Importar models: Account, Category, Transaction
+- [ ] 8.6.4: Criar @tool get_user_transactions
+  - Parâmetro: user_id (int)
+  - Retorna: lista de transações dos últimos 30 dias
+  - Formato: dict com data, valor, tipo, categoria, descrição
+- [ ] 8.6.5: Criar @tool get_user_accounts
+  - Parâmetro: user_id (int)
+  - Retorna: lista de contas com nome, banco, saldo
+- [ ] 8.6.6: Criar @tool get_user_categories
+  - Parâmetro: user_id (int)
+  - Retorna: categorias com nome e tipo
+- [ ] 8.6.7: Criar @tool get_spending_by_category
+  - Parâmetro: user_id (int)
+  - Retorna: total gasto por categoria (últimos 30 dias)
+  - Ordenado do maior para o menor
+- [ ] 8.6.8: Criar @tool get_income_vs_expense
+  - Parâmetro: user_id (int)
+  - Retorna: total receitas, total despesas, saldo
+  - Período: últimos 30 dias
+- [ ] 8.6.9: Adicionar docstrings detalhadas em cada tool
+- [ ] 8.6.10: Adicionar tratamento de exceções
+- [ ] 8.6.11: Testar tools individualmente no shell
+
+#### Tarefa 8.7: Agente LangChain de Finanças
+**Descrição**: Implementar agente de IA usando LangChain
+
+**Subtarefas**:
+- [ ] 8.7.1: Criar arquivo `ai/agents/finance_insight_agent.py`
+- [ ] 8.7.2: Importar ChatOpenAI do langchain-openai
+- [ ] 8.7.3: Importar create_tool_calling_agent, AgentExecutor
+- [ ] 8.7.4: Importar ChatPromptTemplate
+- [ ] 8.7.5: Importar tools de database_tools
+- [ ] 8.7.6: Criar função initialize_agent(user_id: int)
+- [ ] 8.7.7: Configurar ChatOpenAI com variáveis de ambiente
+- [ ] 8.7.8: Definir system prompt detalhado:
+  ```
+  Você é um assistente financeiro pessoal especializado em análise de gastos.
+  Analise os dados do usuário e forneça:
+  1. Visão geral clara e objetiva
+  2. 3-5 insights principais sobre padrões de gasto
+  3. 3-5 recomendações práticas e acionáveis
+  4. Tom amigável e motivador em português
+  Use emojis para tornar a leitura mais agradável.
+  ```
+- [ ] 8.7.9: Criar prompt template com system e user messages
+- [ ] 8.7.10: Criar agente com create_tool_calling_agent
+- [ ] 8.7.11: Criar AgentExecutor com agente e tools
+- [ ] 8.7.12: Criar função run_analysis(user_id: int) -> dict
+- [ ] 8.7.13: Função deve retornar dict com analysis_text, insights, recommendations
+- [ ] 8.7.14: Adicionar logging de execução
+- [ ] 8.7.15: Adicionar tratamento de erros OpenAI
+- [ ] 8.7.16: Testar agente manualmente no shell
+
+#### Tarefa 8.8: Serviço de Análise
+**Descrição**: Criar camada de serviço para orquestrar análise
+
+**Subtarefas**:
+- [ ] 8.8.1: Criar arquivo `ai/services/analysis_service.py`
+- [ ] 8.8.2: Importar AIAnalysis model
+- [ ] 8.8.3: Importar get_user_model
+- [ ] 8.8.4: Importar funções do finance_insight_agent
+- [ ] 8.8.5: Criar função generate_analysis_for_user(user_id: int)
+- [ ] 8.8.6: Validar que usuário existe
+- [ ] 8.8.7: Verificar última análise (não gerar se < 24h)
+- [ ] 8.8.8: Chamar run_analysis do agente
+- [ ] 8.8.9: Parsear resultado do agente
+- [ ] 8.8.10: Extrair insights e recommendations do texto
+- [ ] 8.8.11: Criar objeto AIAnalysis e salvar no banco
+- [ ] 8.8.12: Retornar AIAnalysis criado
+- [ ] 8.8.13: Adicionar logging detalhado
+- [ ] 8.8.14: Adicionar tratamento de exceções completo
+- [ ] 8.8.15: Adicionar função get_latest_analysis(user_id: int)
+
+#### Tarefa 8.9: Django Command
+**Descrição**: Criar comando para executar análise via CLI
+
+**Subtarefas**:
+- [ ] 8.9.1: Criar arquivo `ai/management/commands/run_finance_analysis.py`
+- [ ] 8.9.2: Importar BaseCommand
+- [ ] 8.9.3: Importar get_user_model
+- [ ] 8.9.4: Importar generate_analysis_for_user
+- [ ] 8.9.5: Criar classe Command(BaseCommand)
+- [ ] 8.9.6: Definir help text descritivo
+- [ ] 8.9.7: Adicionar argumento --user-email (opcional)
+- [ ] 8.9.8: Adicionar flag --all para todos os usuários
+- [ ] 8.9.9: Implementar handle method
+- [ ] 8.9.10: Se --user-email: processar apenas esse usuário
+- [ ] 8.9.11: Se --all: iterar sobre todos os usuários ativos
+- [ ] 8.9.12: Adicionar output informativo (self.stdout.write)
+- [ ] 8.9.13: Adicionar barra de progresso para --all (opcional)
+- [ ] 8.9.14: Adicionar tratamento de erros por usuário
+- [ ] 8.9.15: Testar comando: `python manage.py run_finance_analysis --user-email test@test.com`
+
+#### Tarefa 8.10: Exibição no Dashboard
+**Descrição**: Mostrar última análise no dashboard do usuário
+
+**Subtarefas**:
+- [ ] 8.10.1: Abrir `users/views.py` (ou app do dashboard)
+- [ ] 8.10.2: Importar AIAnalysis model
+- [ ] 8.10.3: No get_context_data do DashboardView:
+- [ ] 8.10.4: Buscar última análise do usuário:
+  ```python
+  latest_analysis = AIAnalysis.objects.filter(
+      user=self.request.user
+  ).order_by('-created_at').first()
+  ```
+- [ ] 8.10.5: Adicionar latest_analysis ao context
+- [ ] 8.10.6: Abrir template `templates/dashboard.html`
+- [ ] 8.10.7: Criar seção "Análise Financeira IA" após estatísticas
+- [ ] 8.10.8: Verificar {% if latest_analysis %}
+- [ ] 8.10.9: Exibir card com gradiente destacado
+- [ ] 8.10.10: Exibir ícone de IA (🤖)
+- [ ] 8.10.11: Exibir título "Sua Análise Financeira Personalizada"
+- [ ] 8.10.12: Exibir data da análise (created_at)
+- [ ] 8.10.13: Exibir analysis_text formatado (preservar quebras de linha)
+- [ ] 8.10.14: Adicionar botão "Gerar Nova Análise" (futuro)
+- [ ] 8.10.15: Se não houver análise, mostrar call-to-action
+- [ ] 8.10.16: Estilizar com TailwindCSS seguindo design system
+
+#### Tarefa 8.11: Template da Análise
+**Descrição**: Criar componente visual para exibir análise
+
+**Subtarefas**:
+- [ ] 8.11.1: Criar parcial `templates/includes/ai_analysis_card.html`
+- [ ] 8.11.2: Receber analysis como parâmetro
+- [ ] 8.11.3: Criar card com bg-gradient (roxo/azul)
+- [ ] 8.11.4: Header com ícone 🤖 e título
+- [ ] 8.11.5: Data de geração em formato legível
+- [ ] 8.11.6: Corpo com analysis_text formatado
+- [ ] 8.11.7: Usar white-space: pre-wrap para manter formatação
+- [ ] 8.11.8: Seção de insights destacada (se existir)
+- [ ] 8.11.9: Seção de recomendações destacada (se existir)
+- [ ] 8.11.10: Footer com link "Ver análises anteriores" (futuro)
+- [ ] 8.11.11: Responsividade mobile
+- [ ] 8.11.12: Incluir no dashboard.html: {% include 'includes/ai_analysis_card.html' %}
+
+#### Tarefa 8.12: Testes Manuais da IA
+**Descrição**: Testar funcionalidade completa
+
+**Subtarefas**:
+- [ ] 8.12.1: Criar usuário de teste com dados financeiros variados
+- [ ] 8.12.2: Adicionar 5-10 contas bancárias
+- [ ] 8.12.3: Adicionar 20-30 transações de tipos diferentes
+- [ ] 8.12.4: Executar comando: `python manage.py run_finance_analysis --user-email test@example.com`
+- [ ] 8.12.5: Verificar que análise foi gerada no terminal
+- [ ] 8.12.6: Verificar que AIAnalysis foi criado no banco (admin)
+- [ ] 8.12.7: Acessar dashboard e verificar exibição da análise
+- [ ] 8.12.8: Verificar formatação e estilo da análise
+- [ ] 8.12.9: Tentar gerar nova análise antes de 24h (deve bloquear)
+- [ ] 8.12.10: Testar com usuário sem transações (deve lidar graciosamente)
+- [ ] 8.12.11: Testar comando --all com múltiplos usuários
+- [ ] 8.12.12: Verificar logs de execução
+
+#### Tarefa 8.13: Documentação Técnica AI
+**Descrição**: Criar documentação sobre o sistema de IA
+
+**Subtarefas**:
+- [ ] 8.13.1: Criar arquivo `docs/ai-financial-agent.md`
+- [ ] 8.13.2: Seção: Visão Geral da Funcionalidade
+- [ ] 8.13.3: Seção: Arquitetura e Fluxo de Dados
+- [ ] 8.13.4: Seção: LangChain Tools Disponíveis
+- [ ] 8.13.5: Seção: Configuração (variáveis de ambiente)
+- [ ] 8.13.6: Seção: Como Executar Análises (comando Django)
+- [ ] 8.13.7: Seção: Estrutura do Prompt do Agente
+- [ ] 8.13.8: Seção: Formato de Saída da Análise
+- [ ] 8.13.9: Seção: Segurança e Isolamento de Dados
+- [ ] 8.13.10: Seção: Limitações e Expansões Futuras
+- [ ] 8.13.11: Seção: Troubleshooting
+- [ ] 8.13.12: Adicionar exemplos de uso
+- [ ] 8.13.13: Adicionar link no docs/README.md
+
+#### Tarefa 8.14: Agente Especialista em IA
+**Descrição**: Criar documento de referência para integração de IA
+
+**Subtarefas**:
+- [ ] 8.14.1: Criar arquivo `ai/agents/ai_integration_expert.md`
+- [ ] 8.14.2: Seção: Visão Geral do Papel
+- [ ] 8.14.3: Seção: LangChain 1.0 - Conceitos Fundamentais
+- [ ] 8.14.4: Seção: Padrões de Integração com Django
+- [ ] 8.14.5: Seção: Como Criar Tools para Acesso a Dados
+- [ ] 8.14.6: Seção: Design de Prompts Eficazes
+- [ ] 8.14.7: Seção: Configuração de Agentes (AgentExecutor)
+- [ ] 8.14.8: Seção: Tratamento de Erros e Logging
+- [ ] 8.14.9: Seção: Uso do MCP Context7 para Docs LangChain
+- [ ] 8.14.10: Seção: Boas Práticas de Segurança
+- [ ] 8.14.11: Seção: Testes e Validação de Agentes
+- [ ] 8.14.12: Incluir exemplos de código completos
+- [ ] 8.14.13: Incluir fluxo de desenvolvimento passo a passo
+
+#### Tarefa 8.15: Atualização de Documentação Geral
+**Descrição**: Atualizar documentos do projeto
+
+**Subtarefas**:
+- [ ] 8.15.1: Atualizar README.md com seção sobre IA
+- [ ] 8.15.2: Adicionar instruções de configuração da API OpenAI
+- [ ] 8.15.3: Adicionar comando run_finance_analysis ao README
+- [ ] 8.15.4: Atualizar CLAUDE.md com padrões de código para AI app
+- [ ] 8.15.5: Atualizar docs/architecture.md incluindo AI app
+- [ ] 8.15.6: Atualizar docs/data-models.md com AIAnalysis
+- [ ] 8.15.7: Criar diagrama ER incluindo AIAnalysis
+- [ ] 8.15.8: Atualizar agents/README.md com ai_integration_expert
+
+#### Tarefa 8.16: Refinamentos e Otimizações
+**Descrição**: Melhorias finais e polish
+
+**Subtarefas**:
+- [ ] 8.16.1: Adicionar rate limiting no serviço (1 análise/24h)
+- [ ] 8.16.2: Implementar cache de análises recentes
+- [ ] 8.16.3: Adicionar métricas de uso (tempo de execução, tokens usados)
+- [ ] 8.16.4: Melhorar parsing de insights/recommendations
+- [ ] 8.16.5: Adicionar fallback se API OpenAI falhar
+- [ ] 8.16.6: Melhorar mensagens de erro para usuário
+- [ ] 8.16.7: Adicionar logging estruturado
+- [ ] 8.16.8: Otimizar queries das tools (select_related)
+- [ ] 8.16.9: Adicionar validação de dados antes de enviar ao LLM
+- [ ] 8.16.10: Testar com dados edge case (0 transações, etc)
+
+#### Tarefa 8.17: Segurança e Compliance
+**Descrição**: Validar aspectos de segurança
+
+**Subtarefas**:
+- [ ] 8.17.1: Verificar que API key não está em código
+- [ ] 8.17.2: Verificar isolamento de dados por usuário em todas as tools
+- [ ] 8.17.3: Adicionar validação de user_id em tools
+- [ ] 8.17.4: Testar que usuário A não vê dados de usuário B
+- [ ] 8.17.5: Verificar que prompts não vazam dados sensíveis
+- [ ] 8.17.6: Adicionar rate limiting por usuário
+- [ ] 8.17.7: Verificar que logs não expõem dados financeiros
+- [ ] 8.17.8: Documentar política de privacidade para IA
+- [ ] 8.17.9: Adicionar disclaimer sobre uso de IA
+- [ ] 8.17.10: Testar LGPD compliance (direito ao esquecimento)
+
+---
+
+### Sprint 9: Testes Automatizados
+
+#### Tarefa 9.1: Configuração de Testes
+**Descrição**: Configurar ambiente de testes
+
+**Subtarefas**:
+- [ ] 9.1.1: Criar diretório tests em cada app
+- [ ] 9.1.2: Configurar pytest-django (opcional)
+- [ ] 9.1.3: Criar factories com factory_boy (opcional)
+- [ ] 9.1.4: Configurar coverage
+
+#### Tarefa 9.2: Testes de Models
+**Descrição**: Criar testes para models
+
+**Subtarefas**:
+- [ ] 9.2.1: Testes de CustomUser
+- [ ] 9.2.2: Testes de Profile
+- [ ] 9.2.3: Testes de Account
+- [ ] 9.2.4: Testes de Category
+- [ ] 9.2.5: Testes de Transaction
+- [ ] 9.2.6: Testar métodos __str__
+- [ ] 9.2.7: Testar validações
+
+#### Tarefa 9.3: Testes de Views
+**Descrição**: Criar testes para views
+
+**Subtarefas**:
+- [ ] 9.3.1: Testes de autenticação (signup, login, logout)
+- [ ] 9.3.2: Testes de CRUD de contas
+- [ ] 9.3.3: Testes de CRUD de categorias
+- [ ] 9.3.4: Testes de CRUD de transações
+- [ ] 9.3.5: Testes de dashboard
+- [ ] 9.3.6: Testes de perfil
+- [ ] 9.3.7: Testar permissões de acesso
+
+#### Tarefa 9.4: Testes de Signals
+**Descrição**: Testar signals e lógica de negócio
+
+**Subtarefas**:
+- [ ] 9.4.1: Testar criação automática de perfil
+- [ ] 9.4.2: Testar criação de categorias padrão
+- [ ] 9.4.3: Testar atualização de saldo ao criar transação
+- [ ] 9.4.4: Testar atualização de saldo ao editar transação
+- [ ] 9.4.5: Testar atualização de saldo ao excluir transação
+
+#### Tarefa 9.5: Testes de Integração
+**Descrição**: Testar fluxos completos
+
+**Subtarefas**:
+- [ ] 9.5.1: Testar fluxo completo de cadastro e primeira transação
+- [ ] 9.5.2: Testar fluxo de múltiplas transações e saldo
+- [ ] 9.5.3: Testar fluxo de filtros e busca
+- [ ] 9.5.4: Testar isolamento entre usuários
+
+#### Tarefa 9.6: Executar e Analisar Coverage
+**Descrição**: Verificar cobertura de testes
+
+**Subtarefas**:
+- [ ] 9.6.1: Executar todos os testes
+- [ ] 9.6.2: Gerar relatório de coverage
+- [ ] 9.6.3: Identificar áreas sem cobertura
+- [ ] 9.6.4: Adicionar testes faltantes
+- [ ] 9.6.5: Atingir pelo menos 80% de cobertura
+
+---
+
+### Sprint 10: Docker e CI/CD (Sprint Final)
+
+#### Tarefa 10.1: Dockerfile
 **Descrição**: Criar Dockerfile para containerização
 
 **Subtarefas**:
-- [ ] 9.1.1: Criar Dockerfile na raiz do projeto
-- [ ] 9.1.2: Usar imagem Python oficial
-- [ ] 9.1.3: Configurar workdir
-- [ ] 9.1.4: Copiar requirements e instalar
-- [ ] 9.1.5: Copiar código da aplicação
-- [ ] 9.1.6: Configurar comando de inicialização
-- [ ] 9.1.7: Testar build da imagem
+- [ ] 10.1.1: Criar Dockerfile na raiz do projeto
+- [ ] 10.1.2: Usar imagem Python oficial
+- [ ] 10.1.3: Configurar workdir
+- [ ] 10.1.4: Copiar requirements e instalar
+- [ ] 10.1.5: Copiar código da aplicação
+- [ ] 10.1.6: Configurar comando de inicialização
+- [ ] 10.1.7: Testar build da imagem
 
-#### Tarefa 9.2: Docker Compose
+#### Tarefa 10.2: Docker Compose
 **Descrição**: Criar docker-compose para ambiente completo
 
 **Subtarefas**:
-- [ ] 9.2.1: Criar docker-compose.yml
-- [ ] 9.2.2: Configurar serviço web
-- [ ] 9.2.3: Configurar serviço de banco (PostgreSQL se migrar)
-- [ ] 9.2.4: Configurar volumes
-- [ ] 9.2.5: Configurar networks
-- [ ] 9.2.6: Testar com docker-compose up
+- [ ] 10.2.1: Criar docker-compose.yml
+- [ ] 10.2.2: Configurar serviço web
+- [ ] 10.2.3: Configurar serviço de banco (PostgreSQL se migrar)
+- [ ] 10.2.4: Configurar volumes
+- [ ] 10.2.5: Configurar networks
+- [ ] 10.2.6: Testar com docker-compose up
 
-#### Tarefa 9.3: CI/CD com GitHub Actions
+#### Tarefa 10.3: CI/CD com GitHub Actions
 **Descrição**: Configurar pipeline de CI/CD
 
 **Subtarefas**:
-- [ ] 9.3.1: Criar .github/workflows/ci.yml
-- [ ] 9.3.2: Configurar job de testes
-- [ ] 9.3.3: Configurar job de linting
-- [ ] 9.3.4: Configurar job de build
-- [ ] 9.3.5: Configurar deploy automático (opcional)
-- [ ] 9.3.6: Testar pipeline
+- [ ] 10.3.1: Criar .github/workflows/ci.yml
+- [ ] 10.3.2: Configurar job de testes
+- [ ] 10.3.3: Configurar job de linting
+- [ ] 10.3.4: Configurar job de build
+- [ ] 10.3.5: Configurar deploy automático (opcional)
+- [ ] 10.3.6: Testar pipeline
 
-#### Tarefa 9.4: Documentação Final
+#### Tarefa 10.4: Documentação Final
 **Descrição**: Finalizar documentação do projeto
 
 **Subtarefas**:
-- [ ] 9.4.1: Atualizar docs/README.md completo
-- [ ] 9.4.2: Documentar variáveis de ambiente
-- [ ] 9.4.3: Documentar comandos úteis
-- [ ] 9.4.4: Criar guia de contribuição (se open source)
-- [ ] 9.4.5: Documentar processo de deploy
-- [ ] 9.4.6: Criar CHANGELOG.md
+- [ ] 10.4.1: Atualizar docs/README.md completo
+- [ ] 10.4.2: Documentar variáveis de ambiente
+- [ ] 10.4.3: Documentar comandos úteis
+- [ ] 10.4.4: Criar guia de contribuição (se open source)
+- [ ] 10.4.5: Documentar processo de deploy
+- [ ] 10.4.6: Criar CHANGELOG.md
