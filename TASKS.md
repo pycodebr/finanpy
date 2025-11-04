@@ -1257,17 +1257,18 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Subtarefas**:
 - [X] 8.1.1: Adicionar dependências ao requirements.txt:
 - [X] 8.1.2: Executar `pip install -r requirements.txt`
-- [ ] 8.1.3: Adicionar variáveis de ambiente ao .env:
+- [X] 8.1.3: Adicionar variáveis de ambiente ao .env:
   ```
   OPENAI_API_KEY=sk-xxx
   AI_MODEL=gpt-4o-mini
   AI_MAX_TOKENS=1000
   AI_TEMPERATURE=0.7
   ```
-- [ ] 8.1.4: Atualizar .env.example com novas variáveis (sem valores)
-- [ ] 8.1.5: Configurar settings.py para ler variáveis de IA
-- [ ] 8.1.6: Testar import de langchain e openai no shell Django
-- [ ] 8.1.7: Verificar que app 'ai' está em INSTALLED_APPS
+- [X] 8.1.4: Atualizar .env.example com novas variáveis (sem valores)
+- [X] 8.1.5: Configurar settings.py para ler variáveis de IA
+- [X] 8.1.6: Testar import de langchain e openai no shell Django
+- [X] 8.1.7: Verificar que app 'ai' está em INSTALLED_APPS
+- [X] Tarefa 8.1 concluída
 
 #### Tarefa 8.2: Model AIAnalysis
 **Descrição**: Criar model Django para armazenar análises geradas pela IA
