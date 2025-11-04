@@ -1366,14 +1366,14 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Implementar agente de IA usando LangChain
 
 **Subtarefas**:
-- [ ] 8.7.1: Criar arquivo `ai/agents/finance_insight_agent.py`
-- [ ] 8.7.2: Importar ChatOpenAI do langchain-openai
-- [ ] 8.7.3: Importar create_tool_calling_agent, AgentExecutor
-- [ ] 8.7.4: Importar ChatPromptTemplate
-- [ ] 8.7.5: Importar tools de database_tools
-- [ ] 8.7.6: Criar função initialize_agent(user_id: int)
-- [ ] 8.7.7: Configurar ChatOpenAI com variáveis de ambiente
-- [ ] 8.7.8: Definir system prompt detalhado:
+- [X] 8.7.1: Criar arquivo `ai/agents/finance_insight_agent.py`
+- [X] 8.7.2: Importar ChatOpenAI do langchain-openai
+- [X] 8.7.3: Importar create_tool_calling_agent, AgentExecutor (v1.0: create_agent)
+- [X] 8.7.4: Importar ChatPromptTemplate
+- [X] 8.7.5: Importar tools de database_tools
+- [X] 8.7.6: Criar função initialize_agent(user_id: int)
+- [X] 8.7.7: Configurar ChatOpenAI com variáveis de ambiente
+- [X] 8.7.8: Definir system prompt detalhado:
   ```
   Você é um assistente financeiro pessoal especializado em análise de gastos.
   Analise os dados do usuário e forneça:
@@ -1383,14 +1383,15 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
   4. Tom amigável e motivador em português
   Use emojis para tornar a leitura mais agradável.
   ```
-- [ ] 8.7.9: Criar prompt template com system e user messages
-- [ ] 8.7.10: Criar agente com create_tool_calling_agent
-- [ ] 8.7.11: Criar AgentExecutor com agente e tools
-- [ ] 8.7.12: Criar função run_analysis(user_id: int) -> dict
-- [ ] 8.7.13: Função deve retornar dict com analysis_text, insights, recommendations
-- [ ] 8.7.14: Adicionar logging de execução
-- [ ] 8.7.15: Adicionar tratamento de erros OpenAI
-- [ ] 8.7.16: Testar agente manualmente no shell
+- [X] 8.7.9: Criar prompt template com system e user messages
+- [X] 8.7.10: Criar agente com create_tool_calling_agent (v1.0: create_agent)
+- [X] 8.7.11: Criar AgentExecutor com agente e tools (v1.0: CompiledStateGraph)
+- [X] 8.7.12: Criar função run_analysis(user_id: int) -> dict
+- [X] 8.7.13: Função deve retornar dict com analysis_text, insights, recommendations
+- [X] 8.7.14: Adicionar logging de execução
+- [X] 8.7.15: Adicionar tratamento de erros OpenAI
+- [X] 8.7.16: Testar agente manualmente no shell
+- [X] Tarefa 8.7 concluída
 
 #### Tarefa 8.8: Serviço de Análise
 **Descrição**: Criar camada de serviço para orquestrar análise
