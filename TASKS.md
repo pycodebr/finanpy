@@ -1336,30 +1336,31 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar tools LangChain para acessar dados Django
 
 **Subtarefas**:
-- [ ] 8.6.1: Criar arquivo `ai/tools/database_tools.py`
-- [ ] 8.6.2: Importar tool decorator do LangChain
-- [ ] 8.6.3: Importar models: Account, Category, Transaction
-- [ ] 8.6.4: Criar @tool get_user_transactions
+- [X] 8.6.1: Criar arquivo `ai/tools/database_tools.py`
+- [X] 8.6.2: Importar tool decorator do LangChain
+- [X] 8.6.3: Importar models: Account, Category, Transaction
+- [X] 8.6.4: Criar @tool get_user_transactions
   - Parâmetro: user_id (int)
   - Retorna: lista de transações dos últimos 30 dias
   - Formato: dict com data, valor, tipo, categoria, descrição
-- [ ] 8.6.5: Criar @tool get_user_accounts
+- [X] 8.6.5: Criar @tool get_user_accounts
   - Parâmetro: user_id (int)
   - Retorna: lista de contas com nome, banco, saldo
-- [ ] 8.6.6: Criar @tool get_user_categories
+- [X] 8.6.6: Criar @tool get_user_categories
   - Parâmetro: user_id (int)
   - Retorna: categorias com nome e tipo
-- [ ] 8.6.7: Criar @tool get_spending_by_category
+- [X] 8.6.7: Criar @tool get_spending_by_category
   - Parâmetro: user_id (int)
   - Retorna: total gasto por categoria (últimos 30 dias)
   - Ordenado do maior para o menor
-- [ ] 8.6.8: Criar @tool get_income_vs_expense
+- [X] 8.6.8: Criar @tool get_income_vs_expense
   - Parâmetro: user_id (int)
   - Retorna: total receitas, total despesas, saldo
   - Período: últimos 30 dias
-- [ ] 8.6.9: Adicionar docstrings detalhadas em cada tool
-- [ ] 8.6.10: Adicionar tratamento de exceções
-- [ ] 8.6.11: Testar tools individualmente no shell
+- [X] 8.6.9: Adicionar docstrings detalhadas em cada tool
+- [X] 8.6.10: Adicionar tratamento de exceções
+- [X] 8.6.11: Testar tools individualmente no shell
+- [X] Tarefa 8.6 concluída
 
 #### Tarefa 8.7: Agente LangChain de Finanças
 **Descrição**: Implementar agente de IA usando LangChain
