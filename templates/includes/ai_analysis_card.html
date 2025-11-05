@@ -1,0 +1,64 @@
+{# AI Analysis Accordion Card - expects `analysis` and optional `accordion_id` #}
+{% load static %}
+
+{% with card_id=accordion_id|default:'ai-analysis-card' %}
+<div class="rounded-2xl border border-purple-500/60 bg-gradient-to-br from-purple-700 via-indigo-700 to-blue-700 shadow-xl overflow-hidden"
+     data-ai-analysis-card
+     id="{{ card_id }}">
+    <button type="button"
+            class="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 bg-white/10 hover:bg-white/15 transition-colors text-left"
+            data-ai-accordion-toggle
+            aria-expanded="false"
+            aria-controls="{{ card_id }}-content">
+        <div class="flex items-center gap-3 text-slate-50">
+            <span class="text-2xl" aria-hidden="true">🤖</span>
+            <div>
+                <p class="text-xs uppercase tracking-[0.15em] text-slate-200/80">Análise Financeira IA</p>
+                <p class="text-lg font-semibold text-white">
+                    Gerada em {{ analysis.created_at|date:'d/m/Y H:i' }}
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-purple-100/90">
+            <span>Clique para visualizar a análise completa</span>
+            <svg class="w-5 h-5 transition-transform duration-200 text-purple-100/90"
+                 data-ai-accordion-icon
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </button>
+    <div class="hidden border-t border-white/20 bg-gradient-to-br from-purple-700 via-indigo-700 to-blue-700 text-slate-50"
+         data-ai-accordion-content
+         id="{{ card_id }}-content">
+        <div class="p-6 sm:p-8 space-y-6">
+            <textarea class="hidden" data-ai-analysis-raw>{{ analysis.analysis_text }}</textarea>
+            <div class="space-y-4 text-slate-100 leading-relaxed" data-ai-analysis-rendered></div>
+
+            {% if analysis.key_insights %}
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10">
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-purple-100 mb-3">Insights Principais</h3>
+                <ul class="space-y-2 text-sm marker:text-purple-200 list-disc list-inside">
+                    {% for insight in analysis.key_insights %}
+                    <li class="leading-relaxed">{{ insight }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if analysis.recommendations %}
+            <div class="bg-white/10 rounded-xl p-4 border border-white/10">
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-purple-100 mb-3">Recomendações</h3>
+                <ol class="space-y-2 text-sm list-decimal list-inside marker:text-purple-200">
+                    {% for recommendation in analysis.recommendations %}
+                    <li class="leading-relaxed">{{ recommendation }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endwith %}

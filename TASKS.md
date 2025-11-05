@@ -1466,35 +1466,36 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar componente visual para exibir análise
 
 **Subtarefas**:
-- [ ] 8.11.1: Criar parcial `templates/includes/ai_analysis_card.html`
-- [ ] 8.11.2: Receber analysis como parâmetro
-- [ ] 8.11.3: Criar card com bg-gradient (roxo/azul)
-- [ ] 8.11.4: Header com ícone 🤖 e título
-- [ ] 8.11.5: Data de geração em formato legível
-- [ ] 8.11.6: Corpo com analysis_text formatado
-- [ ] 8.11.7: Usar white-space: pre-wrap para manter formatação
-- [ ] 8.11.8: Seção de insights destacada (se existir)
-- [ ] 8.11.9: Seção de recomendações destacada (se existir)
-- [ ] 8.11.10: Footer com link "Ver análises anteriores" (futuro)
-- [ ] 8.11.11: Responsividade mobile
-- [ ] 8.11.12: Incluir no dashboard.html: {% include 'includes/ai_analysis_card.html' %}
+- [X] 8.11.1: Criar parcial `templates/includes/ai_analysis_card.html`
+- [X] 8.11.2: Receber analysis como parâmetro
+- [X] 8.11.3: Criar card com bg-gradient (roxo/azul)
+- [X] 8.11.4: Header com ícone 🤖 e título
+- [X] 8.11.5: Data de geração em formato legível
+- [X] 8.11.6: Corpo com analysis_text formatado
+- [X] 8.11.7: Usar white-space: pre-wrap para manter formatação
+- [X] 8.11.8: Seção de insights destacada (se existir)
+- [X] 8.11.9: Seção de recomendações destacada (se existir)
+- [X] 8.11.10: Footer com link "Ver análises anteriores" (futuro)
+- [X] 8.11.11: Responsividade mobile
+- [X] 8.11.12: Incluir no dashboard.html: {% include 'includes/ai_analysis_card.html' %}
+- [X] Tarefa 8.11 concluída
 
 #### Tarefa 8.12: Testes Manuais da IA
 **Descrição**: Testar funcionalidade completa
 
 **Subtarefas**:
-- [ ] 8.12.1: Criar usuário de teste com dados financeiros variados
-- [ ] 8.12.2: Adicionar 5-10 contas bancárias
-- [ ] 8.12.3: Adicionar 20-30 transações de tipos diferentes
-- [ ] 8.12.4: Executar comando: `python manage.py run_finance_analysis --user-email test@example.com`
-- [ ] 8.12.5: Verificar que análise foi gerada no terminal
-- [ ] 8.12.6: Verificar que AIAnalysis foi criado no banco (admin)
-- [ ] 8.12.7: Acessar dashboard e verificar exibição da análise
-- [ ] 8.12.8: Verificar formatação e estilo da análise
-- [ ] 8.12.9: Tentar gerar nova análise antes de 24h (deve bloquear)
-- [ ] 8.12.10: Testar com usuário sem transações (deve lidar graciosamente)
-- [ ] 8.12.11: Testar comando --all com múltiplos usuários
-- [ ] 8.12.12: Verificar logs de execução
+- [X] 8.12.1: Criar usuário de teste com dados financeiros variados
+- [X] 8.12.2: Adicionar 5-10 contas bancárias
+- [X] 8.12.3: Adicionar 20-30 transações de tipos diferentes
+- [X] 8.12.4: Executar comando: `python manage.py run_finance_analysis --user-email test@example.com`
+- [X] 8.12.5: Verificar que análise foi gerada no terminal
+- [X] 8.12.6: Verificar que AIAnalysis foi criado no banco (admin)
+- [X] 8.12.7: Acessar dashboard e verificar exibição da análise
+- [X] 8.12.8: Verificar formatação e estilo da análise
+- [X] 8.12.9: Tentar gerar nova análise antes de 24h (deve bloquear)
+- [X] 8.12.10: Testar com usuário sem transações (deve lidar graciosamente)
+- [X] 8.12.11: Testar comando --all com múltiplos usuários
+- [X] 8.12.12: Verificar logs de execução
 
 #### Tarefa 8.13: Documentação Técnica AI
 **Descrição**: Criar documentação sobre o sistema de IA
@@ -1518,7 +1519,7 @@ Implementar funcionalidade de análise financeira personalizada usando Inteligê
 **Descrição**: Criar documento de referência para integração de IA
 
 **Subtarefas**:
-- [ ] 8.14.1: Criar arquivo `ai/agents/ai_integration_expert.md`
+- [ ] 8.14.1: Criar arquivo `agents/ai_integration_expert.md`
 - [ ] 8.14.2: Seção: Visão Geral do Papel
 - [ ] 8.14.3: Seção: LangChain 1.0 - Conceitos Fundamentais
 - [ ] 8.14.4: Seção: Padrões de Integração com Django
