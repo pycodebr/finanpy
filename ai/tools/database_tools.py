@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Dict, List
 
+from django.contrib.auth import get_user_model
 from django.db.models import Count, Sum
 
 from langchain.tools import tool
@@ -19,6 +20,37 @@ from langchain.tools import tool
 from accounts.models import Account
 from categories.models import Category
 from transactions.models import Transaction
+
+_USER_EXISTENCE_CACHE: Dict[int, bool] = {}
+
+
+def _validate_user_id(raw_user_id) -> int:
+    '''
+    Ensure the provided user_id is a valid positive integer pointing to an active user.
+    '''
+    if isinstance(raw_user_id, str):
+        if not raw_user_id.isdigit():
+            raise ValueError('user_id must be a positive integer')
+        user_id = int(raw_user_id)
+    elif isinstance(raw_user_id, int):
+        user_id = raw_user_id
+    else:
+        raise ValueError('user_id must be a positive integer')
+
+    if user_id <= 0:
+        raise ValueError('user_id must be greater than zero')
+
+    cached = _USER_EXISTENCE_CACHE.get(user_id)
+    if cached is None:
+        User = get_user_model()
+        exists = User.objects.filter(pk=user_id, is_active=True).only('pk').exists()
+        _USER_EXISTENCE_CACHE[user_id] = exists
+        cached = exists
+
+    if not cached:
+        raise ValueError(f'User with id={user_id} is not active or does not exist')
+
+    return user_id
 
 
 @tool
@@ -64,6 +96,8 @@ def get_user_transactions(user_id: int) -> List[Dict]:
         - Returns empty list if user has no transactions
     '''
     try:
+        user_id = _validate_user_id(user_id)
+
         # Calculate date 30 days ago from today
         thirty_days_ago = datetime.now().date() - timedelta(days=30)
 
@@ -74,7 +108,7 @@ def get_user_transactions(user_id: int) -> List[Dict]:
         ).select_related(
             'account',
             'category'
-        ).order_by('-transaction_date')
+        ).order_by('-transaction_date')[:120]
 
         # Serialize to JSON-compatible format
         result = []
@@ -90,6 +124,8 @@ def get_user_transactions(user_id: int) -> List[Dict]:
 
         return result
 
+    except ValueError:
+        raise
     except Exception:
         # Return empty list on error to prevent agent failure
         return []
@@ -135,8 +171,12 @@ def get_user_accounts(user_id: int) -> List[Dict]:
         - Balance is calculated from transaction signals
     '''
     try:
+        user_id = _validate_user_id(user_id)
+
         # Query accounts for the user
-        accounts = Account.objects.filter(user_id=user_id)
+        accounts = Account.objects.filter(user_id=user_id).only(
+            'name', 'bank_name', 'account_type', 'balance', 'is_active'
+        )[:50]
 
         # Serialize to JSON-compatible format
         result = []
@@ -151,6 +191,8 @@ def get_user_accounts(user_id: int) -> List[Dict]:
 
         return result
 
+    except ValueError:
+        raise
     except Exception:
         # Return empty list on error to prevent agent failure
         return []
@@ -196,8 +238,12 @@ def get_user_categories(user_id: int) -> List[Dict]:
         - Categories are ordered alphabetically by name
     '''
     try:
+        user_id = _validate_user_id(user_id)
+
         # Query categories for the user
-        categories = Category.objects.filter(user_id=user_id).order_by('name')
+        categories = Category.objects.filter(user_id=user_id).only(
+            'name', 'category_type', 'color'
+        ).order_by('name')[:100]
 
         # Serialize to JSON-compatible format
         result = []
@@ -210,6 +256,8 @@ def get_user_categories(user_id: int) -> List[Dict]:
 
         return result
 
+    except ValueError:
+        raise
     except Exception:
         # Return empty list on error to prevent agent failure
         return []
@@ -261,6 +309,8 @@ def get_spending_by_category(user_id: int) -> List[Dict]:
         - Percentage is relative to total expenses in the period
     '''
     try:
+        user_id = _validate_user_id(user_id)
+
         # Calculate date 30 days ago from today
         thirty_days_ago = datetime.now().date() - timedelta(days=30)
 
@@ -274,7 +324,7 @@ def get_spending_by_category(user_id: int) -> List[Dict]:
         ).annotate(
             total=Sum('amount'),
             count=Count('id')
-        ).order_by('-total')
+        ).order_by('-total')[:25]
 
         # Calculate total spending for percentage calculation
         total_spending = sum(item['total'] for item in category_spending)
@@ -339,6 +389,8 @@ def get_income_vs_expense(user_id: int) -> Dict:
         - Returns zeros if user has no transactions
     '''
     try:
+        user_id = _validate_user_id(user_id)
+
         # Calculate date 30 days ago from today
         thirty_days_ago = datetime.now().date() - timedelta(days=30)
 
@@ -380,6 +432,8 @@ def get_income_vs_expense(user_id: int) -> Dict:
             'period_days': 30
         }
 
+    except ValueError:
+        raise
     except Exception:
         # Return zeros on error to prevent agent failure
         return {

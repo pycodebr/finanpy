@@ -171,6 +171,35 @@ Este diretório contém os agentes especializados de IA para o desenvolvimento d
 
 ---
 
+### 6. [AI Integration Expert](./ai_integration_expert.md)
+**Função**: Especialista em integração de agentes LangChain com o ecossistema Finanpy
+
+**Responsabilidades**:
+- Definir arquitetura de agentes e ferramentas (tools) LangChain
+- Garantir isolamento de dados e uso seguro da OpenAI API
+- Projetar prompts e fluxos de fallback para respostas consistentes
+- Configurar métricas, logging estruturado e cache de resultados
+- Orientar testes e validações específicas de IA
+- Atualizar documentação técnica e políticas de privacidade relacionadas à IA
+
+**Stack**:
+- LangChain 1.0
+- OpenAI (gpt-4o-mini, gpt-5 mini)
+- Django ORM + ferramentas de caching
+- Boas práticas de segurança e LGPD
+
+**Quando usar**:
+- Criar ou revisar agentes LangChain
+- Projetar novas tools para acesso a dados
+- Ajustar prompts e fluxos de resposta da IA
+- Implantar mecanismos de fallback, métricas e observabilidade
+- Validar compliance (privacidade, uso responsável da IA)
+
+**MCP Servers utilizados**:
+- `context7`: Para documentação do LangChain e OpenAI
+
+---
+
 ## 🎯 Fluxo de Trabalho Sugerido
 
 ### Implementação de Nova Feature

@@ -11,10 +11,12 @@ Main Functions:
 '''
 
 import logging
+import time
 from datetime import timedelta
 from typing import Optional
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.db import transaction
 from django.utils import timezone
 
@@ -27,6 +29,27 @@ logger = logging.getLogger(__name__)
 
 # Get User model
 User = get_user_model()
+
+CACHE_TTL_SECONDS = 60 * 60 * 24  # 24 hours
+
+
+def _cache_key(user_id: int) -> str:
+    return f'ai:analysis:{user_id}'
+
+
+def _write_cache(analysis: AIAnalysis) -> None:
+    cache.set(_cache_key(analysis.user_id), analysis.pk, CACHE_TTL_SECONDS)
+
+
+def _read_cache(user_id: int) -> Optional[AIAnalysis]:
+    cached_id = cache.get(_cache_key(user_id))
+    if not cached_id:
+        return None
+    try:
+        return AIAnalysis.objects.get(pk=cached_id)
+    except AIAnalysis.DoesNotExist:
+        cache.delete(_cache_key(user_id))
+        return None
 
 
 @transaction.atomic
@@ -63,15 +86,24 @@ def generate_analysis_for_user(user_id: int) -> AIAnalysis:
         - Existing analysis within 24h is returned without regeneration
     '''
     try:
-        logger.info(f'Starting analysis generation workflow for user_id={user_id}')
+        logger.info('ai.analysis.start', extra={'user_id': user_id})
 
         # Task 8.8.6: Validate user exists
         try:
             user = User.objects.get(pk=user_id)
-            logger.debug(f'User validated: {user.email} (id={user_id})')
+            logger.debug('ai.analysis.user_valid', extra={'user_id': user_id})
         except User.DoesNotExist:
-            logger.error(f'User with id={user_id} does not exist')
+            logger.error('ai.analysis.user_missing', extra={'user_id': user_id})
             raise ValueError(f'User with id {user_id} does not exist')
+
+        cached_analysis = _read_cache(user_id)
+        if cached_analysis:
+            cached_analysis._ai_metadata = {'source': 'cache', 'elapsed_ms': 0}
+            logger.info(
+                'ai.analysis.cache_hit',
+                extra={'user_id': user_id, 'analysis_id': cached_analysis.pk}
+            )
+            return cached_analysis
 
         # Task 8.8.7: Check if analysis exists and is recent (< 24 hours)
         cutoff_time = timezone.now() - timedelta(hours=24)
@@ -81,17 +113,26 @@ def generate_analysis_for_user(user_id: int) -> AIAnalysis:
         ).order_by('-created_at').first()
 
         if existing_analysis:
-            logger.info(
-                f'Recent analysis found for user_id={user_id}, '
-                f'created at {existing_analysis.created_at}. Returning existing analysis.'
-            )
+            logger.info('ai.analysis.reuse_recent', extra={
+                'user_id': user_id,
+                'analysis_id': existing_analysis.pk,
+                'created_at': existing_analysis.created_at.isoformat()
+            })
+            _write_cache(existing_analysis)
+            existing_analysis._ai_metadata = {
+                'source': 'recent',
+                'created_at': existing_analysis.created_at.isoformat(),
+                'elapsed_ms': 0
+            }
             return existing_analysis
 
-        logger.info(f'No recent analysis found for user_id={user_id}. Generating new analysis.')
+        logger.info('ai.analysis.generate_new', extra={'user_id': user_id})
 
         # Task 8.8.8: Call agent to run analysis
-        logger.debug(f'Invoking LangChain agent for user_id={user_id}')
+        logger.debug('ai.analysis.invoke_agent', extra={'user_id': user_id})
+        started_at = time.perf_counter()
         agent_result = run_analysis(user_id)
+        elapsed_ms = int((time.perf_counter() - started_at) * 1000)
 
         # Task 8.8.9-8.8.10: Parse result dict
         # Agent returns: analysis_text, key_insights, recommendations, period_analyzed
@@ -99,17 +140,23 @@ def generate_analysis_for_user(user_id: int) -> AIAnalysis:
         key_insights = agent_result.get('key_insights', [])
         recommendations = agent_result.get('recommendations', [])
         period_analyzed = agent_result.get('period_analyzed', 'Últimos 30 dias')
+        metadata = agent_result.get('metadata', {}) or {}
 
-        logger.debug(
-            f'Agent result parsed for user_id={user_id}: '
-            f'text_length={len(analysis_text)}, '
-            f'insights={len(key_insights)}, '
-            f'recommendations={len(recommendations)}'
-        )
+        logger.debug('ai.analysis.agent_result', extra={
+            'user_id': user_id,
+            'text_length': len(analysis_text),
+            'insights_count': len(key_insights),
+            'recommendations_count': len(recommendations),
+            'elapsed_ms': elapsed_ms,
+            'model_latency_ms': metadata.get('model_latency_ms'),
+            'input_tokens': metadata.get('input_tokens'),
+            'output_tokens': metadata.get('output_tokens'),
+            'source': metadata.get('source', 'agent')
+        })
 
         # Validate parsed data
         if not analysis_text:
-            logger.error(f'Agent returned empty analysis_text for user_id={user_id}')
+            logger.error('ai.analysis.empty_text', extra={'user_id': user_id})
             raise Exception('Agent generated empty analysis text')
 
         # Task 8.8.11: Create AIAnalysis object
@@ -123,24 +170,29 @@ def generate_analysis_for_user(user_id: int) -> AIAnalysis:
 
         # Task 8.8.12: Save to database
         analysis.save()
-        logger.info(
-            f'Analysis successfully saved for user_id={user_id}, '
-            f'analysis_id={analysis.pk}'
-        )
+        _write_cache(analysis)
+        metadata.update({'elapsed_ms': elapsed_ms})
+        logger.info('ai.analysis.completed', extra={
+            'user_id': user_id,
+            'analysis_id': analysis.pk,
+            'elapsed_ms': metadata.get('elapsed_ms'),
+            'source': metadata.get('source', 'agent'),
+            'input_tokens': metadata.get('input_tokens'),
+            'output_tokens': metadata.get('output_tokens'),
+            'total_tokens': metadata.get('total_tokens')
+        })
+        analysis._ai_metadata = metadata
 
         return analysis
 
     except ValueError as e:
         # Task 8.8.14: Exception handling - User not found
-        logger.error(f'Validation error in generate_analysis_for_user: {str(e)}')
+        logger.error('ai.analysis.validation_error', extra={'user_id': user_id, 'error': str(e)})
         raise
 
     except Exception as e:
         # Task 8.8.14: Exception handling - Agent execution or database errors
-        logger.error(
-            f'Error generating analysis for user_id={user_id}: {str(e)}',
-            exc_info=True
-        )
+        logger.error('ai.analysis.error', extra={'user_id': user_id, 'error': str(e)}, exc_info=True)
         raise Exception(f'Failed to generate analysis: {str(e)}')
 
 
@@ -175,7 +227,7 @@ def get_latest_analysis(user_id: int) -> Optional[AIAnalysis]:
         - Uses database index on (user, created_at) for performance
     '''
     try:
-        logger.debug(f'Retrieving latest analysis for user_id={user_id}')
+        logger.debug('ai.analysis.retrieve_latest', extra={'user_id': user_id})
 
         # Task 8.8.15: Get most recent analysis for user
         latest_analysis = AIAnalysis.objects.filter(
@@ -183,18 +235,16 @@ def get_latest_analysis(user_id: int) -> Optional[AIAnalysis]:
         ).order_by('-created_at').first()
 
         if latest_analysis:
-            logger.info(
-                f'Found latest analysis for user_id={user_id}, '
-                f'created at {latest_analysis.created_at}'
-            )
+            logger.info('ai.analysis.latest_found', extra={
+                'user_id': user_id,
+                'analysis_id': latest_analysis.pk,
+                'created_at': latest_analysis.created_at.isoformat()
+            })
         else:
-            logger.info(f'No analysis found for user_id={user_id}')
+            logger.info('ai.analysis.none_found', extra={'user_id': user_id})
 
         return latest_analysis
 
     except Exception as e:
-        logger.error(
-            f'Error retrieving latest analysis for user_id={user_id}: {str(e)}',
-            exc_info=True
-        )
+        logger.error('ai.analysis.retrieve_error', extra={'user_id': user_id, 'error': str(e)}, exc_info=True)
         raise Exception(f'Failed to retrieve latest analysis: {str(e)}')

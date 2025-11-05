@@ -18,6 +18,51 @@ Transaction
 Category
   ↓ ManyToOne
 User
+
+User
+  ↓ OneToMany
+AIAnalysis
+```
+
+```mermaid
+erDiagram
+    USER ||--|| PROFILE : possui
+    USER ||--o{ ACCOUNT : possui
+    USER ||--o{ CATEGORY : possui
+    ACCOUNT ||--o{ TRANSACTION : registra
+    CATEGORY ||--o{ TRANSACTION : classifica
+    USER ||--o{ AIANALYSIS : recebe
+
+    USER {
+        UUID id
+        string email
+    }
+    PROFILE {
+        UUID id
+        string full_name
+    }
+    ACCOUNT {
+        UUID id
+        string name
+        decimal balance
+    }
+    CATEGORY {
+        UUID id
+        string name
+        string category_type
+    }
+    TRANSACTION {
+        UUID id
+        decimal amount
+        date transaction_date
+    }
+    AIANALYSIS {
+        UUID id
+        text analysis_text
+        json key_insights
+        json recommendations
+        datetime created_at
+    }
 ```
 
 ## Models
@@ -427,6 +472,53 @@ def update_account_balance(sender, instance, **kwargs):
     account = instance.account
     account.balance = calculate_balance(account)
     account.save()
+```
+
+---
+
+### AIAnalysis
+Análises financeiras geradas pelo agente de IA.
+
+**App**: `ai`
+
+**Campos**:
+
+| Campo             | Tipo           | Descrição                                      | Obrigatório |
+|-------------------|----------------|------------------------------------------------|-------------|
+| user              | ForeignKey     | Usuário dono da análise                        | Sim         |
+| analysis_text     | TextField      | Texto completo gerado pela IA                  | Sim         |
+| key_insights      | JSONField      | Lista de insights principais                   | Sim (default lista) |
+| recommendations   | JSONField      | Lista de recomendações acionáveis              | Sim (default lista) |
+| period_analyzed   | CharField      | Janela temporal analisada                      | Sim         |
+| created_at        | DateTimeField  | Data/hora da criação                           | Auto        |
+| updated_at        | DateTimeField  | Última atualização                              | Auto        |
+
+**Constraints**:
+- Índice composto `(user, created_at)` para recuperar rapidamente a última análise.
+- Ordenação padrão descendente por `created_at`.
+
+**Comportamento**:
+- Rate limit de 24h controlado em `analysis_service.generate_analysis_for_user`.
+- Resultados podem ser lidos do cache (`django.core.cache`) antes de nova geração.
+- Exibido no dashboard via parcial `includes/ai_analysis_card.html`.
+
+**Exemplo**:
+```python
+class AIAnalysis(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    analysis_text = models.TextField()
+    key_insights = models.JSONField(default=list)
+    recommendations = models.JSONField(default=list)
+    period_analyzed = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [models.Index(fields=['user', '-created_at'])]
+
+    def __str__(self):
+        return f'{self.user.email} - {self.created_at:%d/%m/%Y %H:%M}'
 ```
 
 ---

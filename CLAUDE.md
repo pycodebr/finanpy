@@ -20,6 +20,7 @@ The project follows Django's modular app pattern with strict data isolation per 
 - **accounts/**: Bank accounts (belongs to User, contains Transactions)
 - **categories/**: Transaction categories with type (income/expense), user-specific
 - **transactions/**: Financial transactions linking Account + Category
+- **ai/**: LangChain agents, tools, services and management command for AI analysis
 
 ### Data Flow and Relationships
 
@@ -29,7 +30,8 @@ User (Django Auth)
   ├── Account (1:N)
   │   └── Transaction (1:N)
   │       └── Category (N:1, PROTECT on delete)
-  └── Category (1:N)
+  ├── Category (1:N)
+  └── AIAnalysis (1:N)
 ```
 
 **Critical Security Pattern**: ALL data queries MUST filter by `user=request.user`. Never expose cross-user data.
@@ -40,6 +42,7 @@ User (Django Auth)
 2. **Category Deletion**: Uses `on_delete=PROTECT` to prevent deletion if transactions exist
 3. **Account Deletion**: CASCADE - deletes all associated transactions
 4. **Balance Calculation**: Derived from transaction aggregation (income - expense)
+5. **AI Analysis**: `AIAnalysis` is generated via LangChain agent, cached por 24h e exibido no dashboard em componente próprio
 
 ## Code Standards (Strictly Enforced)
 
@@ -71,6 +74,13 @@ def view_name(request):
 - Use `select_related()` for ForeignKey relationships
 - Use `prefetch_related()` for reverse ForeignKey
 - Avoid N+1 queries in templates
+
+### AI Layer
+- Tools em `ai/tools/database_tools.py` DEVEM validar `user_id` e limitar resultados (`[:N]`).
+- `analysis_service.generate_analysis_for_user` impõe rate limit de 24h e usa cache (`django.core.cache`).
+- `finance_insight_agent.run_analysis` coleta métricas de tokens/latência e aplica fallback seguro.
+- Logs estruturados (`ai.analysis.*`) não podem incluir valores financeiros sensíveis.
+- Sempre atualize documentação (`docs/ai-financial-agent.md`) ao alterar fluxo de IA.
 
 ### Template Structure
 - Templates in `<app>/templates/<app>/` following Django convention

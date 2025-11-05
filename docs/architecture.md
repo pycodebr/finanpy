@@ -10,11 +10,14 @@ finanpy/
 ├── accounts/          # Contas bancárias
 ├── categories/        # Categorias de transações
 ├── transactions/      # Transações financeiras
+├── ai/                # Agente LangChain, tools e serviços de análise
+├── templates/         # Templates compartilhados (dashboard, componentes)
 ├── docs/              # Documentação do projeto
+├── agents/            # Manuais para agentes especializados (PO, QA, AI, etc.)
 ├── manage.py          # Script de gerenciamento Django
 ├── requirements.txt   # Dependências do projeto
 ├── db.sqlite3         # Banco de dados SQLite
-└── PRD.md            # Product Requirements Document
+└── PRD.md             # Product Requirements Document
 ```
 
 ## Apps Django
@@ -113,6 +116,21 @@ Registro de transações financeiras.
 - `created_at`: Data de criação
 - `updated_at`: Data de atualização
 
+### ai/
+Camada responsável pela Inteligência Artificial financeira.
+
+**Responsabilidades**:
+- Persistir análises (`AIAnalysis`)
+- Expor tools LangChain com filtros por usuário
+- Orquestrar geração de análises e fallback seguro
+- Disponibilizar comando Django (`run_finance_analysis`)
+
+**Principais módulos**:
+- `agents/finance_insight_agent.py`: Agente LangChain + fallback manual
+- `tools/database_tools.py`: Tools para transações, contas, categorias e agregações
+- `services/analysis_service.py`: Regras de negócio, cache, métricas e rate limiting
+- `management/commands/run_finance_analysis.py`: Interface CLI para executar análises
+
 ## Arquitetura de Dados
 
 ### Relacionamentos
@@ -141,6 +159,21 @@ User
 4. Usuário cria **Categories** para organização
 5. Usuário registra **Transactions** associadas a contas e categorias
 6. Sistema calcula saldos e apresenta no dashboard
+
+## Arquitetura da IA Financeira
+
+1. **Entrada**: Comando `run_finance_analysis` recebe `user_id` ou `email`.
+2. **Serviço**: `generate_analysis_for_user` valida usuário, aplica rate limit (24h) e consulta cache.
+3. **Agente**: `finance_insight_agent.run_analysis` chama tools LangChain e gera análise via OpenAI.
+4. **Fallback**: Em caso de erro ou resposta incompleta, `_generate_fallback_analysis` sintetiza texto a partir de dados brutos.
+5. **Persistência**: Resultado salvo em `AIAnalysis` (texto, insights, recomendações, período).
+6. **Cache**: ID da análise armazenado no cache Django para leituras subsequentes dentro de 24h.
+7. **Exibição**: Dashboard inclui parcial `includes/ai_analysis_card.html` com acordeão e disclaimer de uso.
+
+### Observabilidade
+- Logs estruturados (`ai.analysis.*`) com `user_id`, `analysis_id`, `elapsed_ms`, tokens e origem (cache/agent/fallback).
+- Métricas de latência e tokens repassadas ao comando para feedback imediato.
+- Erros de tools levantam `ValueError`, permitindo identificar problemas de dados.
 
 ## Padrões Arquiteturais
 
@@ -198,6 +231,7 @@ A arquitetura permite migração fácil para PostgreSQL quando necessário, sem 
 
 ### Caching
 - Template fragment caching quando necessário
+- Cache de análises (`ai.services.analysis_service`) com TTL de 24h por usuário
 - Database query caching para relatórios
 
 ## Escalabilidade

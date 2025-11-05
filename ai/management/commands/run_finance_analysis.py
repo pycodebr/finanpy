@@ -65,11 +65,29 @@ class Command(BaseCommand):
             raise CommandError(f'Falha ao gerar analise: {exc}') from exc
 
         created_at = timezone.localtime(analysis.created_at).strftime('%d/%m/%Y %H:%M')
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Analise disponivel para {user.email} (gerada/em cache em {created_at}).'
+        metadata = getattr(analysis, '_ai_metadata', {}) or {}
+        source = metadata.get('source', 'agent')
+
+        if source == 'recent':
+            message = (
+                f'Analise reutilizada para {user.email}: ultima geracao em {created_at} '
+                '(intervalo minimo de 24h ainda em vigor).'
             )
-        )
+        elif source == 'cache':
+            message = f'Analise recuperada do cache para {user.email} (gerada em {created_at}).'
+        else:
+            message = f'Analise gerada para {user.email} em {created_at}.'
+
+        self.stdout.write(self.style.SUCCESS(message))
+
+        if metadata:
+            self.stdout.write(
+                ' - Latencia total: {latency} ms | Tokens entrada: {tin} | Tokens saida: {tout}'.format(
+                    latency=self._fmt_metric(metadata.get('elapsed_ms')),
+                    tin=self._fmt_metric(metadata.get('input_tokens')),
+                    tout=self._fmt_metric(metadata.get('output_tokens'))
+                )
+            )
 
     def _process_all_users(self, User) -> None:
         users = User.objects.filter(is_active=True).order_by('id')
@@ -98,14 +116,42 @@ class Command(BaseCommand):
 
             processed += 1
             created_at = timezone.localtime(analysis.created_at).strftime('%d/%m/%Y %H:%M')
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f'[{index}/{total}] {user.email}: analise disponivel (gerada/em cache em {created_at}).'
+            metadata = getattr(analysis, '_ai_metadata', {}) or {}
+            source = metadata.get('source', 'agent')
+
+            if source == 'recent':
+                message = (
+                    f'[{index}/{total}] {user.email}: analise reutilizada (gerada originalmente em {created_at}).'
                 )
-            )
+            elif source == 'cache':
+                message = (
+                    f'[{index}/{total}] {user.email}: analise carregada do cache (gerada em {created_at}).'
+                )
+            else:
+                message = f'[{index}/{total}] {user.email}: analise gerada em {created_at}.'
+
+            self.stdout.write(self.style.SUCCESS(message))
+
+            if metadata:
+                self.stdout.write(
+                    '    -> Latencia: {latency} ms | Tokens entrada: {tin} | Tokens saida: {tout}'.format(
+                        latency=self._fmt_metric(metadata.get('elapsed_ms')),
+                        tin=self._fmt_metric(metadata.get('input_tokens')),
+                        tout=self._fmt_metric(metadata.get('output_tokens'))
+                    )
+                )
 
         self.stdout.write(
             self.style.SUCCESS(
                 f'Processamento concluido: {processed} de {total} usuarios processados com sucesso.'
             )
         )
+
+    @staticmethod
+    def _fmt_metric(value) -> str:
+        if value in (None, ''):
+            return 'N/A'
+        try:
+            return f'{int(value)}'
+        except (TypeError, ValueError):
+            return str(value)

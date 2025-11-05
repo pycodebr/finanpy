@@ -11,8 +11,9 @@ comprehensive analysis in Portuguese with a friendly, motivating tone.
 
 import logging
 import re
+import time
 import unicodedata
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from django.conf import settings
 
@@ -34,6 +35,12 @@ logger = logging.getLogger(__name__)
 
 # System prompt for the finance agent
 SYSTEM_PROMPT = '''Você é um assistente financeiro pessoal especializado em análise de gastos.
+
+Regras críticas de segurança e privacidade:
+- Nunca solicite ou compartilhe dados de outros usuários.
+- Utilize apenas as ferramentas fornecidas para coletar dados; não invente informações externas.
+- Se não houver dados suficientes, comunique isso de forma transparente.
+- Não exponha dados sensíveis nos insights ou recomendações.
 
 Analise os dados financeiros do usuário e forneça uma análise completa e estruturada:
 
@@ -185,10 +192,13 @@ def run_analysis(user_id: int) -> Dict:
         logger.debug(f'Invoking agent with request for user_id={user_id}')
 
         # Invoke the agent with the analysis request
+        started_at = time.perf_counter()
         response = agent.invoke({'input': analysis_request})
+        latency_ms = int((time.perf_counter() - started_at) * 1000)
 
         # Extract the analysis text from the response
         analysis_text = ''
+        usage_metadata = _extract_usage_from_agent_response(response)
 
         # Primary source: direct output field from agent executor
         output_text = response.get('output')
@@ -247,19 +257,38 @@ def run_analysis(user_id: int) -> Dict:
                 'Invoking fallback synthesis.',
                 user_id
             )
-            return _generate_fallback_analysis(user_id)
+            return _generate_fallback_analysis(
+                user_id,
+                reason='missing_sections',
+                base_metadata={
+                    'source': 'agent_fallback',
+                    'input_tokens': usage_metadata.get('input_tokens'),
+                    'output_tokens': usage_metadata.get('output_tokens'),
+                    'total_tokens': usage_metadata.get('total_tokens'),
+                    'model_latency_ms': latency_ms
+                }
+            )
 
         # Build structured result
         result = {
             'analysis_text': analysis_text,
             'key_insights': key_insights,
             'recommendations': recommendations,
-            'period_analyzed': 'Últimos 30 dias'
+            'period_analyzed': 'Últimos 30 dias',
+            'metadata': {
+                'source': 'agent',
+                'input_tokens': usage_metadata.get('input_tokens'),
+                'output_tokens': usage_metadata.get('output_tokens'),
+                'total_tokens': usage_metadata.get('total_tokens'),
+                'model_latency_ms': latency_ms
+            }
         }
 
         logger.info(
-            f'Analysis completed for user_id={user_id}: '
-            f'{len(key_insights)} insights, {len(recommendations)} recommendations'
+            'Analysis completed for user_id=%s: %s insights, %s recommendations',
+            user_id,
+            len(key_insights),
+            len(recommendations)
         )
 
         return result
@@ -269,8 +298,17 @@ def run_analysis(user_id: int) -> Dict:
         raise
 
     except Exception as e:
-        logger.error(f'Error running analysis for user_id={user_id}: {str(e)}')
-        raise Exception(f'Failed to run financial analysis: {str(e)}')
+        logger.warning(
+            'Error running agent analysis for user_id=%s. Falling back to manual synthesis. Error: %s',
+            user_id,
+            str(e),
+            exc_info=True
+        )
+        return _generate_fallback_analysis(
+            user_id,
+            reason=str(e),
+            base_metadata={'source': 'fallback_error'}
+        )
 
 
 def _resolve_model_name() -> str:
@@ -296,7 +334,11 @@ def _normalize_text(text: str) -> str:
     return stripped.lower()
 
 
-def _generate_fallback_analysis(user_id: int) -> Dict:
+def _generate_fallback_analysis(
+    user_id: int,
+    reason: str = 'agent_failure',
+    base_metadata: Optional[Dict] = None
+) -> Dict:
     '''
     Generate analysis directly by collecting data with tools and prompting the LLM.
     '''
@@ -375,6 +417,23 @@ def _generate_fallback_analysis(user_id: int) -> Dict:
         summary_lines.append('- Nenhuma categoria cadastrada.')
     summary_lines.append('')
 
+    if not transactions and not spending and not income_transactions:
+        manual_text = (
+            'Olá! Ainda não encontrei dados financeiros suficientes para gerar uma análise completa. '
+            'Registre novas transações e execute novamente a análise para receber insights personalizados.'
+        )
+        return {
+            'analysis_text': manual_text,
+            'key_insights': [],
+            'recommendations': [
+                'Registre suas transações diárias para construir histórico.',
+                'Categorize receitas e despesas para obter insights relevantes.',
+                'Mantenha saldos das contas atualizados.'
+            ],
+            'period_analyzed': 'Últimos 30 dias',
+            'metadata': {**(base_metadata or {}), 'source': 'fallback-no-data', 'reason': reason}
+        }
+
     summary_lines.append(
         'Instrucao para o modelo: elabore a analise final com visao geral, insights e recomendacoes, '
         'sem pedir dados adicionais. Responda em ate 350 tokens e mantenha foco em acoes praticas.'
@@ -390,10 +449,12 @@ def _generate_fallback_analysis(user_id: int) -> Dict:
         api_key=settings.OPENAI_API_KEY
     )
 
+    started_at = time.perf_counter()
     response = model.invoke([
         {'role': 'system', 'content': SYSTEM_PROMPT},
         {'role': 'user', 'content': manual_prompt}
     ])
+    latency_ms = int((time.perf_counter() - started_at) * 1000)
 
     manual_text = getattr(response, 'content', None) or getattr(response, 'text', None) or str(response)
     manual_text = manual_text.strip()
@@ -405,12 +466,91 @@ def _generate_fallback_analysis(user_id: int) -> Dict:
     key_insights = _extract_insights(manual_text)
     recommendations = _extract_recommendations(manual_text)
 
+    usage = _extract_usage_from_message(response)
+
+    metadata = {
+        'source': base_metadata.get('source', 'fallback') if base_metadata else 'fallback',
+        'reason': reason,
+        'input_tokens': usage.get('input_tokens'),
+        'output_tokens': usage.get('output_tokens'),
+        'total_tokens': usage.get('total_tokens'),
+        'model_latency_ms': latency_ms
+    }
+
     return {
         'analysis_text': manual_text,
         'key_insights': key_insights,
         'recommendations': recommendations,
-        'period_analyzed': 'Últimos 30 dias'
+        'period_analyzed': 'Últimos 30 dias',
+        'metadata': metadata
     }
+
+
+def _extract_usage_from_agent_response(response: Dict) -> Dict:
+    usage: Dict[str, Optional[int]] = {
+        'input_tokens': None,
+        'output_tokens': None,
+        'total_tokens': None
+    }
+    try:
+        messages = response.get('messages') or []
+        if messages:
+            last_message = messages[-1]
+            return _extract_usage_from_message(last_message)
+        token_usage = response.get('token_usage') or response.get('usage_metadata')
+        if token_usage:
+            usage['input_tokens'] = token_usage.get('prompt_tokens')
+            usage['output_tokens'] = token_usage.get('completion_tokens')
+            usage['total_tokens'] = token_usage.get('total_tokens')
+    except Exception as exc:
+        logger.debug('Unable to extract usage metadata from agent response: %s', exc)
+    return usage
+
+
+def _extract_usage_from_message(message) -> Dict:
+    usage: Dict[str, Optional[int]] = {
+        'input_tokens': None,
+        'output_tokens': None,
+        'total_tokens': None
+    }
+    try:
+        metadata = getattr(message, 'response_metadata', {}) or {}
+        token_usage = metadata.get('token_usage') or metadata.get('token_usage_model_output') or {}
+        if token_usage:
+            usage['input_tokens'] = (
+                token_usage.get('prompt_tokens')
+                or token_usage.get('input_tokens')
+                or token_usage.get('total_tokens', None)
+            )
+            usage['output_tokens'] = (
+                token_usage.get('completion_tokens')
+                or token_usage.get('output_tokens')
+            )
+            usage['total_tokens'] = token_usage.get('total_tokens')
+
+        usage_meta = getattr(message, 'usage_metadata', None)
+        if usage_meta:
+            usage['input_tokens'] = usage['input_tokens'] or usage_meta.get('input_tokens')
+            usage['output_tokens'] = usage['output_tokens'] or usage_meta.get('output_tokens')
+            usage['total_tokens'] = usage['total_tokens'] or usage_meta.get('total_tokens')
+    except Exception as exc:
+        logger.debug('Unable to extract usage metadata from message: %s', exc)
+    return usage
+
+
+INSIGHTS_HEADERS = [
+    r'Insights?\s*Principais?',
+    r'Principais?\s*Insights?',
+    r'🔍\s*Insights?',
+    r'📊\s*Insights?'
+]
+
+RECOMMENDATIONS_HEADERS = [
+    r'Recomenda[çc][õo]es?',
+    r'Sugest[õo]es?',
+    r'💡\s*Recomenda[çc][õo]es?',
+    r'🎯\s*Metas?'
+]
 
 
 def _extract_insights(text: str) -> List[str]:
@@ -438,7 +578,9 @@ def _extract_insights(text: str) -> List[str]:
     try:
         # Look for insights section
         # Common patterns: "Insights Principais", "Insights", etc.
-        insights_pattern = r'(?:Insights?\s*Principais?|Principais?\s*Insights?)[:\s]*\n(.*?)(?=\n\n|\n[#*]|$)'
+        insights_pattern = (
+            r'(?:' + '|'.join(INSIGHTS_HEADERS) + r')[:\s]*\n(.*?)(?=\n\n|\n[#*🔍💡📊🎯]|$)'
+        )
         insights_match = re.search(insights_pattern, text, re.IGNORECASE | re.DOTALL)
 
         if insights_match:
@@ -447,7 +589,7 @@ def _extract_insights(text: str) -> List[str]:
             # Extract bullet points or numbered items
             # Patterns: "- item", "* item", "1. item", "• item", emoji items
             items = re.findall(
-                r'(?:^|\n)(?:[-*•]|\d+[.)])\s*(.+?)(?=\n(?:[-*•]|\d+[.)])|\n\n|$)',
+                r'(?:^|\n)(?:[-*•🔹▫️👉]|\d+[.)])\s*(.+?)(?=\n(?:[-*•🔹▫️👉]|\d+[.)])|\n\n|$)',
                 insights_section,
                 re.MULTILINE
             )
@@ -461,7 +603,7 @@ def _extract_insights(text: str) -> List[str]:
             # Look for any bullet points in the first half of text
             first_half = text[:len(text)//2]
             items = re.findall(
-                r'(?:^|\n)(?:[-*•]|\d+[.)])\s*(.+?)(?=\n|$)',
+                r'(?:^|\n)(?:[-*•🔹▫️👉]|\d+[.)])\s*(.+?)(?=\n|$)',
                 first_half,
                 re.MULTILINE
             )
@@ -500,7 +642,9 @@ def _extract_recommendations(text: str) -> List[str]:
     try:
         # Look for recommendations section
         # Common patterns: "Recomendações", "Sugestões", etc.
-        rec_pattern = r'(?:Recomenda[çc][õo]es?|Sugest[õo]es?)[:\s]*\n(.*?)(?=\n\n|\n[#*]|$)'
+        rec_pattern = (
+            r'(?:' + '|'.join(RECOMMENDATIONS_HEADERS) + r')[:\s]*\n(.*?)(?=\n\n|\n[#*🔍💡📊🎯]|$)'
+        )
         rec_match = re.search(rec_pattern, text, re.IGNORECASE | re.DOTALL)
 
         if rec_match:
@@ -508,7 +652,7 @@ def _extract_recommendations(text: str) -> List[str]:
 
             # Extract bullet points or numbered items
             items = re.findall(
-                r'(?:^|\n)(?:[-*•]|\d+[.)])\s*(.+?)(?=\n(?:[-*•]|\d+[.)])|\n\n|$)',
+                r'(?:^|\n)(?:[-*•🔹▫️👉]|\d+[.)])\s*(.+?)(?=\n(?:[-*•🔹▫️👉]|\d+[.)])|\n\n|$)',
                 rec_section,
                 re.MULTILINE
             )
@@ -522,7 +666,7 @@ def _extract_recommendations(text: str) -> List[str]:
             # Look for any bullet points in the second half of text
             second_half = text[len(text)//2:]
             items = re.findall(
-                r'(?:^|\n)(?:[-*•]|\d+[.)])\s*(.+?)(?=\n|$)',
+                r'(?:^|\n)(?:[-*•🔹▫️👉]|\d+[.)])\s*(.+?)(?=\n|$)',
                 second_half,
                 re.MULTILINE
             )

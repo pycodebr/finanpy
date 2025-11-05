@@ -176,9 +176,9 @@ sequenceDiagram
 1. **Inicialização**: Admin executa comando Django
 2. **Validação**: Service verifica se usuário existe e se análise recente existe
 3. **Coleta de Dados**: Tools consultam banco de dados via Django ORM
-4. **Processamento**: Agente LangChain processa dados com LLM
+4. **Processamento**: Agente LangChain processa dados com LLM (fallback manual é acionado se a resposta estiver incompleta ou ocorrer erro)
 5. **Geração**: OpenAI gera texto de análise com insights
-6. **Persistência**: Service salva resultado no model AIAnalysis
+6. **Persistência**: Service salva resultado no model AIAnalysis e grava o ID no cache (TTL 24h)
 7. **Exibição**: Dashboard exibe última análise ao usuário
 
 ---
@@ -455,6 +455,8 @@ Generating financial analysis for user: joao@email.com
   Period: Últimos 30 dias
   Insights: 4
   Recommendations: 5
+  Tokens (in/out): 612 / 489
+  Latency: 2800 ms
 ```
 
 ### Limitações
@@ -463,6 +465,13 @@ Generating financial analysis for user: joao@email.com
 - **Dados Mínimos**: Usuário deve ter pelo menos 5 transações
 - **Timeout**: Análise tem timeout de 60 segundos
 - **Custo**: Cada análise consome ~500-1000 tokens da OpenAI
+
+### Métricas Registradas
+- `elapsed_ms`: tempo total do serviço (inclui cache, agent e persistência).
+- `input_tokens`, `output_tokens`, `total_tokens`: métricas retornadas pelo modelo via LangChain.
+- `source`: identifica se a análise veio do agente, fallback, cache ou reutilização recente.
+- `reason`: texto explicando motivo do fallback quando aplicável.
+- As informações são logadas com prefixo `ai.analysis.*` e exibidas pelo comando para facilitar observabilidade.
 
 ---
 
@@ -690,6 +699,25 @@ logger.info(f'Analysis completed in {elapsed_time}s')
 logger.info(f'User {email} has balance {balance}')  # NUNCA
 logger.debug(f'Transactions: {transactions}')  # NUNCA
 ```
+
+---
+
+## Política de Privacidade e Compliance
+
+### Privacidade (LGPD)
+- A análise é executada somente mediante dados do próprio usuário autenticado.
+- Usuários podem solicitar exclusão das análises via remoção das entradas `AIAnalysis`.
+- Nenhum dado financeiro é enviado para logs ou exposto em prompts além do necessário.
+- A IA não reutiliza dados de outros usuários e não armazena contexto entre execuções.
+
+### Disclaimer para Usuário Final
+- O dashboard exibe aviso informando que a análise é automatizada e deve ser validada manualmente.
+- Recomenda-se divulgar termos adicionais no onboarding sobre uso de IA e compartilhamento com OpenAI.
+
+### Testes de Conformidade
+- Casos de teste garantem isolamento (ver `ai/tests.py`).
+- Rate limit de 24h evita processamento excessivo de dados.
+- Em caso de erro da IA, fallback gera análise baseada apenas em dados locais.
 
 ---
 
